@@ -28,9 +28,11 @@ v - POC : 건뛰
 - POC : A100 & 모델은 아무거나.
 - 실전 : 비싼 GPU
 
+POC 발견 TroubleShooting
+- 이미 만들어져 있는 text-to-sql용 데이터 5000행이 있었음. 근데 다 instruction이 입력 텍스트, DDL statements 순으로 되어 있음. Olist 데이터 생성할 때 바꿔주어야 할 듯.
+- 왜 일반 Llama Instruction이 아닌 allganize를 base model로 사용했는지도 적기. (한국어 성능 더 좋음)
+
 7. 평가
 SQL문이 정확히 같은지 여부가 아니라 SQL을 실제 DB에 실행 시 돌아온 값이 같은지 여부로 판단하기. SQL문을 쓰는 방식은 아주 다양하기 때문.
 exact match 문자열 비교 X -> execution accracy 실행 기반 평가 O
 
-POC 발견 TroubleShooting
-- 이미 만들어져 있는 text-to-sql용 데이터 5000행이 있었음. 근데 다 instruction이 입력 텍스트, DDL statements 순으로 되어 있음. Olist 데이터 생성할 때 바꿔주어야 할 듯.
