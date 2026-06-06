@@ -9,19 +9,19 @@ https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce : ⭐Olist 브라질
     
 2. (완료) gretelai로 base 데이터 생성 (코드)
 https://huggingface.co/datasets/gretelai/synthetic_text_to_sql : base 데이터셋
-v- POC : gpt-4o-mini, 100개로 먼저 POC 진행.
+v- POC : gpt-4o-mini, 100개로 먼저 POC 진행. (text_to_sql_data.json)
 - 실전 : gpt-5.5, 5000개.
 
 3. (완료) Olist 기반 데이터 생성 - 단일
-v- POC : GPT-5 DB 1개 * 9개
+v- POC : GPT-5 DB 1개 * 9개 (Olist_orders_text_to_sql_data.json)
 - 실전 : GPT-5 DB 8개 * 30개씩 
 
-4. Olist 기반 데이터 생성 - 복합
-- POC : GPT-5 DB 연결고리 1개 * 9개
+4. (완료) Olist 기반 데이터 생성 - 복합
+v - POC : GPT-5 DB 연결고리 1개 * 3개 (Olist_orders_n_order_items_text_to_sql_data.json)
 - 실전 : GPT-5 DB 연결고리 8개 * 30개씩 
 
-5. Olist 데이터셋 검증
-- POC : 건뛰
+5. (완료) Olist 데이터셋 검증
+v - POC : 건뛰
 - 실전 : rule-based + LLM-as-a-Judge
 
 6. gretelai와 Olist 데이터 섞어 Fine-Tuning
