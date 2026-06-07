@@ -28,7 +28,7 @@ v - POC : 건뛰
 v- POC : A100 & 모델은 아무거나.
 - 실전 : 비싼 GPU
 
--> POC 발견 TroubleShooting
+7. POC 발견 TroubleShooting
 (완료)- 이미 만들어져 있는 text-to-sql용 데이터 5000행이 있었음. 근데 다 instruction이 입력 텍스트, DDL statements 순으로 되어 있음. Olist 데이터 생성할 때 바꿔주어야 할 듯.
 
 - query 정교화
