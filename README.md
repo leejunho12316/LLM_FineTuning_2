@@ -24,15 +24,48 @@ v - POC : GPT-5 DB 연결고리 1개 * 3개 (Olist_orders_n_order_items_text_to_
 v - POC : 건뛰
 - 실전 : rule-based + LLM-as-a-Judge
 
-6. gretelai와 Olist 데이터 섞어 Fine-Tuning
-- POC : A100 & 모델은 아무거나.
+6. (완료)gretelai와 Olist 데이터 섞어 Fine-Tuning
+v- POC : A100 & 모델은 아무거나.
 - 실전 : 비싼 GPU
 
-POC 발견 TroubleShooting
-- 이미 만들어져 있는 text-to-sql용 데이터 5000행이 있었음. 근데 다 instruction이 입력 텍스트, DDL statements 순으로 되어 있음. Olist 데이터 생성할 때 바꿔주어야 할 듯.
-- 왜 일반 Llama Instruction이 아닌 allganize를 base model로 사용했는지도 적기. (한국어 성능 더 좋음)
+-> POC 발견 TroubleShooting
+(완료)- 이미 만들어져 있는 text-to-sql용 데이터 5000행이 있었음. 근데 다 instruction이 입력 텍스트, DDL statements 순으로 되어 있음. Olist 데이터 생성할 때 바꿔주어야 할 듯.
+
+- query 정교화
+질문 text-to-sql Base 데이터의 query와 내가 생성한 Olist 데이터의 query 형태의 차이점 파악하기.
+Base데이터에 내 데이터 생성 프롬프트에서 지시한 것처럼 완전 구체적인 값을 사용한 질문이 있는지.
+사람이 진짜 이렇게 질문을 할 것 같은지.
+영어로 된 칼럼명을 한글로 말해도 알아듣도록 데이터가 만들어져있는지. (데이터의 query가 칼럼명을 있는 그대로 영어로 말하면 FT 후 한글로 질문하면 성능 저하)
+
+- 질문 말투 다양화
+명사구 질문. (마을 변호사는 몇 명이었는가? -> 마을변호사 인원 수)
+답답적인 질문.
+끝 말투 변경 (~요? ~까? ~임? ~나?)
+
+- DDL문
+데이터 생성시에는 필요없지만 최종 데이터 생성 시 DDL문에는 INSERT INTO VALUES 까지 있어야 함.
+VALUES 개수는 일반화를 막기 위해 0~5개까지 계속 바뀜. 이걸 수동으로 해주긴 좀 그럼.
+
+CREATE TABLE salesperson (salesperson_id INT, name TEXT, region TEXT); 
+INSERT INTO salesperson (salesperson_id, name, region) 
+VALUES (1, 'John Doe', 'North'), (2, 'Jane Smith', 'South');
+
 
 7. 평가
 SQL문이 정확히 같은지 여부가 아니라 SQL을 실제 DB에 실행 시 돌아온 값이 같은지 여부로 판단하기. SQL문을 쓰는 방식은 아주 다양하기 때문.
 exact match 문자열 비교 X -> execution accracy 실행 기반 평가 O
 
+
+----------
+
+데이터 생성시 문제
+
+1. 도메인 지식
+데이터와 도메인에 대한 어느 정도의 지식이 있어야 가능한 질문이 필요함
+-> 칼럼 별 unique 값 중 랜덤 n개 추가.
+2. 질문 복잡성
+실제 사람이 한 것 같은 질문을 만들도록 하고 싶었음. 하지만 특정 SELECT, GROUP BY, COUNT, JOIN 등 어떠한 SQL문을 쓰라고 직접적으로 명시하면 거기에 LLM이 몰두해 대답이 한정적이게 됨. 나노단위 통제보다 유연하게 만들도록 예시를 추가함 추가함.
+-> base Text-to-SQL 데이터 중 랜덤 n개에서 질문만 추출해 추가.
+
+README 추가할 내용
+- 왜 일반 Llama Instruction이 아닌 allganize를 base model로 사용했는지도 적기. (한국어 성능 더 좋음)
