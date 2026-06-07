@@ -50,6 +50,9 @@ CREATE TABLE salesperson (salesperson_id INT, name TEXT, region TEXT);
 INSERT INTO salesperson (salesperson_id, name, region) 
 VALUES (1, 'John Doe', 'North'), (2, 'Jane Smith', 'South');
 
+- 복합 DB 데이터
+DDL 문에 -- 하고 각 칼럼별 설명 써있음. 복합 DB 데이터에만 되어있는데 수정해야할 듯.
+복합 데이턴데 둘 다 쓰는 JOIN같은 SQL문이 아니라 그냥 단일 DB SQL문인 경우가 있음.
 
 7. 평가
 SQL문이 정확히 같은지 여부가 아니라 SQL을 실제 DB에 실행 시 돌아온 값이 같은지 여부로 판단하기. SQL문을 쓰는 방식은 아주 다양하기 때문.
