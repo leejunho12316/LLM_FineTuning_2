@@ -1,0 +1,502 @@
+[
+    {
+        "instruction": "입력 텍스트: 우편번호 접두어 '06463'의 위도와 경도는 무엇임?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('03386', -23.58374197807145, -46.53283450735759, 'são paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_lat, geolocation_lng\nFROM geolocation\nWHERE geolocation_zip_code_prefix = '06463';"
+    },
+    {
+        "instruction": "입력 텍스트: MT 주에 있는 도시 이름 목록 (중복 없이, 이름순)\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_city\nFROM geolocation\nWHERE geolocation_state = 'MT'\nORDER BY geolocation_city ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별 등록된 우편번호 접두어 개수.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_state, COUNT(DISTINCT geolocation_zip_code_prefix) AS zip_prefix_count\nFROM geolocation\nGROUP BY geolocation_state\nORDER BY zip_prefix_count DESC, geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 위도 -24 이상 -22 이하이고 경도 -68 이상 -66 이하 범위에 있는 우편번호 접두어 목록을 알려줍니까?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('01330', -23.563465575076464, -46.64913246003805, 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_zip_code_prefix\nFROM geolocation\nWHERE geolocation_lat >= -24 AND geolocation_lat <= -22\n  AND geolocation_lng >= -68 AND geolocation_lng <= -66\nORDER BY geolocation_zip_code_prefix;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시 이름에 'mirassol'이 포함된 모든 행을 보여주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('75910', -17.766816334809423, -50.90521787753392, 'rio verde', 'GO');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT *\nFROM geolocation\nWHERE LOWER(geolocation_city) LIKE '%mirassol%';"
+    },
+    {
+        "instruction": "입력 텍스트: 각 도시와 주별 평균 위도 및 평균 경도.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  geolocation_state,\n  AVG(geolocation_lat) AS avg_lat,\n  AVG(geolocation_lng) AS avg_lng\nFROM geolocation\nGROUP BY geolocation_city, geolocation_state\nORDER BY geolocation_state, geolocation_city;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주에서 가장 북쪽에 있는 우편번호 접두어와 도시를 알려주겠니?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('90830', -30.08547882263841, -51.2225801935773, 'porto alegre', 'RS'), ('89802', -27.0959068139778, -52.61685026588547, 'chapeco', 'SC');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  g1.geolocation_state,\n  g1.geolocation_city,\n  g1.geolocation_zip_code_prefix,\n  g1.geolocation_lat,\n  g1.geolocation_lng\nFROM geolocation g1\nJOIN (\n  SELECT geolocation_state, MAX(geolocation_lat) AS max_lat\n  FROM geolocation\n  GROUP BY geolocation_state\n) g2\n  ON g1.geolocation_state = g2.geolocation_state\n AND g1.geolocation_lat = g2.max_lat\nORDER BY g1.geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: BA 주에서 우편번호 접두어가 가장 많이 등록된 상위 5개 도시와 그 개수를 알려주나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('26291', -22.7803908888251, -43.54354151027773, 'nova iguacu', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  COUNT(DISTINCT geolocation_zip_code_prefix) AS zip_prefix_count\nFROM geolocation\nWHERE geolocation_state = 'BA'\nGROUP BY geolocation_city\nORDER BY zip_prefix_count DESC, geolocation_city ASC\nLIMIT 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 위도 -23.55, 경도 -46.63에 가장 가까운 우편번호 접두어 3개는 무엇인가요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('27260', -22.51810907882737, -44.1036116194818, 'volta redonda', 'RJ'), ('76908', -10.876420689390155, -61.92307975076257, 'ji-parana', 'RO'), ('59780', -5.79449960374758, -37.55671560818592, 'caraúbas', 'RN'), ('29101', -20.34243843022821, -40.283871236281314, 'vila velha', 'ES');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_zip_code_prefix,\n  geolocation_city,\n  geolocation_state,\n  ((geolocation_lat - -23.55) * (geolocation_lat - -23.55) +\n   (geolocation_lng - -46.63) * (geolocation_lng - -46.63)) AS dist2\nFROM geolocation\nORDER BY dist2 ASC\nLIMIT 3;"
+    },
+    {
+        "instruction": "입력 텍스트: 주별로 'sao'로 시작하는 도시 수를 집계해 주세요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('04661', -23.686150211592487, -46.69345841828658, 'sao paulo', 'SP'), ('53040', -7.967466984736557, -34.83231238299968, 'olinda', 'PE'), ('02804', -23.482181891482465, -46.69793477185641, 'são paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  COUNT(DISTINCT geolocation_city) AS city_count\nFROM geolocation\nWHERE LOWER(geolocation_city) LIKE 'sao%'\nGROUP BY geolocation_state\nORDER BY city_count DESC, geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두어 '01007'에 해당하는 도시와 주는 무엇임?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_city, geolocation_state\nFROM geolocation\nWHERE geolocation_zip_code_prefix = '01007';"
+    },
+    {
+        "instruction": "입력 텍스트: MG 주에서 위도가 -20보다 큰 우편번호 접두어 목록을 알려주시나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('36640', -21.859589014081152, -43.00793161926246, 'mar de espanha', 'MG'), ('96010', -31.77865365113387, -52.33314786456225, 'pelotas', 'RS');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_zip_code_prefix\nFROM geolocation\nWHERE geolocation_state = 'MG'\n  AND geolocation_lat > -20\nORDER BY geolocation_zip_code_prefix;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시별로 등록된 우편번호 접두어가 1개뿐인 도시와 주 목록.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('22620', -23.00551425914832, -43.37596441256672, 'rio de janeiro', 'RJ'), ('25750', -22.32830835369569, -43.13163065759442, 'petropolis', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_city, geolocation_state\nFROM geolocation\nGROUP BY geolocation_city, geolocation_state\nHAVING COUNT(DISTINCT geolocation_zip_code_prefix) = 1\nORDER BY geolocation_state, geolocation_city;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별 고유 도시 수 많은 순.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_state, COUNT(DISTINCT geolocation_city) AS city_count\nFROM geolocation\nGROUP BY geolocation_state\nORDER BY city_count DESC, geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주에서 가장 동쪽 우편번호 접두어와 도시를 한 건씩 알려줄 수 있나?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('82410', -25.38776034014841, -49.33669759154928, 'curitiba', 'PR'), ('13846', -22.34319844661338, -46.94852543178731, 'mogi guacu', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_state, geolocation_zip_code_prefix, geolocation_city, geolocation_lng\nFROM (\n  SELECT geolocation_state,\n         geolocation_zip_code_prefix,\n         geolocation_city,\n         geolocation_lng,\n         ROW_NUMBER() OVER (PARTITION BY geolocation_state ORDER BY geolocation_lng DESC, geolocation_zip_code_prefix ASC) AS rn\n  FROM geolocation\n) t\nWHERE rn = 1\nORDER BY geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 주별 도시명이 'porto'로 시작하는 도시 수.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_state, COUNT(DISTINCT geolocation_city) AS city_count\nFROM geolocation\nWHERE LOWER(geolocation_city) LIKE 'porto%'\nGROUP BY geolocation_state\nORDER BY city_count DESC, geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 위도 -24 이상 -23 이하이고 경도 -47 이상 -45 이하인 지역의 도시와 주를 중복 없이 알려주는 것임?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('09170', -23.71305193180517, -46.50955075458462, 'santo andre', 'SP'), ('04848', -23.73927320982171, -46.684805547463775, 'sao paulo', 'SP'), ('11680', -23.457505778574745, -45.06771832418171, 'ubatuba', 'SP'), ('03118', -23.56412577047144, -46.59274456855558, 'sao paulo', 'SP'), ('03414', -23.558997551762943, -46.54905038051819, 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_city, geolocation_state\nFROM geolocation\nWHERE geolocation_lat >= -24\n  AND geolocation_lat <= -23\n  AND geolocation_lng >= -47\n  AND geolocation_lng <= -45\nORDER BY geolocation_state, geolocation_city;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시 'viamão'의 우편번호 접두어들의 평균 위도와 평균 경도는 얼마인가요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('39880', -17.0364626377644, -41.04679953617648, 'águas formosas', 'MG'), ('98535', -27.291199999999947, -53.69898999999998, 'vista gaúcha', 'RS');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT AVG(geolocation_lat) AS avg_lat, AVG(geolocation_lng) AS avg_lng\nFROM geolocation\nWHERE geolocation_city = 'viamão';"
+    },
+    {
+        "instruction": "입력 텍스트: 여러 개의 도시에 매핑된 우편번호 접두어를 찾아 그 접두어와 매핑된 도시 수를 보여주겠느냐?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('79031', -20.455502600152656, -54.55602819008982, 'campo grande', 'MS'), ('09371', -23.66598191950101, -46.47570497811254, 'mauá', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_zip_code_prefix, COUNT(DISTINCT geolocation_city) AS city_count\nFROM geolocation\nGROUP BY geolocation_zip_code_prefix\nHAVING COUNT(DISTINCT geolocation_city) > 1\nORDER BY city_count DESC, geolocation_zip_code_prefix ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별 도시들의 위도 범위, 최소 위도와 최대 위도.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('98270', -28.418503020689094, -53.65937949061461, 'pejucara', 'RS');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_state,\n       MIN(geolocation_lat) AS min_lat,\n       MAX(geolocation_lat) AS max_lat\nFROM geolocation\nGROUP BY geolocation_state\nORDER BY geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: SP 주 '캠피나스' 도시의 모든 우편번호 접두어 목록.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('13024', -22.894890862888825, -47.05985979793992, 'campinas', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_zip_code_prefix\nFROM geolocation\nWHERE geolocation_city = 'campinas'\n  AND geolocation_state = 'SP'\nORDER BY geolocation_zip_code_prefix;"
+    },
+    {
+        "instruction": "입력 텍스트: 전국에서 우편번호 접두어가 가장 많이 등록된 상위 10개 도시와 그 개수를 알려줍니까?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('25270', -22.621200252551283, -43.23174129341948, 'duque de caxias', 'RJ'), ('79822', -22.23743004638937, -54.84443371209558, 'dourados', 'MS'), ('03441', -23.54796751234925, -46.53665012989781, 'são paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  geolocation_state,\n  COUNT(DISTINCT geolocation_zip_code_prefix) AS zip_prefix_count\nFROM geolocation\nGROUP BY geolocation_city, geolocation_state\nORDER BY zip_prefix_count DESC, geolocation_city ASC, geolocation_state ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 'grande'로 끝나는 도시와 그에 해당하는 주의 중복 없는 이름순 나열.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('79006', -20.48082881378027, -54.64464986692819, 'campo grande', 'MS'), ('78310', -13.65916697253924, -59.7831894616464, 'comodoro', 'MT');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_city, geolocation_state\nFROM geolocation\nWHERE geolocation_city LIKE '%grande'\nORDER BY geolocation_city ASC, geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 위도 -23.55, 경도 -46.63을 기준으로 반경 20km 내에 있는 우편번호 접두어와 도시를 거리 순으로 보여줄 수 있나?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('89820', -26.86968880278556, -52.40948531814578, 'xanxere', 'SC');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_zip_code_prefix,\n  geolocation_city,\n  geolocation_state,\n  6371 * ACOS(\n    COS(RADIANS(-23.55)) * COS(RADIANS(geolocation_lat)) *\n    COS(RADIANS(geolocation_lng) - RADIANS(-46.63)) +\n    SIN(RADIANS(-23.55)) * SIN(RADIANS(geolocation_lat))\n  ) AS distance_km\nFROM geolocation\nWHERE 6371 * ACOS(\n    COS(RADIANS(-23.55)) * COS(RADIANS(geolocation_lat)) *\n    COS(RADIANS(geolocation_lng) - RADIANS(-46.63)) +\n    SIN(RADIANS(-23.55)) * SIN(RADIANS(geolocation_lat))\n  ) <= 20\nORDER BY distance_km ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 둘 이상의 주에 존재하는 도시 이름과 해당 주의 개수.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('23073', -22.89259449498527, -43.587133295575306, 'rio de janeiro', 'RJ'), ('13419', -22.722911266172275, -47.6385816947025, 'piracicaba', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  COUNT(DISTINCT geolocation_state) AS state_count\nFROM geolocation\nGROUP BY geolocation_city\nHAVING COUNT(DISTINCT geolocation_state) > 1\nORDER BY state_count DESC, geolocation_city ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주의 중심점인 평균 위도와 평균 경도를 구해 주시나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('59152', -5.8918365, -35.20335600000001, 'parnamirim', 'RN'), ('58071', -7.162987652230394, -34.87000976686476, 'joao pessoa', 'PB'), ('05512', -23.58359011045077, -46.7159332625656, 'são paulo', 'SP'), ('02469', -23.48446027477061, -46.64331739716662, 'sao paulo', 'SP'), ('03111', -23.55650094754457, -46.60609197114656, 'são paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  AVG(geolocation_lat) AS avg_latitude,\n  AVG(geolocation_lng) AS avg_longitude\nFROM geolocation\nGROUP BY geolocation_state\nORDER BY geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: RJ 주에서 경도가 -42보다 작은 우편번호 접두어 목록을 오름차순으로 보여줍니까?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('32606', -19.93580921426511, -44.20401884624039, 'betim', 'MG'), ('99020', -28.245192000258783, -52.41230010818784, 'passo fundo', 'RS'), ('40150', -12.997402296164845, -38.52653491517864, 'salvador', 'BA'), ('29902', -19.3816031449327, -40.063048580531, 'linhares', 'ES');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_zip_code_prefix\nFROM geolocation\nWHERE geolocation_state = 'RJ'\n  AND geolocation_lng < -42\nORDER BY geolocation_zip_code_prefix;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주에서 가장 서쪽에 위치한 우편번호 접두어와 도시를 한 건씩 알려주시겠어요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('89055', -26.877108572854763, -49.06001115889549, 'blumenau', 'SC');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_state, geolocation_zip_code_prefix, geolocation_city, geolocation_lng\nFROM (\n  SELECT\n    geolocation_state,\n    geolocation_zip_code_prefix,\n    geolocation_city,\n    geolocation_lng,\n    ROW_NUMBER() OVER (\n      PARTITION BY geolocation_state\n      ORDER BY geolocation_lng ASC, geolocation_zip_code_prefix ASC\n    ) AS rn\n  FROM geolocation\n) t\nWHERE rn = 1\nORDER BY geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별 경도 범위에 대한 최소 경도와 최대 경도.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('04317', -23.64210439613166, -46.631629439988735, 'sao paulo', 'SP'), ('36213', -21.108111968843303, -44.02084072619226, 'dores de campos', 'MG');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  MIN(geolocation_lng) AS min_longitude,\n  MAX(geolocation_lng) AS max_longitude\nFROM geolocation\nGROUP BY geolocation_state\nORDER BY geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두어가 '05'로 시작하는 모든 행을 보여주십니까?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('81810', -25.508922077153937, -49.28092605412886, 'curitiba', 'PR'), ('78850', -15.558634210770208, -54.30036759209798, 'primavera do leste', 'MT'), ('09403', -23.69359702479053, -46.44002476030554, 'ribeirao pires', 'SP'), ('01520', -23.55889725284208, -46.62062912421365, 'são paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT *\nFROM geolocation\nWHERE geolocation_zip_code_prefix LIKE '05%'\nORDER BY geolocation_zip_code_prefix ASC, geolocation_city ASC, geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 'manaus' 도시의 우편번호 접두어 및 위도와 경도 정보\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_zip_code_prefix, geolocation_lat, geolocation_lng\nFROM geolocation\nWHERE geolocation_city = 'manaus' AND geolocation_state = 'AM'\nORDER BY geolocation_zip_code_prefix;"
+    },
+    {
+        "instruction": "입력 텍스트: RS 주에서 우편번호 접두어가 50개 이상 등록된 도시와 그 개수를 많은 순으로 보여줄 수 있냐?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('20070', -22.90314975076461, -43.179633471550574, 'rio de janeiro', 'RJ'), ('05415', -23.563965740492826, -46.68179815445209, 'sao paulo', 'SP'), ('06805', -23.638622280220645, -46.85409864826809, 'embu das artes', 'SP'), ('07428', -23.40368940628431, -46.31722068472511, 'arujá', 'SP'), ('08280', -23.56308717707312, -46.47201646225976, 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_city, COUNT(DISTINCT geolocation_zip_code_prefix) AS prefix_count\nFROM geolocation\nWHERE geolocation_state = 'RS'\nGROUP BY geolocation_city\nHAVING COUNT(DISTINCT geolocation_zip_code_prefix) >= 50\nORDER BY prefix_count DESC, geolocation_city ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시 이름에 'nova'가 포함된 도시와 주의 중복 없는 이름 목록\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('06433', -23.525687775829564, -46.88879880411226, 'barueri', 'SP'), ('02851', -23.460345922009356, -46.693565559813, 'sao paulo', 'SP'), ('08502', -23.54361627391773, -46.371887397983166, 'ferraz de vasconcelos', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_city, geolocation_state\nFROM geolocation\nWHERE geolocation_city LIKE '%nova%'\nORDER BY geolocation_city, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 위도 -4 이상 0 미만이고 경도 -50 이상 -44 이하인 지역의 우편번호 접두어와 도시, 주는 무엇인가요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('02734', -23.497105274770615, -46.697949282272425, 'sao paulo', 'SP'), ('41100', -12.972028499999992, -38.45609100000001, 'salvador', 'BA'), ('34000', -19.98312673895008, -43.85041280082424, 'nova lima', 'MG'), ('94455', -30.114197677980133, -51.06068632213029, 'viamao', 'RS');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_zip_code_prefix, geolocation_city, geolocation_state\nFROM geolocation\nWHERE geolocation_lat >= -4 AND geolocation_lat < 0\n  AND geolocation_lng >= -50 AND geolocation_lng <= -44\nORDER BY geolocation_zip_code_prefix;"
+    },
+    {
+        "instruction": "입력 텍스트: 위도 -15.78, 경도 -47.93에서 가장 가까운 우편번호 접두어 1개와 해당 도시·주를 알려주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('23510', -22.915628884269097, -43.68018616250217, 'rio de janeiro', 'RJ'), ('30160', -19.924888201223364, -43.93742578183974, 'belo horizonte', 'MG'), ('03387', -23.58542630835592, -46.52716353857696, 'sao paulo', 'SP'), ('13208', -23.18870706272721, -46.89684082572549, 'jundiai', 'SP'), ('04084', -23.613309765739587, -46.66321340132154, 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_zip_code_prefix,\n  geolocation_city,\n  geolocation_state,\n  6371 * 2 * ASIN(SQRT(POWER(SIN(RADIANS(geolocation_lat - (-15.78)) / 2), 2) + COS(RADIANS(-15.78)) * COS(RADIANS(geolocation_lat)) * POWER(SIN(RADIANS(geolocation_lng - (-47.93)) / 2), 2))) AS distance_km\nFROM geolocation\nORDER BY distance_km\nLIMIT 1;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 '산타 마리아'인 곳의 주별 우편번호 접두어 개수를 알려주겠느냐?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('03961', -23.602124410293225, -46.48478928361534, 'são paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_state, COUNT(DISTINCT geolocation_zip_code_prefix) AS prefix_count\nFROM geolocation\nWHERE geolocation_city = 'santa maria'\nGROUP BY geolocation_state\nORDER BY prefix_count DESC, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: PA 주에서 위도가 -2 이하이거나 경도가 -55 이하인 우편번호 접두어 목록과 도시, 위도, 경도\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('80250', -25.442741242570293, -49.27837713307181, 'curitiba', 'PR');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_zip_code_prefix, geolocation_city, geolocation_lat, geolocation_lng\nFROM geolocation\nWHERE geolocation_state = 'PA'\n  AND (geolocation_lat <= -2 OR geolocation_lng <= -55)\nORDER BY geolocation_zip_code_prefix;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두어가 10개를 초과해 등록된 도시와 주, 그리고 그 개수를 많은 순으로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('99010', -28.26138513759633, -52.41447523708255, 'passo fundo', 'RS');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_city, geolocation_state, COUNT(DISTINCT geolocation_zip_code_prefix) AS prefix_count\nFROM geolocation\nGROUP BY geolocation_city, geolocation_state\nHAVING COUNT(DISTINCT geolocation_zip_code_prefix) > 10\nORDER BY prefix_count DESC, geolocation_city, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 오직 하나의 주에만 존재하는 도시 이름과 그 주를 이름순으로 나열해 주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('09181', -23.686012770471443, -46.52342688273989, 'santo andre', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT g.geolocation_city, g.geolocation_state\nFROM geolocation g\nJOIN (\n  SELECT geolocation_city\n  FROM geolocation\n  GROUP BY geolocation_city\n  HAVING COUNT(DISTINCT geolocation_state) = 1\n) t ON g.geolocation_city = t.geolocation_city\nORDER BY g.geolocation_city, g.geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: AC와 RO 두 주의 고유 도시 수는 각각 몇 개인지 보여주시겠습니까?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('59160', -5.942182444510237, -35.169908237916594, 'parnamirim', 'RN'), ('36087', -21.7017874432454, -43.42264299042069, 'juiz de fora', 'MG'), ('31260', -19.85954903941369, -43.939625018870125, 'belo horizonte', 'MG'), ('09433', -23.665799393483955, -46.38454219172888, 'ribeirao pires', 'SP'), ('05509', -23.570667481822365, -46.71164088011417, 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_state, COUNT(DISTINCT geolocation_city) AS city_count\nFROM geolocation\nWHERE geolocation_state IN ('AC', 'RO')\nGROUP BY geolocation_state\nORDER BY geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두어 '04651'의 도시, 주, 위도, 경도 정보\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('60160', -3.734779452680465, -38.48632107799065, 'fortaleza', 'CE'), ('28994', -22.895379547549297, -42.471193456997135, 'saquarema', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_city, geolocation_state, geolocation_lat, geolocation_lng\nFROM geolocation\nWHERE geolocation_zip_code_prefix = '04651';"
+    },
+    {
+        "instruction": "입력 텍스트: 전국에서 가장 남쪽에 있는 우편번호 접두어 상위 5개와 해당 도시 및 주.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('09751', -23.69354148268775, -46.53867119608748, 'sao bernardo do campo', 'SP'), ('29118', -20.349115651523103, -40.337016432351504, 'vila velha', 'ES'), ('13631', -22.005139958622703, -47.42516342329619, 'pirassununga', 'SP'), ('06410', -23.50049645066299, -46.869655787246415, 'barueri', 'SP'), ('31565', -19.83349772745109, -43.96985603482604, 'belo horizonte', 'MG');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_zip_code_prefix, geolocation_city, geolocation_state, geolocation_lat\nFROM geolocation\nORDER BY geolocation_lat ASC\nLIMIT 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 주별로 '719'로 시작하는 우편번호 접두어 수.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('90420', -30.037385536211037, -51.19785829808413, 'porto alegre', 'RS'), ('25770', -22.27900240009413, -43.04047806521368, 'petropolis', 'RJ'), ('72130', -15.800502558946546, -48.06201554969027, 'brasilia', 'DF'), ('06454', -23.50221837443544, -46.84763601085229, 'barueri', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_state, COUNT(*) AS zip_prefix_count\nFROM geolocation\nWHERE geolocation_zip_code_prefix LIKE '719%'\nGROUP BY geolocation_state\nORDER BY zip_prefix_count DESC, geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 위도 -22.90, 경도 -43.20을 기준으로 반경 50km 안에 있는 우편번호 접두어는 몇 개인가니?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('36846', -19.145787560830374, -46.13018193916962, 'tombos', 'MG'), ('72225', -15.806800498865943, -48.11706777183964, 'brasília', 'DF');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS zip_prefix_count\nFROM geolocation\nWHERE 6371 * 2 * ASIN(\n  SQRT(\n    POWER(SIN((RADIANS(geolocation_lat) - RADIANS(-22.90)) / 2), 2) +\n    COS(RADIANS(-22.90)) * COS(RADIANS(geolocation_lat)) *\n    POWER(SIN((RADIANS(geolocation_lng) - RADIANS(-43.20)) / 2), 2)\n  )\n) <= 50;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 공백을 포함하는 모든 도시-주를 중복 없이 이름순으로 나열해 주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('18745', -23.6320374874721, -49.3076293582771, 'coronel macedo', 'SP'), ('19275', -22.55946299632256, -52.59081899276815, 'euclides da cunha paulista', 'SP'), ('58200', -6.853468499999995, -35.49502574999998, 'guarabira', 'PB'), ('35765', -19.52204235820132, -44.45513734718174, 'cachoeira da prata', 'MG');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_city, geolocation_state\nFROM geolocation\nWHERE geolocation_city LIKE '% %'\nORDER BY geolocation_city ASC, geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: MG 주에서 우편번호 접두어가 가장 많이 등록된 상위 3개 도시는 무엇임?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('29704', -19.52892549029617, -40.669285636716445, 'colatina', 'ES'), ('90035', -30.031839481822363, -51.21521191796999, 'porto alegre', 'RS'), ('28930', -22.96923141825844, -42.02086019149984, 'arraial do cabo', 'RJ'), ('84600', -26.22643716208742, -51.08866893041483, 'uniao da vitoria', 'PR'), ('09721', -23.720745783772987, -46.548089706907525, 'sao bernardo do campo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_city, COUNT(*) AS zip_prefix_count\nFROM geolocation\nWHERE geolocation_state = 'MG'\nGROUP BY geolocation_city\nORDER BY zip_prefix_count DESC, geolocation_city ASC\nLIMIT 3;"
+    },
+    {
+        "instruction": "입력 텍스트: 둘 이상의 주에 존재하는 도시들의 모든 도시-주 조합을 이름순으로 보여주냐?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('79902', -22.50840866719019, -55.724479924483205, 'ponta pora', 'MS'), ('89669', -27.40598774792092, -51.77365797946408, 'ipira', 'SC');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT g.geolocation_city, g.geolocation_state\nFROM geolocation g\nJOIN (\n  SELECT geolocation_city\n  FROM geolocation\n  GROUP BY geolocation_city\n  HAVING COUNT(DISTINCT geolocation_state) > 1\n) multi ON g.geolocation_city = multi.geolocation_city\nORDER BY g.geolocation_city ASC, g.geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주에서 우편번호 접두어 수가 가장 적은 도시를 한 곳씩과 그 개수를 알려주나?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('22780', -22.96394093617627, -43.40526724395527, 'rio de janeiro', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH city_counts AS (\n  SELECT geolocation_state, geolocation_city, COUNT(*) AS cnt\n  FROM geolocation\n  GROUP BY geolocation_state, geolocation_city\n),\nranked AS (\n  SELECT geolocation_state, geolocation_city, cnt,\n         ROW_NUMBER() OVER (PARTITION BY geolocation_state ORDER BY cnt ASC, geolocation_city ASC) AS rn\n  FROM city_counts\n)\nSELECT geolocation_state, geolocation_city, cnt AS zip_prefix_count\nFROM ranked\nWHERE rn = 1\nORDER BY geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 경도가 -40보다 큰 지역의 주별 고유 도시 수 집계.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('11065', -23.96862003191187, -46.3559764977783, 'santos', 'SP'), ('71907', -15.832475819308588, -48.01033388194513, 'brasilia', 'DF'), ('88815', -28.680059509678863, -49.35441785784126, 'criciuma', 'SC'), ('07072', -23.446600292255752, -46.5540961851232, 'guarulhos', 'SP'), ('78870', -14.420922233300628, -54.04709647291536, 'paranatinga', 'MT');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_state, COUNT(DISTINCT geolocation_city) AS city_count\nFROM geolocation\nWHERE geolocation_lng > -40\nGROUP BY geolocation_state\nORDER BY city_count DESC, geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 'rio'로 시작하는 도시들을 주와 함께 중복 없이 이름순으로 나열해 주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('09185', -23.682378949766267, -46.533680969184665, 'santo andre', 'SP'), ('88106', -27.598643513844998, -48.63167595408608, 'sao jose', 'SC'), ('89540', -26.957188546434107, -50.42420912128348, 'santa cecilia', 'SC'), ('09950', -23.684721443793656, -46.58409388868383, 'diadema', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_city, geolocation_state\nFROM geolocation\nWHERE geolocation_city LIKE 'rio%'\nORDER BY geolocation_city ASC, geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 전국에서 도시 이름 기준으로 우편번호 접두어가 가장 많이 등록된 상위 10개 도시와 각 도시별 개수.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('28860', -22.480186071219485, -42.19945224772273, 'casimiro de abreu', 'RJ'), ('03351', -23.572170996900223, -46.56680553512501, 'são paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  COUNT(*) AS zip_count\nFROM geolocation\nGROUP BY geolocation_city\nORDER BY zip_count DESC, geolocation_city ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 위도 -12.97, 경도 -38.50 지점에서 가장 먼 우편번호 접두어와 해당 도시 및 주.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('04617', -23.6191660068826, -46.67562744081213, 'sao paulo', 'SP'), ('13187', -22.90568661966586, -47.2180980798713, 'hortolandia', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  g.geolocation_zip_code_prefix,\n  g.geolocation_city,\n  g.geolocation_state,\n  6371 * 2 * ASIN(SQRT(POWER(SIN(RADIANS(g.geolocation_lat - (-12.97)) / 2), 2) +\n                      COS(RADIANS(-12.97)) * COS(RADIANS(g.geolocation_lat)) *\n                      POWER(SIN(RADIANS(g.geolocation_lng - (-38.50)) / 2), 2))) AS distance_km\nFROM geolocation g\nORDER BY distance_km DESC\nLIMIT 1;"
+    },
+    {
+        "instruction": "입력 텍스트: 같은 주 안에서 둘 이상의 도시에 매핑된 우편번호 접두어와 해당 주, 매핑된 도시 수.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('36895', -20.864684121348173, -42.24287411841734, 'vieiras', 'MG'), ('06764', -23.614501563029496, -46.766137239830144, 'taboão da serra', 'SP'), ('20230', -22.9083716150396, -43.19508511842318, 'rio de janeiro', 'RJ'), ('13660', -21.855796114246505, -47.4725116896314, 'porto ferreira', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  geolocation_zip_code_prefix,\n  COUNT(DISTINCT geolocation_city) AS city_count\nFROM geolocation\nGROUP BY geolocation_state, geolocation_zip_code_prefix\nHAVING COUNT(DISTINCT geolocation_city) >= 2\nORDER BY city_count DESC, geolocation_state ASC, geolocation_zip_code_prefix ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: SP 주에서 도시별 위도 범위(최대 위도 - 최소 위도)가 가장 큰 상위 5개 도시와 그 범위.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('04552', -23.59421532996734, -46.68677781447278, 'sao paulo', 'SP'), ('84025', -25.088519687204588, -50.13685415502763, 'ponta grossa', 'PR'), ('04625', -23.63239706669831, -46.66830473875065, 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  MAX(geolocation_lat) - MIN(geolocation_lat) AS lat_range\nFROM geolocation\nWHERE geolocation_state = 'SP'\nGROUP BY geolocation_city\nORDER BY lat_range DESC, geolocation_city ASC\nLIMIT 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두어의 앞 3자리별 건수 집계 및 상위 20개 목록.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('03151', -23.588284537047752, -46.585833594927536, 'sao paulo', 'SP'), ('06663', -23.56507440459112, -46.93089297049059, 'itapevi', 'SP'), ('79940', -22.63430747488361, -54.8202687370562, 'caarapo', 'MS'), ('05030', -23.541308863725543, -46.69100199610485, 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  LEFT(geolocation_zip_code_prefix, 3) AS zip3,\n  COUNT(*) AS zip_count\nFROM geolocation\nGROUP BY LEFT(geolocation_zip_code_prefix, 3)\nORDER BY zip_count DESC, zip3 ASC\nLIMIT 20;"
+    },
+    {
+        "instruction": "입력 텍스트: 위도 -10 이상 -5 이하이고 경도 -60 이상 -50 이하인 영역에 존재하는 주를 중복 없이 이름순으로 나열해야 하나?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT\n  geolocation_state\nFROM geolocation\nWHERE geolocation_lat >= -10 AND geolocation_lat <= -5\n  AND geolocation_lng >= -60 AND geolocation_lng <= -50\nORDER BY geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별 도시당 평균 우편번호 접두어 수가 가장 높은 상위 5개 주.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('88440', -27.48573951668057, -49.42267768119301, 'imbuia', 'SC'), ('48800', -10.43968049988005, -39.33157609870364, 'monte santo', 'BA'), ('98400', -27.355511801391177, -53.40050501179122, 'frederico westphalen', 'RS');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  s.geolocation_state,\n  AVG(s.zip_count) AS avg_zip_per_city\nFROM (\n  SELECT\n    geolocation_state,\n    geolocation_city,\n    COUNT(*) AS zip_count\n  FROM geolocation\n  GROUP BY geolocation_state, geolocation_city\n) AS s\nGROUP BY s.geolocation_state\nORDER BY avg_zip_per_city DESC, s.geolocation_state ASC\nLIMIT 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별 위도 값의 표준편차를 계산해 큰 순서대로 보여줄 수 있냐?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('15910', -21.27326413235479, -48.502747342122, 'monte alto', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  STDDEV_POP(geolocation_lat) AS lat_stddev\nFROM geolocation\nGROUP BY geolocation_state\nORDER BY lat_stddev DESC, geolocation_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 같은 도시 내에서 서로 가장 멀리 떨어진 두 우편번호 접두어 한 쌍과 그 도시 및 주, 거리.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('35585', -20.4842475, -45.80400375000001, 'pimenta', 'MG'), ('03817', -23.49134185873388, -46.49471003067111, 'sao paulo', 'SP'), ('71955', -15.854445547796969, -48.03767828265821, 'brasilia', 'DF'), ('95560', -29.340844422716305, -49.74513145151992, 'torres', 'RS');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  t.geolocation_city,\n  t.geolocation_state,\n  t.zip1,\n  t.zip2,\n  t.distance_km\nFROM (\n  SELECT\n    g1.geolocation_city,\n    g1.geolocation_state,\n    g1.geolocation_zip_code_prefix AS zip1,\n    g2.geolocation_zip_code_prefix AS zip2,\n    6371 * 2 * ASIN(SQRT(POWER(SIN(RADIANS(g2.geolocation_lat - g1.geolocation_lat) / 2), 2) +\n                        COS(RADIANS(g1.geolocation_lat)) * COS(RADIANS(g2.geolocation_lat)) *\n                        POWER(SIN(RADIANS(g2.geolocation_lng - g1.geolocation_lng) / 2), 2))) AS distance_km\n  FROM geolocation g1\n  JOIN geolocation g2\n    ON g1.geolocation_city = g2.geolocation_city\n   AND g1.geolocation_state = g2.geolocation_state\n   AND g1.geolocation_zip_code_prefix < g2.geolocation_zip_code_prefix\n) AS t\nORDER BY t.distance_km DESC\nLIMIT 1;"
+    },
+    {
+        "instruction": "입력 텍스트: MG와 SP 두 주에 모두 존재하는 도시 이름들을 이름순으로 나열해 주실 수 있습니까?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('18271', -23.34200219188677, -47.83355770798437, 'tatui', 'SP'), ('59062', -5.812810699526222, -35.229716539623645, 'natal', 'RN'), ('04578', -23.609767003927256, -46.69770001979821, 'são paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  c1.geolocation_city\nFROM (\n  SELECT DISTINCT geolocation_city\n  FROM geolocation\n  WHERE geolocation_state = 'MG'\n) AS c1\nJOIN (\n  SELECT DISTINCT geolocation_city\n  FROM geolocation\n  WHERE geolocation_state = 'SP'\n) AS c2\n  ON c1.geolocation_city = c2.geolocation_city\nORDER BY c1.geolocation_city ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 전국에서 가장 서쪽에 위치한 우편번호 접두어와 해당 도시 및 주\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('60711', -3.804277023313518, -38.5715440896474, 'fortaleza', 'CE'), ('13401', -22.737469777684808, -47.65697013044607, 'piracicaba', 'SP'), ('21021', -22.837264658347237, -43.26822923146179, 'rio de janeiro', 'RJ'), ('16920', -20.868614204350227, -51.48522439715759, 'castilho', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_zip_code_prefix, geolocation_city, geolocation_state, geolocation_lng\nFROM geolocation\nORDER BY geolocation_lng ASC\nLIMIT 1;"
+    },
+    {
+        "instruction": "입력 텍스트: 이름이 'polis'로 끝나는 도시들을 주와 함께 중복 없이 이름순으로 보여줄 수 있냐?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('05577', -23.585302374488748, -46.76573031099623, 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_city, geolocation_state\nFROM geolocation\nWHERE LOWER(geolocation_city) LIKE '%polis'\nORDER BY geolocation_city, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 주별로 가장 이름이 긴 도시와 그 길이를 모두 보여주세요. 여러 도시가 같은 길이로 최대라면 모두 포함해 주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('13324', -23.212548380189315, -47.31191503582483, 'salto', 'SP'), ('79905', -22.5513076681912, -55.70782007204205, 'ponta pora', 'MS'), ('14680', -21.022373611157064, -47.78516448248121, 'jardinopolis', 'SP'), ('24020', -22.894655648883507, -43.123130570633045, 'niteroi', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH city_unique AS (\n  SELECT geolocation_city AS city, geolocation_state AS state, CHAR_LENGTH(geolocation_city) AS name_len\n  FROM (SELECT DISTINCT geolocation_city, geolocation_state FROM geolocation) t\n),\nstate_max AS (\n  SELECT state, MAX(name_len) AS max_len\n  FROM city_unique\n  GROUP BY state\n)\nSELECT cu.state, cu.city, cu.name_len\nFROM city_unique cu\nJOIN state_max sm ON sm.state = cu.state AND sm.max_len = cu.name_len\nORDER BY cu.state, cu.city;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시 이름의 첫 글자별 고유 도시 이름 수를 집계해서, 많은 순으로 상위 10개를 보여줄 수 있나?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('36700', -21.527026368998804, -42.645241681328415, 'leopoldina', 'MG'), ('60311', -3.7092744796006647, -38.554579817790994, 'fortaleza', 'CE'), ('83370', -25.452964228600155, -48.691280430305774, 'antonina', 'PR'), ('87303', -24.033344268662205, -52.37318109547798, 'campo mourao', 'PR');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT SUBSTRING(LOWER(geolocation_city), 1, 1) AS initial, COUNT(DISTINCT geolocation_city) AS city_count\nFROM geolocation\nGROUP BY SUBSTRING(LOWER(geolocation_city), 1, 1)\nORDER BY city_count DESC, initial\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 동일한 위도·경도 좌표를 공유하는 우편번호 접두어가 2개 이상인 좌표와 해당 우편번호 접두어 개수를 알려줄 수 있겠습니까?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('13650', -21.820736579494163, -47.24195848018031, 'santa cruz das palmeiras', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_lat, geolocation_lng, COUNT(DISTINCT geolocation_zip_code_prefix) AS zip_count\nFROM geolocation\nGROUP BY geolocation_lat, geolocation_lng\nHAVING COUNT(DISTINCT geolocation_zip_code_prefix) >= 2\nORDER BY zip_count DESC, geolocation_lat, geolocation_lng;"
+    },
+    {
+        "instruction": "입력 텍스트: ES와 RJ 두 주에서 도시명이 'vila'로 시작하는 도시-주 목록.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('17527', -22.220540914157027, -49.97496896525404, 'marilia', 'SP'), ('14160', -21.13782700159532, -47.98363700426773, 'sertaozinho', 'SP'), ('25715', -22.471173883338448, -43.15903876219456, 'petrópolis', 'RJ'), ('21011', -22.83178216097296, -43.28395669331751, 'rio de janeiro', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_city, geolocation_state\nFROM geolocation\nWHERE geolocation_state IN ('ES', 'RJ')\n  AND LOWER(geolocation_city) LIKE 'vila%'\nORDER BY geolocation_city, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 위도 -15.00, 경도 -47.00을 기준으로 반경 100km 내에 있는 도시와 주를 중복 없이 이름순으로 보여줄 수 있냐?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('11608', -23.80608447162208, -45.40177235876208, 'sao sebastiao', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT geolocation_city, geolocation_state\nFROM geolocation\nWHERE 6371 * 2 * ASIN(SQRT(\n        POWER(SIN(RADIANS(geolocation_lat - (-15.00)) / 2), 2) +\n        COS(RADIANS(-15.00)) * COS(RADIANS(geolocation_lat)) *\n        POWER(SIN(RADIANS(geolocation_lng - (-47.00)) / 2), 2)\n      )) <= 100\nORDER BY geolocation_city, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 정확히 두 개의 주에만 존재하는 도시 이름들.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('24220', -22.89901376106504, -43.106746265047086, 'niteroi', 'RJ'), ('03447', -23.55320448542905, -46.52527109186912, 'sao paulo', 'SP'), ('27273', -22.519388608661764, -44.13609598819902, 'volta redonda', 'RJ'), ('66812', -1.3108095689596246, -48.48730231418429, 'belem', 'PA'), ('89708', -27.243439526955736, -52.03765778699477, 'concordia', 'SC');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_city\nFROM geolocation\nGROUP BY geolocation_city\nHAVING COUNT(DISTINCT geolocation_state) = 2\nORDER BY geolocation_city;"
+    },
+    {
+        "instruction": "입력 텍스트: 경도가 -40보다 큰 지역에서 평균 경도가 가장 큰 상위 5개 주와 그 평균 경도.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('04138', -23.613670445467097, -46.631451494171614, 'são paulo', 'SP'), ('40240', -12.971191976686468, -38.499211010964274, 'salvador', 'BA'), ('28300', -21.19235766266665, -41.902481746204025, 'itaperuna', 'RJ'), ('92500', -30.092442496249088, -51.32650503136361, 'guaiba', 'RS');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_state, AVG(geolocation_lng) AS avg_lng\nFROM geolocation\nWHERE geolocation_lng > -40\nGROUP BY geolocation_state\nORDER BY avg_lng DESC\nLIMIT 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시·주별 중심 위도(평균 위도)를 계산했을 때, 적도(위도 0)에 가장 가까운 상위 10개 도시·주와 그 평균 위도를 알려줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('06665', -23.555607354522092, -46.94928195305729, 'itapevi', 'SP'), ('08041', -23.514500629753584, -46.43502025965141, 'sao paulo', 'SP'), ('15775', -20.191392297099817, -50.93081298185121, 'santa fe do sul', 'SP'), ('14801', -21.782953519562607, -48.18878696655892, 'araraquara', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT geolocation_city, geolocation_state, AVG(geolocation_lat) AS avg_lat\nFROM geolocation\nGROUP BY geolocation_city, geolocation_state\nORDER BY ABS(AVG(geolocation_lat)) ASC, geolocation_city, geolocation_state\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 전국에 등록된 고유 우편번호 접두어는 총 몇 개인가요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('06144', -23.56452317375491, -46.79826162184774, 'osasco', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(DISTINCT geolocation_zip_code_prefix) AS total_unique_zip_prefixes\nFROM geolocation;"
+    },
+    {
+        "instruction": "입력 텍스트: 평균 위도가 -10보다 큰 주와 그 평균 위도를 큰 순서대로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('11441', -23.97857668220901, -46.22658145475794, 'guaruja', 'SP'), ('27930', -22.392152999999997, -41.81449725, 'macae', 'RJ'), ('93113', -29.751067503115827, -51.144514144571474, 'são leopoldo', 'RS');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  AVG(geolocation_lat) AS avg_lat\nFROM geolocation\nGROUP BY geolocation_state\nHAVING AVG(geolocation_lat) > -10\nORDER BY avg_lat DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 평균 경도가 -45보다 큰 도시와 주의 이름순 나열.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('31985', -19.85570810449368, -43.89891029888448, 'belo horizonte', 'MG');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  geolocation_state,\n  AVG(geolocation_lng) AS avg_lng\nFROM geolocation\nGROUP BY geolocation_city, geolocation_state\nHAVING AVG(geolocation_lng) > -45\nORDER BY geolocation_city, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 하이픈('-')을 포함하는 모든 도시-주를 중복 없이 이름순으로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('30570', -19.961471127387654, -43.97895294907379, 'belo horizonte', 'MG');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT\n  geolocation_city,\n  geolocation_state\nFROM geolocation\nWHERE geolocation_city LIKE '%-%'\nORDER BY geolocation_city, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: '2'로 시작하는 우편번호 접두어 수를 주별로 집계해 상위 10개 주를 알려줄 수 있을까?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('15480', -20.180942574899333, -49.34488474677588, 'orindiuva', 'SP'), ('79370', -19.00482084385397, -57.60326940007783, 'ladário', 'MS'), ('08598', -23.465108862090407, -46.31930426512224, 'itaquaquecetuba', 'SP'), ('13960', -22.588526524558954, -46.5151100275551, 'socorro', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  COUNT(*) AS cnt\nFROM geolocation\nWHERE geolocation_zip_code_prefix LIKE '2%'\nGROUP BY geolocation_state\nORDER BY cnt DESC, geolocation_state\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 주별 위도 범위(최대 위도 - 최소 위도)가 8도 이상인 주와 그 범위를 큰 순서대로 보여주는 것이 맞음?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('03005', -23.542630019158576, -46.62450533305443, 'sao paulo', 'SP'), ('38065', -19.73297292423105, -47.93681796419299, 'uberaba', 'MG');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  MAX(geolocation_lat) - MIN(geolocation_lat) AS lat_range\nFROM geolocation\nGROUP BY geolocation_state\nHAVING MAX(geolocation_lat) - MIN(geolocation_lat) >= 8\nORDER BY lat_range DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 전국에서 가장 짧은 도시 이름 20개(도시명만, 중복 없이)와 글자 수를 알려주시겠습니까?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('38748', -18.962643468138783, -46.98655551216012, 'patrocinio', 'MG'), ('08440', -23.53294586234056, -46.40851225812221, 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT\n  geolocation_city,\n  CHAR_LENGTH(geolocation_city) AS name_length\nFROM geolocation\nORDER BY name_length ASC, geolocation_city ASC\nLIMIT 20;"
+    },
+    {
+        "instruction": "입력 텍스트: 둘 이상의 주에 걸쳐 존재하는 동일 우편번호 접두어와 해당 주의 개수를 많은 순으로 보여주시겠습니까?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('24900', -22.916355908958398, -42.81666240454102, 'marica', 'RJ'), ('39270', -17.35496897978403, -44.91562368080993, 'pirapora', 'MG'), ('06330', -23.55994011377211, -46.83054463009389, 'carapicuiba', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_zip_code_prefix,\n  COUNT(DISTINCT geolocation_state) AS state_count\nFROM geolocation\nGROUP BY geolocation_zip_code_prefix\nHAVING COUNT(DISTINCT geolocation_state) > 1\nORDER BY state_count DESC, geolocation_zip_code_prefix;"
+    },
+    {
+        "instruction": "입력 텍스트: 정확히 두 단어로 이루어진 도시와 주를 중복 없이 이름순으로 나열해 주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('04191', -23.645072891950967, -46.605887414059545, 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT\n  geolocation_city,\n  geolocation_state\nFROM geolocation\nWHERE (CHAR_LENGTH(geolocation_city) - CHAR_LENGTH(REPLACE(geolocation_city, ' ', ''))) = 1\nORDER BY geolocation_city, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 위도 -22.90, 경도 -43.20 지점을 기준으로 반경 30km 안에 있는 우편번호 접두어는 몇 개인가요? 그리고 그들의 평균 거리는 얼마나 되나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('13212', -23.187504743949663, -46.96006197934819, 'jundiai', 'SP'), ('12281', -23.10334689286745, -45.70829345184374, 'cacapava', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  COUNT(*) AS zip_prefix_count_within_30km,\n  AVG(min_distance_km) AS avg_distance_km\nFROM (\n  SELECT\n    geolocation_zip_code_prefix,\n    MIN(\n      6371 * 2 * ASIN(\n        SQRT(\n          POWER(SIN((RADIANS(geolocation_lat) - RADIANS(-22.90)) / 2), 2) +\n          COS(RADIANS(-22.90)) * COS(RADIANS(geolocation_lat)) *\n          POWER(SIN((RADIANS(geolocation_lng) - RADIANS(-43.20)) / 2), 2)\n        )\n      )\n    ) AS min_distance_km\n  FROM geolocation\n  GROUP BY geolocation_zip_code_prefix\n) t\nWHERE t.min_distance_km <= 30;"
+    },
+    {
+        "instruction": "입력 텍스트: CE 주에서 우편번호 접두어가 20개 이상 등록된 도시와 그 개수를 많은 순으로 알려주니?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('20511', -22.928064170148215, -43.23909289979233, 'rio de janeiro', 'RJ'), ('34003', -19.98964590913067, -43.853586193879806, 'nova lima', 'MG'), ('37704', -21.788942478303152, -46.60421352001134, 'pocos de caldas', 'MG'), ('83824', -25.67839281210192, -49.301944432278, 'fazenda rio grande', 'PR'), ('39880', -17.083339903908662, -40.93318728583552, 'aguas formosas', 'MG');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  COUNT(*) AS zip_count\nFROM geolocation\nWHERE geolocation_state = 'CE'\nGROUP BY geolocation_city\nHAVING COUNT(*) >= 20\nORDER BY zip_count DESC, geolocation_city;"
+    },
+    {
+        "instruction": "입력 텍스트: 앞 두 자리가 '70'으로 시작하는 우편번호 접두어 수를 주별로 집계해 상위 5개 주를 알려주시겠니?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('56280', -7.576218497732113, -40.5031974130007, 'araripina', 'PE'), ('78690', -14.664110850452824, -52.35121394411415, 'nova xavantina', 'MT'), ('89050', -26.914305548399824, -49.06426571995049, 'blumenau', 'SC'), ('26165', -22.728097106157435, -43.38090846396809, 'belford roxo', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  COUNT(*) AS cnt\nFROM geolocation\nWHERE geolocation_zip_code_prefix LIKE '70%'\nGROUP BY geolocation_state\nORDER BY cnt DESC, geolocation_state\nLIMIT 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 단어가 세 개 이상인 도시와 주를 중복 없이 이름순으로 나열해 주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('06056', -23.563903527745406, -46.78432445281566, 'osasco', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT\n  geolocation_city,\n  geolocation_state\nFROM geolocation\nWHERE geolocation_city LIKE '% % %'\nORDER BY geolocation_city, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 주별 경도 평균과 경도 표준편차를 계산해 표준편차가 큰 순서대로 보여줄 수 있을까?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('65735', -4.729694622960795, -44.32294448491785, 'capinzal do norte', 'MA'), ('20771', -22.889161247013696, -43.282234980841416, 'rio de janeiro', 'RJ'), ('15700', -20.270091413156383, -50.545347643739774, 'jales', 'SP'), ('35570', -20.477644449685528, -45.42775068388758, 'formiga', 'MG'), ('09111', -23.67421885261703, -46.4884250126377, 'santo andre', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  AVG(geolocation_lng) AS avg_lng,\n  STDDEV_SAMP(geolocation_lng) AS stddev_lng\nFROM geolocation\nGROUP BY geolocation_state\nORDER BY stddev_lng DESC, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 적도에 가장 가까운 우편번호 접두어 상위 10개와 해당 도시 및 주\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('14940', -21.765248380649737, -48.82411661405835, 'ibitinga', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_zip_code_prefix,\n  geolocation_city,\n  geolocation_state,\n  geolocation_lat\nFROM geolocation\nORDER BY ABS(geolocation_lat) ASC, geolocation_zip_code_prefix\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 주별 도시 이름의 평균 길이와 상위 10개 주.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('57970', -8.942353305175725, -35.662136851953136, 'novo lino', 'AL');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  AVG(CHAR_LENGTH(geolocation_city)) AS avg_city_name_len\nFROM (\n  SELECT DISTINCT geolocation_city, geolocation_state\n  FROM geolocation\n) AS t\nGROUP BY geolocation_state\nORDER BY avg_city_name_len DESC, geolocation_state\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 북부 지역(AC, AP, AM, PA, RO, RR, TO)에서 우편번호 접두어가 가장 많이 등록된 상위 10개 도시와 그 개수를 알려주세요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('75709', -18.17238449824329, -47.9405672037292, 'catalao', 'GO'), ('11045', -23.966671347221357, -46.32327548473656, 'santos', 'SP'), ('90020', -30.0297757634359, -51.227369428024886, 'porto alegre', 'RS'), ('35012', -18.8600744044447, -41.95962023288991, 'governador valadares', 'MG'), ('22451', -22.98458707047018, -43.244998593150704, 'rio de janeiro', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  geolocation_state,\n  COUNT(*) AS zip_count\nFROM geolocation\nWHERE geolocation_state IN ('AC','AP','AM','PA','RO','RR','TO')\nGROUP BY geolocation_city, geolocation_state\nORDER BY zip_count DESC, geolocation_city, geolocation_state\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 위도 -5 이상 -3 이하이고 경도 -50 이상 -47 이하인 지역의 도시와 주를 중복 없이 이름순으로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('03451', -23.558637305466345, -46.51966059291495, 'sao paulo', 'SP'), ('17230', -22.244733, -48.720095999999984, 'itapui', 'SP'), ('06018', -23.53801672020906, -46.7796531695713, 'osasco', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT\n  geolocation_city,\n  geolocation_state\nFROM geolocation\nWHERE geolocation_lat >= -5 AND geolocation_lat <= -3\n  AND geolocation_lng >= -50 AND geolocation_lng <= -47\nORDER BY geolocation_city, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 위도 범위가 3도 이상인 도시와 주, 그리고 그 범위를 큰 순서대로 상위 20개는 무엇인가요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('40050', -12.980474891861356, -38.51299611179898, 'salvador', 'BA');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  geolocation_state,\n  (MAX(geolocation_lat) - MIN(geolocation_lat)) AS lat_range\nFROM geolocation\nGROUP BY geolocation_city, geolocation_state\nHAVING (MAX(geolocation_lat) - MIN(geolocation_lat)) >= 3\nORDER BY lat_range DESC, geolocation_city, geolocation_state\nLIMIT 20;"
+    },
+    {
+        "instruction": "입력 텍스트: 서쪽 평균 경도가 가장 낮은 상위 5개 주와 그 평균 경도\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  AVG(geolocation_lng) AS avg_lng\nFROM geolocation\nGROUP BY geolocation_state\nORDER BY avg_lng ASC, geolocation_state\nLIMIT 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시 수가 1개인 주와 해당 도시 수.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('09941', -23.67621927200065, -46.60225519484673, 'diadema', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  COUNT(DISTINCT geolocation_city) AS city_count\nFROM geolocation\nGROUP BY geolocation_state\nHAVING COUNT(DISTINCT geolocation_city) = 1\nORDER BY geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 같은 도시명이 최소 3개 주에 존재하는 도시 이름과 해당 주의 개수를 많은 순으로 보여줄 수 있니?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('11705', -24.0381518731606, -46.49780716250217, 'praia grande', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  COUNT(DISTINCT geolocation_state) AS state_count\nFROM geolocation\nGROUP BY geolocation_city\nHAVING COUNT(DISTINCT geolocation_state) >= 3\nORDER BY state_count DESC, geolocation_city;"
+    },
+    {
+        "instruction": "입력 텍스트: 남동부 지역에서 도시별 우편번호 접두어가 가장 많은 상위 10개 도시와 그 개수.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  geolocation_state,\n  COUNT(*) AS zip_count\nFROM geolocation\nWHERE geolocation_state IN ('SP','RJ','MG','ES')\nGROUP BY geolocation_city, geolocation_state\nORDER BY zip_count DESC, geolocation_city, geolocation_state\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 앞 세 자리가 '351'로 시작하는 우편번호 접두어의 주별 고유 접두어 개수를 많은 순으로 집계해 주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('14700', -20.941607753249755, -48.483511267174144, 'bebedouro', 'SP'), ('32670', -19.95357323101482, -44.15989169514203, 'betim', 'MG');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_state,\n  COUNT(DISTINCT geolocation_zip_code_prefix) AS prefix_count\nFROM geolocation\nWHERE geolocation_zip_code_prefix LIKE '351%'\nGROUP BY geolocation_state\nORDER BY prefix_count DESC, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 경도가 -50보다 서쪽에 위치한 우편번호 접두어가 가장 많이 등록된 상위 10개 도시와 주, 그리고 그 개수를 알려주세요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('88119', -27.56793598448924, -48.650936884018826, 'sao jose', 'SC'), ('64290', -5.044538663686172, -42.467939922908286, 'altos', 'PI'), ('85801', -24.96029345325737, -53.45749297599398, 'cascavel', 'PR');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  geolocation_state,\n  COUNT(*) AS zip_count\nFROM geolocation\nWHERE geolocation_lng < -50\nGROUP BY geolocation_city, geolocation_state\nORDER BY zip_count DESC, geolocation_city, geolocation_state\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 'de'로 끝나는 도시와 주를 중복 없이 이름순으로 나열해 주시겠소?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT\n  geolocation_city,\n  geolocation_state\nFROM geolocation\nWHERE LOWER(geolocation_city) LIKE '% de'\nORDER BY geolocation_city, geolocation_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 주별 도시당 우편번호 접두어 수의 표준편차가 큰 상위 5개 주.\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('04863', -23.761966359494547, -46.70337501569672, 'sao paulo', 'SP'), ('66635', -1.3014435945235012, -48.476975245196016, 'belem', 'PA'), ('14407', -20.505431384059115, -47.415142392520295, 'franca', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH city_counts AS (\n  SELECT\n    geolocation_state,\n    geolocation_city,\n    COUNT(*) AS zip_count\n  FROM geolocation\n  GROUP BY geolocation_state, geolocation_city\n)\nSELECT\n  geolocation_state,\n  STDDEV_SAMP(zip_count) AS zip_count_stddev\nFROM city_counts\nGROUP BY geolocation_state\nORDER BY zip_count_stddev DESC, geolocation_state\nLIMIT 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 동일한 위도를 공유하는 우편번호 접두어가 5개 이상인 위도 값과 그 개수를 많은 순으로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_lat,\n  COUNT(*) AS prefix_count\nFROM geolocation\nGROUP BY geolocation_lat\nHAVING COUNT(*) >= 5\nORDER BY prefix_count DESC, geolocation_lat;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시와 주별 평균 위도가 가장 북쪽인 상위 10개와 그 평균 위도를 알려주시겠습니까?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('22631', -23.00513351762937, -43.32596927546312, 'rio de janeiro', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  geolocation_city,\n  geolocation_state,\n  AVG(geolocation_lat) AS avg_lat\nFROM geolocation\nGROUP BY geolocation_city, geolocation_state\nORDER BY avg_lat DESC, geolocation_city, geolocation_state\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 공백이 전혀 없는 도시와 주를 중복 없이 이름순으로 나열하는 것임?\n\nDDL statements:\n\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT\n  geolocation_city,\n  geolocation_state\nFROM geolocation\nWHERE geolocation_city NOT LIKE '% %'\nORDER BY geolocation_city, geolocation_state;"
+    }
+]

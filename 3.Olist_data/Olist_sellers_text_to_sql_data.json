@@ -1,0 +1,502 @@
+[
+    {
+        "instruction": "입력 텍스트: 전체 판매자 수는 몇 명이에요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('83c8aafbefb034674a70de0eac5b8954', '85601', 'francisco beltrao', 'PR'), ('e5bd51692380fd8cabb19b756b95e714', '09220', 'santo andre', 'SP'), ('0432ead42b6c8a0bdf68154add917fdf', '09320', 'maua', 'SP'), ('28fb0829fd777877cdc350d25cb5bd5b', '15051', 'sao jose do rio pret', 'SP'), ('aec99834ab5d38ead22766ada8497e87', '83411', 'colombo', 'PR');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별 판매자 수를 많은 순서로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('50c361bcf670d16f6df4d52de3dff924', '04131', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS seller_count\nFROM sellers\nGROUP BY seller_state\nORDER BY seller_count DESC, seller_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: CE 주에 있는 판매자들의 도시 목록을 중복 없이 가나다순으로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('cc5a78bbad32776dc4e3af205218368c', '35501', 'divinopolis', 'MG'), ('8090490573c6c0aa343a7231ebcb8c86', '04130', 'sao paulo - sp', 'SP'), ('ca4b77513ac2040591b0d8fae6958380', '09190', 'sando andre', 'SP'), ('37be5a7c751166fbc5f8ccba4119e043', '04248', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT seller_city\nFROM sellers\nWHERE seller_state = 'CE'\nORDER BY seller_city ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시별 판매자 수가 5명 이상인 도시와 해당 판매자 수.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('c0aff2da32c17759d30b22fb0af6649d', '88032', 'florianopolis', 'SC'), ('762fafdaa57a532ee0119731697579dd', '13311', 'itu', 'SP'), ('a7a9b880c49781da66651ccf4ba9ac38', '13530', 'itirapina', 'SP'), ('a08692680c77d30a0b4280da5df01c5a', '04719', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_city, COUNT(*) AS seller_count\nFROM sellers\nGROUP BY seller_city\nHAVING COUNT(*) >= 5\nORDER BY seller_count DESC, seller_city ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 다음 판매자 ID들에 해당하는 판매자의 주와 도시를 조회해 주시겠습니까?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('3fac58ce0ad699020c7944d53c41329c', '03480', 'sao paulo', 'SP'), ('668bf321538e5072858eaef6087ce027', '83323', 'pinhais', 'PR'), ('f7ccf836d21b2fb1de37564105216cc1', '14940', 'ibitinga', 'SP'), ('4200ddf1967c5e41e48db62bc6d4b5ac', '09710', 'sao bernardo do campo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_id, seller_state, seller_city\nFROM sellers\nWHERE seller_id IN ('38af8acfd46ac4a7bf754e8ca6736664', '0951a6e282947e09cd47969f4ed0b47f');"
+    },
+    {
+        "instruction": "입력 텍스트: 도시 이름에 '리우데자네이루'가 포함된 판매자의 판매자 ID와 우편번호 접두사.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('6576fd3e23c88f0e5d4d23f39bba0542', '06766', 'taboao da serra', 'SP'), ('11742f81550ac064cc9a40f67151d9ad', '15810', 'catanduva', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_id, seller_zip_code_prefix\nFROM sellers\nWHERE LOWER(seller_city) LIKE '%rio de janeiro%';"
+    },
+    {
+        "instruction": "입력 텍스트: MS 주에서 우편번호 접두사가 '36200'인 판매자는 몇 명인가요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('508808d438fe2ff972ed13bb8f4a82e2', '03963', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_state = 'MS'\n  AND seller_zip_code_prefix = '36200';"
+    },
+    {
+        "instruction": "입력 텍스트: 주별로 서로 다른 도시 수를 집계해 주실 수 있습니까?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(DISTINCT seller_city) AS distinct_city_count\nFROM sellers\nGROUP BY seller_state\nORDER BY distinct_city_count DESC, seller_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 'minas'를 포함하는 도시의 판매자 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE LOWER(seller_city) LIKE '%minas%';"
+    },
+    {
+        "instruction": "입력 텍스트: 주와 도시 조합별 판매자 수 상위 10개.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('cfa5ab0e4d3fc212fd0b3410e7081c62', '36500', 'uba', 'MG');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, seller_city, COUNT(*) AS seller_count\nFROM sellers\nGROUP BY seller_state, seller_city\nORDER BY seller_count DESC, seller_state ASC, seller_city ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: RJ 주에 등록된 판매자의 식별자 20개를 보여줄 수 있음?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('f1fd5ab1181f827ffad998c1a5de7d74', '80010', 'curitiba', 'PR'), ('b9de031b671cd48b28fae9d828cbf2b4', '04283', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_id\nFROM sellers\nWHERE seller_state = 'RJ'\nORDER BY seller_id ASC\nLIMIT 20;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 'santa'로 시작하는 도시별로 판매자 수를 집계해 주시겠습니까?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('03a2a6dcbe45d639c4dc2a0d24769c40', '09340', 'maua', 'SP'), ('403aa86912527d730337ffcb0fb096ab', '30220', 'belo horizonte', 'MG'), ('01fdefa7697d26ad920e9e0346d4bd1b', '86050', 'londrina', 'PR'), ('8c351ed7c326c62123318f4f3246e906', '11701', 'praia grande', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_city, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_city LIKE 'santa%'\nGROUP BY seller_city\nORDER BY seller_count DESC, seller_city ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 주별 판매자 수가 10명 미만인 주만 보여줄 수 있나?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('ae8bfdbf1c2a2a2dee92d799db0a31c6', '85900', 'toledo', 'PR'), ('247587846358bb1d2e4c6522020b36fe', '15093', 'sao jose do rio preto', 'SP'), ('fe701d88b67eaca109dffd464d1be9f9', '24900', 'marica', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS seller_count\nFROM sellers\nGROUP BY seller_state\nHAVING COUNT(*) < 10\nORDER BY seller_count ASC, seller_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두사가 10000 이상 20000 미만인 판매자 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('b18871c324516afa228a13e8f1ef0ae9', '04186', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_zip_code_prefix >= '10000' AND seller_zip_code_prefix < '20000';"
+    },
+    {
+        "instruction": "입력 텍스트: RJ와 SP 두 주 각각의 판매자 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('8def3db7f272735afb2ecd03aeca09a7', '28035', 'rio de janeiro', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_state IN ('RJ', 'SP')\nGROUP BY seller_state\nORDER BY seller_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시 이름에 'do'가 포함된 도시 중 판매자 수가 많은 상위 5개 도시와 그 수를 보여줍니까?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('cc80e2f693fa6e2408f47ccf62413fc1', '81050', 'curitiba', 'PR');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_city, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_city LIKE '%do%'\nGROUP BY seller_city\nORDER BY seller_count DESC, seller_city ASC\nLIMIT 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주에서 판매자가 가장 많은 도시와 그 판매자 수.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('b2479f944e1b90cf8a5de1bbfde284d6', '14940', 'ibitinga', 'SP'), ('968ee78631915a63fef426d6733d7422', '99700', 'erechim', 'RS'), ('8603f0038fe0e52fedd3382d266723de', '88495', 'garopaba', 'SC');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, seller_city, seller_count\nFROM (\n  SELECT seller_state, seller_city, seller_count,\n         ROW_NUMBER() OVER (PARTITION BY seller_state ORDER BY seller_count DESC, seller_city ASC) AS rn\n  FROM (\n    SELECT seller_state, seller_city, COUNT(*) AS seller_count\n    FROM sellers\n    GROUP BY seller_state, seller_city\n  ) c\n) r\nWHERE rn = 1\nORDER BY seller_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두사가 '88220', '14806', '83075'인 판매자의 도시와 주 정보.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('391fc6631aebcf3004804e51b40bcf1e', '14940', 'ibitinga', 'SP'), ('1b65c144b17e607c0f37f10bb7dfec8d', '89160', 'rio do sul', 'SC'), ('8fec2e460530482132c436cfb5439925', '18500', 'laranjal paulista', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_zip_code_prefix, seller_city, seller_state\nFROM sellers\nWHERE seller_zip_code_prefix IN ('88220', '14806', '83075')\nORDER BY seller_zip_code_prefix, seller_city, seller_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시 이름에 공백이 포함된 도시에 속한 판매자 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('64c9a1db4e73e19aaafd3286dc448c96', '82510', 'curitiba', 'PR'), ('e732329483fd5f27367dd997b47f598a', '89030', 'blumenau', 'SC'), ('05ff92fedb5be47920fea08e501238b9', '98803', 'santo angelo', 'RS'), ('88af55b4a7ca402b27df16f7c7c9b5d2', '06775', 'taboao da serra', 'SP'), ('7d7866a99a8656a42c7ff6352a433410', '01320', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_city LIKE '% %';"
+    },
+    {
+        "instruction": "입력 텍스트: 각 도시별 서로 다른 우편번호 접두사 수를 구하고, 접두사 수가 많은 순서대로 10개만 보여주냐?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('4ebdc7e6cd6102a022dadc49156d4ea8', '05030', 'sao paulo', 'SP'), ('a7a9b880c49781da66651ccf4ba9ac38', '13530', 'itirapina', 'SP'), ('f125f3a310c2e5f822d116147de1e474', '03068', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_city, COUNT(DISTINCT seller_zip_code_prefix) AS zip_prefix_count\nFROM sellers\nGROUP BY seller_city\nORDER BY zip_prefix_count DESC, seller_city ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 상파울루시에 등록된 판매자 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_state = 'SP' AND seller_city = 'sao paulo';"
+    },
+    {
+        "instruction": "입력 텍스트: 'seller_id'가 'a'로 시작하는 판매자는 몇 명임?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('b3809b8d4394588a47c8470ea331e135', '04810', 'sao paulo', 'SP'), ('582d4f8675b945722eda7c0cb61ba4c7', '11250', 'bertioga', 'SP'), ('889009a0ed0bb52c87819941192931b8', '18682', 'lencois paulista', 'SP'), ('6879c4d287a8dd06b11f54ea8f78e4da', '06186', 'osasco', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_id LIKE 'a%';"
+    },
+    {
+        "instruction": "입력 텍스트: 도시 이름에 하이픈(-)이 포함된 도시에 속한 판매자는 몇 명일까?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('2a7dc43cecabf23403078e2188437d1d', '04142', 'sao paulo', 'SP'), ('00720abe85ba0859807595bbf045a33b', '07070', 'guarulhos', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_city LIKE '%-%';"
+    },
+    {
+        "instruction": "입력 텍스트: curitiba나 londrina에 있는 판매자들의 seller_id, 도시, 주를 도시명 오름차순으로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('3ea00e1dea2b0659dbaf654735929220', '80020', 'curitiba', 'PR'), ('d2df77822373f19934e87694d8640767', '86706', 'arapongas', 'PR'), ('a9b533a26e898b12e8b8d4c07279bf4d', '21545', 'rio de janeiro', 'RJ'), ('94c49f20a123aeb9360dbf80ff912bf6', '18015', 'sorocaba', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_id, seller_city, seller_state\nFROM sellers\nWHERE seller_city IN ('curitiba', 'londrina')\nORDER BY seller_city ASC, seller_id ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별 판매자 수 많음 순.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('78ba5933c21686d1c2f64669c8c459e7', '08810', 'mogi das cruzes', 'SP'), ('5ca5d579b5857ee8709479b1047cecc3', '04176', 'sao paulo', 'SP'), ('f97e2b0650c2068227e1d366140eb62f', '13830', 'santo antonio de posse', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_state IN ('SP', 'RJ', 'MG', 'ES')\nGROUP BY seller_state\nORDER BY seller_count DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두사별 판매자 수가 가장 많은 상위 10개 접두사와 그 수.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('e882b2a25a10b9c057cc49695f222c19', '25963', 'teresopolis', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_zip_code_prefix, COUNT(*) AS seller_count\nFROM sellers\nGROUP BY seller_zip_code_prefix\nORDER BY seller_count DESC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 판매자가 정확히 1명인 도시-주 조합의 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('4a23adac87cf538689fa600d976f78b2', '04537', 'sao paulo', 'SP'), ('e3d3b3efac954a60d61be70b7e05b49b', '03370', 'sao paulo', 'SP'), ('c26a2be5b53b7db6b276280da212a779', '28630', 'nova friburgo', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS one_seller_city_state_count\nFROM (\n  SELECT seller_state, seller_city\n  FROM sellers\n  GROUP BY seller_state, seller_city\n  HAVING COUNT(*) = 1\n) AS t;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두사가 정확히 5자리인 판매자는 몇 명이니?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('20a8b0dc55da94fe74d112082427c84f', '13312', 'itu', 'SP'), ('71271995e85f5b8530be99ed54a91b89', '91360', 'porto alegre', 'RS'), ('f3c38ab652836d21de61fb8314b69182', '01206', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE CHAR_LENGTH(seller_zip_code_prefix) = 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 'polis'로 끝나는 도시들의 주별 판매자 수를 많은 순서대로 보여줍니까?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('d2374cbcbb3ca4ab1086534108cc3ab7', '14940', 'ibitinga', 'SP'), ('43b2c864251aa0ce4030c746984e088a', '71936', 'brasilia', 'DF'), ('7ecd59e5e20407131822c1a68ac59c1f', '70719', 'brasilia', 'DF'), ('20fd2d2080ed85fa67fad3fcbb2c1813', '83405', 'colombo', 'PR');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_city LIKE '%polis'\nGROUP BY seller_state\nORDER BY seller_count DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: BA 주에서 판매자가 가장 많은 상위 5개 도시와 그 판매자 수.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('f1ed6bd0a9b11b581f16c851c6a5a527', '90240', 'porto alegre', 'RS'), ('3ded4e2d5f135cb103e5949d7263d2dd', '37550', 'pouso alegre', 'MG');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_city, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_state = 'BA'\nGROUP BY seller_city\nORDER BY seller_count DESC\nLIMIT 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 등록된 주 코드들을 중복 없이 모두 나열하고, 알파벳순으로 정렬해 주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT seller_state\nFROM sellers\nORDER BY seller_state;"
+    },
+    {
+        "instruction": "입력 텍스트: RS 주에서 판매자가 가장 많은 상위 5개 도시와 그 판매자 수를 알려주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('3bb548e3cb7f70f28e3f11ee9dce0e59', '87040', 'maringa', 'PR');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_city, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_state = 'RS'\nGROUP BY seller_city\nORDER BY seller_count DESC, seller_city ASC\nLIMIT 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두사가 '88'로 시작하는 판매자는 몇 명인가요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('79a679c36c08d606b3fd47ead9de109b', '02611', 'sao paulo', 'SP'), ('a49928bcdf77c55c6d6e05e09a9b4ca5', '03017', 'sao paulo', 'SP'), ('17e34d8224d27a541263c4c64b11a56b', '14085', 'riberao preto', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_zip_code_prefix LIKE '88%';"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 정확히 '리오데자네이루'인 판매자의 판매자 ID를 우편번호 접두사 오름차순으로 20개만 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('7fdb0720c8d7c9075538b365dc8c3a22', '85904', 'toledo', 'PR'), ('c54679b132454625907c773d273d4126', '11443', 'guaruja', 'SP'), ('457fe919b032a3f7dadba6fb92cf7855', '13140', 'paulinia', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_id\nFROM sellers\nWHERE seller_city = 'rio de janeiro'\nORDER BY seller_zip_code_prefix ASC\nLIMIT 20;"
+    },
+    {
+        "instruction": "입력 텍스트: PR, SC, RS 세 주 각각의 판매자 수를 적은 순서대로 보여주시겠니?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('eebb3372362aa9a46975164bed19a7e7', '04578', 'sao paulo', 'SP'), ('4eeb99008a0f59d2c7759c59f9a346eb', '06807', 'embu das artes', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_state IN ('PR', 'SC', 'RS')\nGROUP BY seller_state\nORDER BY seller_count ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별 서로 다른 우편번호 접두사 개수 상위 10개 주.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('b499c00f28f4b7069ff6550af8c1348a', '13481', 'limeira', 'SP'), ('70c0fda4c313d87115644d39e62eec60', '55004', 'caruaru', 'PE');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(DISTINCT seller_zip_code_prefix) AS prefix_count\nFROM sellers\nGROUP BY seller_state\nORDER BY prefix_count DESC, seller_state ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 한 주에 단 하나의 도시에만 판매자가 있는 주의 주 코드와 그 주의 총 판매자 수를 보여주십시오.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('89757206b887aed36f3e18d858460fea', '03121', 'sao paulo', 'SP'), ('e628d4a53c109f09ca88098338b3a3f5', '30170', 'belo horizonte', 'MG'), ('cd6efc47efaabf134f8bdb654e10b4f1', '23050', 'rio de janeiro', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS seller_count\nFROM sellers\nGROUP BY seller_state\nHAVING COUNT(DISTINCT seller_city) = 1\nORDER BY seller_count DESC, seller_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명에 'nova'가 포함된 도시들의 주별 판매자 수를 많은 순서대로 보여줄 수 있나?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('eb4df17aed01d918c65f0f8d650900c0', '13140', 'paulinia', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_city LIKE '%nova%'\nGROUP BY seller_state\nORDER BY seller_count DESC, seller_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: RS 주 판매자들의 우편번호 접두사 중복 제거 후 오름차순으로 정렬한 상위 50개.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('8e6cc767478edae941d9bd9eb778d77a', '38442', 'araguari', 'MG'), ('26e2e5033827d2ba53929f43e03d8ffe', '02611', 'sao paulo', 'SP'), ('713e3a23ca5e47786eb6f0d99f94cfac', '81050', 'curitiba', 'PR');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT seller_zip_code_prefix\nFROM sellers\nWHERE seller_state = 'RS'\nORDER BY seller_zip_code_prefix ASC\nLIMIT 50;"
+    },
+    {
+        "instruction": "입력 텍스트: seller_id의 길이가 32자인 판매자는 몇 명인가요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('f0e103c63864d5405b958d984b6e94c9', '06150', 'osasco', 'SP'), ('b39d7fe263ef469605dbb32608aee0af', '14940', 'ibitinga', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE CHAR_LENGTH(seller_id) = 32;"
+    },
+    {
+        "instruction": "입력 텍스트: SP 주에서 우편번호 접두사별 판매자 수가 가장 많은 상위 5개 접두사와 그 수를 알려주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: select seller_zip_code_prefix, count(*) as seller_count\nfrom sellers\nwhere seller_state = 'SP'\ngroup by seller_zip_code_prefix\norder by seller_count desc, seller_zip_code_prefix asc\nlimit 5;"
+    },
+    {
+        "instruction": "입력 텍스트: MG 주에서 판매자가 많은 상위 10개 도시와 각 도시의 판매자 수를 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('62de60d81c55c29d76a6bce418b31cef', '14940', 'ibitinga', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: select seller_city, count(*) as seller_count\nfrom sellers\nwhere seller_state = 'MG'\ngroup by seller_city\norder by seller_count desc, seller_city asc\nlimit 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 둘 이상의 주에 존재하는 동일한 도시 이름과 각 도시가 존재하는 주의 개수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('6edacfd9f9074789dad6d62ba7950b9c', '07135', 'guarulhos', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: select seller_city, count(distinct seller_state) as state_count\nfrom sellers\ngroup by seller_city\nhaving count(distinct seller_state) > 1\norder by state_count desc, seller_city asc;"
+    },
+    {
+        "instruction": "입력 텍스트: SP와 RJ를 제외한 나머지 주에 속한 판매자 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('657969cca82e884d272385ec0ef06edd', '93608', 'estancia velha', 'RS');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: select count(*) as seller_count\nfrom sellers\nwhere seller_state not in ('SP', 'RJ');"
+    },
+    {
+        "instruction": "입력 텍스트: 도시 이름에 공백이 포함된 도시들 중에서 판매자 수가 많은 상위 10개 도시와 그 수를 보여줄 수 있음?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('0be8ff43f22e456b4e0371b2245e4d01', '04461', 'sao paulo', 'SP'), ('3dc69bf2c42f0568a5c4791ec3fd3745', '02880', 'sao paulo', 'SP'), ('30c7f28fd3a5897b2c82d152bb760c17', '24020', 'niteroi', 'RJ'), ('55f7a3319d80f7fdf078b8f03e6725fe', '06056', 'osasco', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: select seller_city, count(*) as seller_count\nfrom sellers\nwhere seller_city like '% %'\ngroup by seller_city\norder by seller_count desc, seller_city asc\nlimit 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 동일한 우편번호 접두사가 둘 이상의 주에서 사용되는 경우, 해당 접두사와 사용된 주의 수를 알려주나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('2d9e8987a2ea5cf88dce330249043ff1', '15155', 'jaci', 'SP'), ('41b14765bd56c8ad10971074380f9c0c', '09070', 'santo andre', 'SP'), ('244b04680fdbded0acf5aebd9c92b44a', '13211', 'jundiai', 'SP'), ('7315baebc0572ff220d226283dc66728', '13560', 'sao carlos', 'SP'), ('056b4ada5bbc2c50cc7842547dda6b51', '26379', 'queimados', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: select seller_zip_code_prefix, count(distinct seller_state) as state_count\nfrom sellers\ngroup by seller_zip_code_prefix\nhaving count(distinct seller_state) > 1\norder by state_count desc, seller_zip_code_prefix asc;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주에서 도시당 평균 판매자 수 상위 10개 주\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('436bf27f2f18474fc6047702e9f8a866', '13041', 'campinas', 'SP'), ('bbe87dce25ba8b38bb61cc7210a3f10b', '13870', 'sao joao da boa vista', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: select seller_state,\n       1.0 * count(*) / nullif(count(distinct seller_city), 0) as avg_sellers_per_city\nfrom sellers\ngroup by seller_state\norder by avg_sellers_per_city desc, seller_state asc\nlimit 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별 우편번호 접두사의 최솟값과 최댓값.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('aded58c8142dedc5494a81f948431fab', '22051', 'rio de janeiro', 'RJ'), ('c1d1ebb4745cc43cb6f05e9c8a705c9a', '08070', 'sao paulo', 'SP'), ('b1b3948701c5c72445495bd161b83a4c', '03390', 'sao paulo', 'SP'), ('6ebf4eceee4dd9847201c82e77ef8123', '23587', 'rio de janeiro', 'RJ'), ('c5ebe6598748b0aeaa61cfb820478b92', '95910', 'lajeado', 'RS');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: select seller_state,\n       min(seller_zip_code_prefix) as min_zip_code_prefix,\n       max(seller_zip_code_prefix) as max_zip_code_prefix\nfrom sellers\ngroup by seller_state\norder by seller_state asc;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주에서 판매자가 많은 상위 3개 도시와 그 판매자 수를 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('54065e9aef7e9e9c2dc23b7594db021a', '20040', 'rio de janeiro', 'RJ'), ('3c4e0452bff7a2a788179488d3d77032', '83408', 'colombo', 'PR'), ('cb8bcce248bb1fb274ba762d8b971456', '37540', 'santa rita do sapucai', 'MG'), ('88af55b4a7ca402b27df16f7c7c9b5d2', '06775', 'taboao da serra', 'SP'), ('3b872fd4747f01cc56206f2934198618', '14940', 'ibitinga', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: select seller_state, seller_city, seller_count\nfrom (\n  select seller_state, seller_city, count(*) as seller_count,\n         dense_rank() over (partition by seller_state order by count(*) desc, seller_city asc) as rnk\n  from sellers\n  group by seller_state, seller_city\n) t\nwhere rnk <= 3\norder by seller_state asc, seller_count desc, seller_city asc;"
+    },
+    {
+        "instruction": "입력 텍스트: DF 주에 등록된 판매자의 판매자 ID와 도시, 우편번호 접두사를 판매자 ID 오름차순으로 50개만 보여줄 수 있나?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('df56d7b40d437f88407c5f78b63bc328', '85812', 'cascavel', 'PR'), ('7d81e74a4755b552267cd5e081563028', '04735', 'sao paulo', 'SP'), ('700f03c207639c22d933381ff60b35c2', '14784', 'barretos', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: select seller_id, seller_city, seller_zip_code_prefix\nfrom sellers\nwhere seller_state = 'DF'\norder by seller_id asc\nlimit 50;"
+    },
+    {
+        "instruction": "입력 텍스트: SP 주에는 서로 다른 도시가 몇 개인가요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(DISTINCT seller_city) AS city_count\nFROM sellers\nWHERE seller_state = 'SP';"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 정확히 'fortaleza'인 판매자의 seller_id를 seller_id 오름차순으로 30개만 보여주니?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('d91fb3b7d041e83b64a00a3edfb37e4f', '11704', 'praia grande', 'SP'), ('db46ca7bce82b11f7e247539271fc390', '23080', 'rio de janeiro', 'RJ'), ('99a25c39b28a74d1151c35c18d178292', '02236', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_id\nFROM sellers\nWHERE seller_city = 'fortaleza'\nORDER BY seller_id ASC\nLIMIT 30;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두사가 숫자만으로 이루어진 5자리인 판매자 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('ed4311e67debd72b8610a5347a743087', '07170', 'guarulhos', 'SP'), ('d6cd01c59123df02fc226eadbadb5f89', '01207', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_zip_code_prefix REGEXP '^[0-9]{5}$';"
+    },
+    {
+        "instruction": "입력 텍스트: 도시 이름의 길이가 가장 긴 상위 10개 도시와 그 길이를 알려주겠느냐?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('818d28f936e791926d33bcb6ee94ef79', '04141', 'sao paulo', 'SP'), ('a2e85714b56b1cb6bb24a9a6e6cad36f', '14530', 'miguelopolis', 'SP'), ('6548c2550b6e2d8f18053216e1c7b6f3', '09920', 'diadema', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_city, LENGTH(seller_city) AS name_length\nFROM (\n  SELECT DISTINCT seller_city\n  FROM sellers\n) AS d\nORDER BY name_length DESC, seller_city ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별로 가장 많이 사용되는 우편번호 접두사와 그 판매자 수를 보여줄 수 있습니까?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('fa14641f57b655e933124a9ea49cd7a5', '01310', 'sao paulo', 'SP'), ('cda598c48d7c614bc1cad7d8ff6f0010', '15137', 'mirassol', 'SP'), ('4c8545742faaf58fafd5fd14d25d75cf', '15603', 'fernandopolis', 'SP'), ('685b870da5b52a710782c9c0fefbeb5b', '09820', 'sao bernardo do campo', 'SP'), ('f09b760d23495ac9a7e00d29b769007c', '15802', 'catanduva', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, seller_zip_code_prefix, cnt\nFROM (\n  SELECT\n    seller_state,\n    seller_zip_code_prefix,\n    COUNT(*) AS cnt,\n    RANK() OVER (PARTITION BY seller_state ORDER BY COUNT(*) DESC) AS rnk\n  FROM sellers\n  GROUP BY seller_state, seller_zip_code_prefix\n) AS x\nWHERE rnk = 1\nORDER BY seller_state ASC, seller_zip_code_prefix ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 둘 이상의 도시에서 사용되는 우편번호 접두사와 해당 도시 수를 많은 순서대로 상위 10개만 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('dbc51f5e45d654ecc16cb68e6817ecea', '14402', 'franca', 'SP'), ('3aa3c89ae3cd482385568be76120f63c', '74343', 'goiania', 'GO');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_zip_code_prefix, COUNT(DISTINCT seller_city) AS city_count\nFROM sellers\nGROUP BY seller_zip_code_prefix\nHAVING COUNT(DISTINCT seller_city) >= 2\nORDER BY city_count DESC, seller_zip_code_prefix ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 판매자가 정확히 1명만 있는 우편번호 접두사의 총 개수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS zip_prefix_with_one_seller\nFROM (\n  SELECT seller_zip_code_prefix\n  FROM sellers\n  GROUP BY seller_zip_code_prefix\n  HAVING COUNT(*) = 1\n) AS t;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주에서 판매자가 가장 적은 도시와 그 도시의 판매자 수.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('4a82168aaef173cbb6e46ae88728f919', '84500', 'irati', 'PR'), ('503c1de08ae81a2d86f17951b204db55', '03725', 'sao paulo', 'SP'), ('fec8cd45395b3cb0c2b173d7739706a1', '12270', 'jambeiro', 'SP'), ('bd43e172d599bed47a85da877172ca8c', '89280', 'sao bento do sul', 'SC');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, seller_city, cnt\nFROM (\n  SELECT\n    seller_state,\n    seller_city,\n    cnt,\n    MIN(cnt) OVER (PARTITION BY seller_state) AS min_cnt\n  FROM (\n    SELECT seller_state, seller_city, COUNT(*) AS cnt\n    FROM sellers\n    GROUP BY seller_state, seller_city\n  ) AS a\n) AS b\nWHERE cnt = min_cnt\nORDER BY seller_state ASC, seller_city ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별 판매자 수 상위 5개(단, SP와 RJ 제외)\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('e62b2d6ac10570a035a30bafcf01d263', '05767', 'sao paulo', 'SP'), ('1127b7f2594683f2510f1c2c834a486b', '13087', 'campinas', 'SP'), ('72431a818f97fe6ab9c81eee3e297e54', '13390', 'rio das pedras', 'SP'), ('3d2531eccfbde1d7c8db7a3a12fb267a', '31340', 'contagem', 'MG'), ('eb72802c83dc7547529c9546d1a9b8ef', '13504', 'rio claro', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_state NOT IN ('SP', 'RJ')\nGROUP BY seller_state\nORDER BY seller_count DESC, seller_state ASC\nLIMIT 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 정확히 'porto alegre'인 판매자들의 우편번호 접두사를 중복 없이 오름차순으로 50개만 보여줄 수 있나?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('6cf476a4ca74498db55cbccdaa9dcfb6', '02873', 'sao paulo', 'SP'), ('7ad41305e96a6cab8294cd65891e9a86', '28810', 'rio bonito', 'SP'), ('553a440137d6e0cf776aee0bb83ac9f5', '13481', 'limeira', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT seller_zip_code_prefix\nFROM sellers\nWHERE seller_city = 'porto alegre'\nORDER BY seller_zip_code_prefix ASC\nLIMIT 50;"
+    },
+    {
+        "instruction": "입력 텍스트: 주 코드가 'A'로 시작하는 주에 속한 판매자는 총 몇 명입니까?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_state LIKE 'A%';"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명 길이가 정확히 3자인 도시들의 목록과 각 도시의 판매자 수.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('fe2032dab1a61af8794248c8196565c9', '13030', 'campinas', 'SP'), ('fd435faa3c0422b60440ea3480d0e77c', '58073', 'joao pessoa', 'PB'), ('98115075dd26cb8835946fc6086f5d30', '09687', 'ao bernardo do campo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_city, COUNT(*) AS seller_count\nFROM sellers\nWHERE CHAR_LENGTH(seller_city) = 3\nGROUP BY seller_city\nORDER BY seller_city ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 'nova'로 시작하는 판매자들을 주별로 집계하고 많은 순서대로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('e3a386fc36e22064434e1fa256f6a9fa', '13165', 'engenheiro coelho', 'SP'), ('fa8d335d68129e464e60c1826a683e96', '95660', 'tres coroas', 'RS'), ('1fddcb7b326905d3ad5efe82187db347', '02279', 'sao paulo', 'SP'), ('381c83fdca332ea6afd896da20bf6e4a', '80010', 'curitiba', 'PR'), ('2379bdc3888025689a9deb7b141507d5', '13806', 'mogi mirim', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_city LIKE 'nova%'\nGROUP BY seller_state\nORDER BY seller_count DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두사에 숫자가 아닌 문자가 포함된 판매자의 ID를 오름차순으로 50개만 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('87142160b41353c4e5fca2360caf6f92', '90230', 'porto alegre', 'RS'), ('19a7c9f66ffa6452ff4b4c0cca71da27', '85880', 'itaipulandia', 'PR'), ('89dda63a3c907c468ec88c310ed91213', '09380', 'maua/sao paulo', 'SP'), ('3338e7a0710a195872be80e0d2423867', '13403', 'piracicaba', 'SP'), ('557f22c76691849db52d2abccf0015d0', '75650', 'morrinhos', 'GO');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_id\nFROM sellers\nWHERE seller_zip_code_prefix NOT REGEXP '^[0-9]{5}$'\nORDER BY seller_id ASC\nLIMIT 50;"
+    },
+    {
+        "instruction": "입력 텍스트: SP 주에서 도시명이 'sao'로 시작하는 곳에 등록된 판매자는 몇 명임?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_state = 'SP'\n  AND seller_city LIKE 'sao%';"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별로, 두 개 이상의 도시에 걸쳐 사용되는 우편번호 접두사가 몇 개인지 아는 임?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('0873d9f8f36123f8d910f4760e788cfb', '06465', 'barueri', 'SP'), ('c9c7905cffc4ef9ff9f113554423e671', '06871', 'itapecerica da serra', 'SP'), ('4e42581f08e8cfc7c090f930bac4552a', '13660', 'portoferreira', 'SP'), ('a5a1bfcf728ab0e19182959cf0771ee4', '13960', 'socorro', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT s.seller_state, COUNT(*) AS prefix_count\nFROM (\n  SELECT seller_state, seller_zip_code_prefix\n  FROM sellers\n  GROUP BY seller_state, seller_zip_code_prefix\n  HAVING COUNT(DISTINCT seller_city) >= 2\n) AS s\nGROUP BY s.seller_state\nORDER BY prefix_count DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주에서 판매자 수가 100명 이상인 도시가 몇 개인지 많은 순서대로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('ec8463980a4e0ea9f8517aea1ed0c419', '88010', 'florianopolis', 'SC'), ('2f74af7a0ee5636f12c2336f9fffed47', '02376', 'sao paulo', 'SP'), ('4e5725ba188db8252977a4f0227bd462', '14092', 'ribeirao preto', 'SP'), ('6806dad1da97bfb5a9038eac6881f706', '83280', 'guaratuba', 'PR');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS city_count\nFROM (\n  SELECT seller_state, seller_city, COUNT(*) AS seller_count\n  FROM sellers\n  GROUP BY seller_state, seller_city\n  HAVING COUNT(*) >= 100\n) AS t\nGROUP BY seller_state\nORDER BY city_count DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명에 'santo' 또는 'santa'가 포함된 판매자의 주별 합산 결과.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_city LIKE '%santo%'\n   OR seller_city LIKE '%santa%'\nGROUP BY seller_state\nORDER BY seller_count DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두사가 '0'으로 시작하는 판매자는 몇 명일까?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('a2e874074c877c5a05abae80ad6e488f', '15070', 'sao jose do rio preto', 'SP'), ('ab9db4cf53b08b828b64dccaafc2d9f0', '96530', 'paraiso do sul', 'RS'), ('d1a5cc844736958c11b8efab9a2b4c87', '80310', 'curitiba', 'PR'), ('3a79f35a2344ede41af21267f61d5ec6', '13040', 'campinas', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_zip_code_prefix LIKE '0%';"
+    },
+    {
+        "instruction": "입력 텍스트: 전체 기준으로 판매자 수가 가장 많은 상위 10개 도시와 각 도시의 판매자 수를 알려주겠느냐?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('47efca563408aae19bb7206c2d969ea9', '64033', 'teresina', 'PI'), ('a7ecf689b40a44361e259b28939023e4', '29102', 'vila velha', 'ES'), ('3a3e46d10f74d8a6ca76e2b538f106a0', '02522', 'sao paulo', 'SP'), ('fc906263ca5083d09dce42fe02247800', '31030', 'belo horizonte', 'MG');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_city, COUNT(*) AS seller_count\nFROM sellers\nGROUP BY seller_city\nORDER BY seller_count DESC, seller_city ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 'salvador'인 판매자에 대한 seller_id와 우편번호 접두사, seller_id 오름차순으로 정렬된 상위 30개.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_id, seller_zip_code_prefix\nFROM sellers\nWHERE seller_city = 'salvador'\nORDER BY seller_id\nLIMIT 30;"
+    },
+    {
+        "instruction": "입력 텍스트: 주 코드가 'R'로 시작하는 각 주별 판매자 수 많은 순서.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('ad14615bdd492b01b0d97922e87cb87f', '88704', 'tubarao', 'SC'), ('d1c281d3ae149232351cd8c8cc885f0d', '14940', 'ibitinga', 'SP'), ('0ade5cc4a305ed7093a23f68ca47519c', '81030', 'curitiba', 'PR'), ('95ec4458365c4d11f452ccf538377619', '13481', 'limeira', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_state LIKE 'R%'\nGROUP BY seller_state\nORDER BY seller_count DESC, seller_state;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시당 평균 판매자 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('d558ebe531605a1285ab2b1bc3256dfb', '35501', 'divinopolis', 'MG'), ('6b2612338467c08c9b25f0cc55b1578d', '86990', 'marialva', 'PR'), ('3dbbce181edfaa4a597ec858c382d2ec', '82515', 'curitiba', 'PR'), ('ab27bbbad5239bc31a34709275a70db4', '18279', 'tatui', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT CAST(COUNT(*) AS DECIMAL(18,2)) / NULLIF(COUNT(DISTINCT seller_city), 0) AS avg_sellers_per_city\nFROM sellers;"
+    },
+    {
+        "instruction": "입력 텍스트: 한 주에서만 등장하는 도시 이름 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('9591fc341b1bfb7ef561e2968ec6e011', '04456', 'sao paulo', 'SP'), ('76ea5315acb3f5f7ade3cd261faf922a', '04213', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS unique_cities_in_single_state\nFROM (\n  SELECT seller_city\n  FROM sellers\n  GROUP BY seller_city\n  HAVING COUNT(DISTINCT seller_state) = 1\n) t;"
+    },
+    {
+        "instruction": "입력 텍스트: 숫자로 끝나는 판매자 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('c864036feaab8c1659f65ea4faebe1da', '83605', 'campo largo', 'PR'), ('128f9bfbe4c7d5185033914b1de3d39a', '12940', 'atibaia', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS sellers_ending_with_digit\nFROM sellers\nWHERE RIGHT(seller_id, 1) >= '0' AND RIGHT(seller_id, 1) <= '9';"
+    },
+    {
+        "instruction": "입력 텍스트: 도시-주-우편번호 접두사 조합별 판매자 수를 집계하고, 판매자가 50명 이상인 조합만 도시, 주, 접두사와 그 수를 많은 순서대로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('87d30a6a0cbf89356e49324971ab1d24', '02036', 'sao paulo', 'SP'), ('bbf9ad41dca6603e614efcdad7aab8c4', '60348', 'fortaleza', 'CE'), ('de722cd6dad950a92b7d4f82673f8833', '51250', 'recife', 'PE');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, seller_city, seller_zip_code_prefix, COUNT(*) AS seller_count\nFROM sellers\nGROUP BY seller_state, seller_city, seller_zip_code_prefix\nHAVING COUNT(*) >= 50\nORDER BY seller_count DESC, seller_state, seller_city, seller_zip_code_prefix;"
+    },
+    {
+        "instruction": "입력 텍스트: 전체 기준으로 판매자가 가장 많은 단일 도시-주 조합과 판매자 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('5721089ba9214e80074f27d5a03fc0eb', '01408', 'sao paulo', 'SP'), ('7adbd3210a7b3cc2235e225eef33574d', '02544', 'sao paulo', 'SP'), ('c26ba52cf8d2f34915f2f6b7ffa0a3f3', '21510', 'rio de janeiro', 'RJ'), ('6562efe88ce0826a4ca4f189f03b4b84', '87005', 'maringa', 'PR');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, seller_city, COUNT(*) AS seller_count\nFROM sellers\nGROUP BY seller_state, seller_city\nORDER BY seller_count DESC, seller_state, seller_city\nLIMIT 1;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 세 단어 이상인 도시들의 판매자 수를 도시명 오름차순으로 모두 보여줍니까?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('5e25c632f9db6cfb8bc100421c2737b6', '89801', 'chapeco', 'SC'), ('afa6714acee029b2dfdf357e5579cc03', '13690', 'descalvado', 'SP'), ('20f0aeea30bc3b8c4420be8ced4226c0', '13456', 'santa barbara d''oeste', 'SP'), ('2075d8cd4dd63ff12df0749a5866bb06', '80010', 'curitiba', 'PR'), ('c4fabeea6e569d42d02993bb1f4f1cbc', '60741', 'fortaleza', 'CE');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_city, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_city LIKE '% % %'\nGROUP BY seller_city\nORDER BY seller_city ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두사에 숫자 '7'이 포함된 판매자는 총 몇 명입니까?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('5e25c632f9db6cfb8bc100421c2737b6', '89801', 'chapeco', 'SC');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS sellers_with_7_in_zip_prefix\nFROM sellers\nWHERE seller_zip_code_prefix LIKE '%7%';"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별로 seller_id 앞 3글자 접두사의 종류 수를 계산하고, 많은 순서대로 상위 10개 주를 보여주나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('f12d3c2a14729ae461b920c11fe20fdc', '09080', 'santo andre', 'SP'), ('412a4720f3e9431b4afa1476a1acddbe', '13060', 'campinas', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(DISTINCT SUBSTRING(seller_id, 1, 3)) AS distinct_id_prefix3_count\nFROM sellers\nGROUP BY seller_state\nORDER BY distinct_id_prefix3_count DESC, seller_state\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명에 슬래시('/')가 포함된 판매자 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('553a440137d6e0cf776aee0bb83ac9f5', '13481', 'limeira', 'SP'), ('9da15f4a4ea758d9eeb49000dbe57e22', '06290', 'osasco', 'SP'), ('528bcf6680c36dddf07620bd35b33a6f', '03178', 'sao paulo', 'SP'), ('8c5e007d7bd5693fa1386ffefbc99f6c', '13347', 'indaiatuba', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_city LIKE '%/%';"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두사가 '99'로 시작하는 판매자를 주별로 집계하여 많은 순서대로 보여주시겠습니까?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('1a8e2d9c38b84a9702ac7922924b0573', '89245', 'araquari', 'SC');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_state, COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_zip_code_prefix LIKE '99%'\nGROUP BY seller_state\nORDER BY seller_count DESC, seller_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 전체 기준으로 서로 다른 우편번호 접두사는 총 몇 개인가요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('b64d51f0435e884e8de603b1655155ae', '07077', 'garulhos', 'SP'), ('e38db885400cd35c71dfd162f2c1dbcf', '70740', 'brasilia', 'DF'), ('ec8879960bd2221d5c32f8e12f7da711', '13253', 'itatiba', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(DISTINCT seller_zip_code_prefix) AS distinct_zip_prefix_count\nFROM sellers;"
+    },
+    {
+        "instruction": "입력 텍스트: 전체 기준으로 주당 평균 판매자 수는 얼마임?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('1838dd9b8977065acf51d95e0053ea7a', '30882', 'belo horizonte', 'MG'), ('141440cad9341e553f8401c574a2aa38', '85200', 'pitanga', 'PR'), ('5de1c80811ce7007f62f00d971236c09', '88063', 'florianopolis', 'SC'), ('698f5fa55a5f73d0740e9d9a773e8093', '20751', 'rio de janeiro', 'RJ');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT CAST(COUNT(*) AS DECIMAL(18,2)) / NULLIF(COUNT(DISTINCT seller_state), 0) AS avg_sellers_per_state\nFROM sellers;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두사가 숫자만으로 이루어진 4자리인 판매자 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_zip_code_prefix REGEXP '^[0-9]{4}$';"
+    },
+    {
+        "instruction": "입력 텍스트: 브라질 남부 지역인 파라나, 산타카타리나, 리우그란지두술에 속한 판매자는 총 몇 명인가요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('eb9267cccc90f1b49c8d2f9887c7dd97', '52011', 'recife', 'PE'), ('63272377184e969942f7fff221be858d', '03340', 'sao paulo', 'SP'), ('9315e491484b1b0081ca166fc164108d', '86039', 'londrina', 'PR'), ('12c2ed9cded6138cf0c75f525f565fc7', '11709', 'praia grande', 'SP'), ('1c83418358f249c9d6affa52d579db0e', '01420', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_state IN ('PR', 'SC', 'RS');"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 정확히 'curitiba'인 곳에서 사용되는 서로 다른 우편번호 접두사는 몇 개인가임?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(DISTINCT seller_zip_code_prefix) AS distinct_prefix_count\nFROM sellers\nWHERE seller_city = 'curitiba';"
+    },
+    {
+        "instruction": "입력 텍스트: 전체 기준으로 서로 다른 도시 이름은 총 몇 개인가요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('669ae81880e08f269a64487cfb287169', '89160', 'rio do sul', 'SC'), ('68ca56ce86830f3d31b1b7ec6a54da3e', '83280', 'guaratuba', 'PR');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(DISTINCT seller_city) AS distinct_city_count\nFROM sellers;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명 첫 글자별 판매자 수 상위 10개.\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('a64e44665225d19dfc0277eeeaaccc57', '19400', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT LOWER(SUBSTRING(seller_city, 1, 1)) AS initial, COUNT(*) AS seller_count\nFROM sellers\nGROUP BY LOWER(SUBSTRING(seller_city, 1, 1))\nORDER BY seller_count DESC, initial ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시 이름 길이가 가장 짧은 상위 10개 도시와 그 길이를 알려주시겠어요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('56f413900b5166ab4d730e9ac0b12cb0', '18076', 'sorocaba', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT seller_city, LENGTH(seller_city) AS name_length\nFROM sellers\nGROUP BY seller_city\nORDER BY name_length ASC, seller_city ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명이 'vale'로 끝나는 도시들의 판매자 수를 주별로 집계하여 많은 순서대로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('75fbb52eda0cbc24f479d3b2fbfa8d3e', '74560', 'goiania', 'GO'), ('a0415d9b25ede3c4b1e477e9916ffc03', '26255', 'nova iguacu', 'RJ'), ('52956b80ae65fda598f06f6b9943e7a9', '87050', 'maringa', 'PR'), ('ea566164622c6b439516ab18062c42cd', '05303', 'sao  paulo', 'SP'), ('651530bf5c607240ccdd89a30c9c9712', '44600', 'ipira', 'BA');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  seller_state,\n  COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_city LIKE '%vale'\nGROUP BY seller_state\nORDER BY seller_count DESC, seller_state ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 브라질 북부 지역(AC, AP, AM, PA, RO, RR, TO)에 속한 판매자는 총 몇 명인가요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('d06d019f72a04e5497a0b64190af170c', '06703', 'cotia', 'SP'), ('1f867308a0ce13133a4e639ff4de0c02', '82510', 'curitiba', 'PR'), ('4a82c4af97ffc0fb2dc26bfdc03b1842', '35590', 'lagoa da prata', 'MG'), ('7df1fc11cc5cbc518b39faa60cf5d67c', '79112', 'campo grande', 'MS'), ('3d290fe363c60a77498c1126fd3fb8d3', '06694', 'itapevi', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_state IN ('AC', 'AP', 'AM', 'PA', 'RO', 'RR', 'TO');"
+    },
+    {
+        "instruction": "입력 텍스트: 최소 3개 주에 걸쳐 존재하는 동일한 도시 이름과, 해당 도시가 포함된 주의 수를 많은 순서대로 보여주니?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('21c62b998a043ebe31161d38f84929fc', '60110', 'fortaleza', 'CE');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  seller_city,\n  COUNT(DISTINCT seller_state) AS state_count\nFROM sellers\nGROUP BY seller_city\nHAVING COUNT(DISTINCT seller_state) >= 3\nORDER BY state_count DESC, seller_city ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 우편번호 접두사 앞 두 글자별로 판매자 수를 집계해, 많은 순서대로 보여줄 수 있나?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('a416b6a846a11724393025641d4edd5e', '03702', 'sao paulo', 'SP'), ('19e0f40a907ec568c34bfac15de4f4a1', '13478', 'americana', 'SP'), ('4917cee8d902e13428c3ec4b1ca6f315', '89031', 'blumenau', 'SC'), ('ede2977fbaf3738583170735ca403f6c', '80010', 'curitiba', 'PR');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  LEFT(seller_zip_code_prefix, 2) AS zip2,\n  COUNT(*) AS seller_count\nFROM sellers\nGROUP BY LEFT(seller_zip_code_prefix, 2)\nORDER BY seller_count DESC, zip2 ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 도시명에 숫자가 포함된 판매자 수\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('02f623a8eb246f3c5f7c2f96462654e6', '18611', 'botucatu', 'SP'), ('5f26c1408a65b42a7224cd463bdf3292', '86707', 'arapongas', 'PR'), ('820c7c9eaf76d2b226b6c242bcf3f34d', '04756', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_city REGEXP '[0-9]';"
+    },
+    {
+        "instruction": "입력 텍스트: MG 주에서 우편번호 접두사별로 서로 다른 도시 수를 집계하고, 도시 수가 많은 순서대로 상위 10개 접두사만 보여주시겠습니까?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('59b22a78efb79a4797979612b885db36', '38414', 'uberlandia', 'MG'), ('42d4b7e70819438f5ada61c965e92d7e', '74045', 'goiania', 'GO');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  seller_zip_code_prefix,\n  COUNT(DISTINCT seller_city) AS city_count\nFROM sellers\nWHERE seller_state = 'MG'\nGROUP BY seller_zip_code_prefix\nORDER BY city_count DESC, seller_zip_code_prefix ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주별로 우편번호 접두사당 평균 판매자 수를 계산하고, 평균이 높은 순으로 상위 10개 주를 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('8a130737016f838139d31878787a39c9', '03187', 'sao paulo', 'SP'), ('f44bdc12aa39f5271f0b95f66cd4c289', '12914', 'braganca paulista', 'SP'), ('fb8904a8ea99f8831b64ce27db2c1765', '09550', 'sao caetano do sul', 'SP'), ('57d2ba47f7a3209aa347532ae75c1165', '89287', 'sao bento do sul', 'SC');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  seller_state,\n  1.0 * COUNT(*) / COUNT(DISTINCT seller_zip_code_prefix) AS avg_sellers_per_prefix\nFROM sellers\nGROUP BY seller_state\nORDER BY avg_sellers_per_prefix DESC, seller_state ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: seller_id에 '123' 문자열이 포함된 판매자는 몇 명이냐?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('a420f60ff1aa9acc80d0e42959f2b313', '05138', 'sao paulo', 'SP'), ('ce27a3cc3c8cc1ea79d11e561e9bebb6', '03006', 'sao paulo', 'SP'), ('8d92f3ea807b89465643c219455e7369', '03052', 'sao paulo', 'SP'), ('c6381b1321d7d97717a5bb4ed5b77882', '04276', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  COUNT(*) AS seller_count\nFROM sellers\nWHERE seller_id LIKE '%123%';"
+    },
+    {
+        "instruction": "입력 텍스트: 정확히 두 단어로 이루어진 도시들만 대상으로, 도시별 판매자 수가 많은 상위 10개 도시는 무엇인가요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  seller_city,\n  COUNT(*) AS seller_count\nFROM sellers\nWHERE (LENGTH(seller_city) - LENGTH(REPLACE(seller_city, ' ', ''))) = 1\nGROUP BY seller_city\nORDER BY seller_count DESC, seller_city ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 한 도시에서만 사용되는 우편번호 접두사는 총 몇 개인가요? 또한, 이러한 접두사들에 속한 판매자 수의 합은 얼마인가요?\n\nDDL statements:\n\nCREATE TABLE sellers (seller_id VARCHAR(32) NOT NULL, seller_zip_code_prefix VARCHAR(5) NOT NULL, seller_city VARCHAR(40) NOT NULL, seller_state VARCHAR(2) NOT NULL, PRIMARY KEY (seller_id));\n\nINSERT INTO sellers (seller_id, seller_zip_code_prefix, seller_city, seller_state) VALUES ('381c83fdca332ea6afd896da20bf6e4a', '80010', 'curitiba', 'PR'), ('0a82f5fb06a4fe4ac2cf7cb412ec71b8', '05524', 'sao paulo', 'SP'), ('41e0fa5761c886a630994a55c12087e7', '11446', 'guaruja', 'SP'), ('63a79f5a7eb5cb48a7e5787b141c7993', '38701', 'patos de minas', 'MG'), ('d9442042130b7fe579d1295f9f4a248f', '03550', 'sao paulo', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  COUNT(*) AS prefix_count,\n  SUM(seller_cnt) AS total_sellers\nFROM (\n  SELECT\n    seller_zip_code_prefix,\n    COUNT(*) AS seller_cnt\n  FROM sellers\n  GROUP BY seller_zip_code_prefix\n  HAVING COUNT(DISTINCT seller_city) = 1\n) t;"
+    }
+]

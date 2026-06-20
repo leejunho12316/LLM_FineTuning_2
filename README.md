@@ -10,11 +10,11 @@ https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce : ⭐Olist 브라질
 2. (완료) gretelai로 base 데이터 생성 (코드)
 https://huggingface.co/datasets/gretelai/synthetic_text_to_sql : base 데이터셋
 v- POC : gpt-4o-mini, 100개로 먼저 POC 진행. (text_to_sql_data.json)
-- 실전 : gpt-5.5, 5000개.
+v- 실전 : gpt-5.5, 5000개.
 
 3. (완료) Olist 기반 데이터 생성 - 단일
 v- POC : GPT-5 DB 1개 * 9개 (Olist_orders_text_to_sql_data.json)
-- 실전 : GPT-5 DB 8개 * 30개씩 
+v- 실전 : GPT-5 DB 8개 * 100개씩 
 
 4. (완료) Olist 기반 데이터 생성 - 복합
 v - POC : GPT-5 DB 연결고리 1개 * 3개 (Olist_orders_n_order_items_text_to_sql_data.json)
@@ -31,24 +31,37 @@ v- POC : A100 & 모델은 아무거나.
 7. POC 발견 TroubleShooting
 (완료)- 이미 만들어져 있는 text-to-sql용 데이터 5000행이 있었음. 근데 다 instruction이 입력 텍스트, DDL statements 순으로 되어 있음. Olist 데이터 생성할 때 바꿔주어야 할 듯.
 
-- query 정교화
-질문 text-to-sql Base 데이터의 query와 내가 생성한 Olist 데이터의 query 형태의 차이점 파악하기.
-Base데이터에 내 데이터 생성 프롬프트에서 지시한 것처럼 완전 구체적인 값을 사용한 질문이 있는지.
-사람이 진짜 이렇게 질문을 할 것 같은지.
+(완료) - query 정교화
+ㅇ 질문 text-to-sql Base 데이터의 query와 내가 생성한 Olist 데이터의 query 형태의 차이점 파악하기.
+ㅇ Base데이터에 내 데이터 생성 프롬프트에서 지시한 것처럼 완전 구체적인 값을 사용한 질문이 있는지.
+ㅇ 사람이 진짜 이렇게 질문을 할 것 같은지.
+-> base data 의질문을 예시로 넣어주며 보완
+
+(완료) - 질문 말투 다양화
+1. column 이름 직접언급/간접언급
+ex) 각 country_of_origin별 모든 statellites의 최대 거리는 얼마인가요? -> 각 국가별로 지구 표면으로부터 모든 위성의 최대 거리는 얼마인가요?
+ex) country가 Africa인 모든 org_name 값과 그들이 진행한 num_projects 수를 나열하세요 -> 아프리카에서 활동하는 모든 식량 정의 단체와 그들이 진행한 프로젝트 수를 나열하세요.
+2. 명사구 질문.
+ex) 마을 변호사는 몇 명이었는가? -> 마을변호사 인원 수
+ex) 각 고객별 첫 구매 일시를 알고 싶습니다. 고객 ID와 첫 구매 타임스탬프를 반환해 주세요. -> 각 고객별 첫 구매 일시에 대한 고객 ID와 첫 구매 타임스탬프.
+ex) 2018년 2분기(Q2)에 구매된 주문들의 구매 시각부터 배송사 인계까지 평균 며칠이 걸렸는지 알려주세요 -> 2018년 2분기 구매 시각부터 배송사 인계까지 평균일.
+4. 끝 말투 변경 (~요? ~까? ~임? ~나?)
+ex)태평양 해양의 연간 평균 해수면 온도는 얼마인가요?
+-> 태평양 해양의 연간 평균 해수면 온도는 얼마입니까?
+-> 태평양 해양의 연간 평균 해수면 온도는 얼마임?
+-> 태평양 해양의 연간 평균 해수면 온도는 얼마이나?
+
 영어로 된 칼럼명을 한글로 말해도 알아듣도록 데이터가 만들어져있는지. (데이터의 query가 칼럼명을 있는 그대로 영어로 말하면 FT 후 한글로 질문하면 성능 저하)
+-> 위 규칙을 적용해 LLM으로 말투 다양화
 
-- 질문 말투 다양화
-명사구 질문. (마을 변호사는 몇 명이었는가? -> 마을변호사 인원 수)
-답답적인 질문.
-끝 말투 변경 (~요? ~까? ~임? ~나?)
-
-- DDL문
+(완료) - DDL문
 데이터 생성시에는 필요없지만 최종 데이터 생성 시 DDL문에는 INSERT INTO VALUES 까지 있어야 함.
 VALUES 개수는 일반화를 막기 위해 0~5개까지 계속 바뀜. 이걸 수동으로 해주긴 좀 그럼.
 
 CREATE TABLE salesperson (salesperson_id INT, name TEXT, region TEXT); 
 INSERT INTO salesperson (salesperson_id, name, region) 
 VALUES (1, 'John Doe', 'North'), (2, 'Jane Smith', 'South');
+-> INSERT문 만드는 함수 새로 작성해 basedata형식으로 전환하는 함수에 추가.
 
 - 복합 DB 데이터
 DDL 문에 -- 하고 각 칼럼별 설명 써있음. 복합 DB 데이터에만 되어있는데 수정해야할 듯.

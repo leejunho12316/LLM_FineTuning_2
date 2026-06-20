@@ -1,0 +1,502 @@
+[
+    {
+        "instruction": "입력 텍스트: 각 주문별 총 결제 금액과 사용된 결제 수단 개수를 계산하고, 총액이 500 이상인 주문만 총액 내림차순으로 보여줍니다. ~습니까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('9a535db7017bc4d84dcfdd14e9a8cfcc', 1, 'boleto', 1, 43.0), ('d4f05891951a18c5d6a2b25ff3a8946a', 1, 'credit_card', 3, 172.02);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  SUM(payment_value) AS total_payment_value,\n  COUNT(DISTINCT payment_type) AS payment_method_count\nFROM order_payments\nGROUP BY order_id\nHAVING SUM(payment_value) >= 500\nORDER BY total_payment_value DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별 평균 할부 횟수와 총 결제 금액, 총 결제 금액 기준 정렬.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('2d27ee9bbc377938d4a8c5a8efb16551', 2, 'credit_card', 2, 44.23), ('97998b2b2e9a8fdfaa4ed32426a52878', 1, 'credit_card', 5, 127.33);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  AVG(payment_installments) AS avg_installments,\n  SUM(payment_value) AS total_payment_value\nFROM order_payments\nGROUP BY payment_type\nORDER BY total_payment_value DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 두 가지 이상의 서로 다른 결제 수단으로 결제된 주문의 주문 ID를 보여줍니까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('29658becd07b8b8ae3d13366b9cb10cc', 1, 'credit_card', 4, 347.79), ('fc7f5997b1623d9bc1427466a7a70b94', 1, 'credit_card', 3, 90.97), ('4baeb46418ac44b0f5ab2795772663b3', 1, 'boleto', 1, 45.0);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id\nFROM order_payments\nGROUP BY order_id\nHAVING COUNT(DISTINCT payment_type) >= 2;"
+    },
+    {
+        "instruction": "입력 텍스트: 할부 횟수가 1인 결제들의 총 건수와 총 결제 금액.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('75c2711e9fabc4fc0531917afc748451', 1, 'boleto', 1, 209.3), ('21ac7b9aaf4cb4e41aa7ed2722a0c2ab', 1, 'credit_card', 10, 758.26), ('ffb2c3a5bb149a2f860e5d057096201f', 1, 'credit_card', 1, 311.88), ('2c9015a3c9e7ded7dc344a1536b2c72f', 1, 'credit_card', 1, 39.77);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  COUNT(*) AS payment_count,\n  SUM(payment_value) AS total_payment_value\nFROM order_payments\nWHERE payment_installments = 1;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단이 boleto인 결제 중 금액이 100 이상인 건들의 평균 결제 금액\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('be352bbad6d37a556d8ed5fc593bf248', 1, 'boleto', 1, 487.27), ('d3221f47eb4afb028ea89bf72bdc8bc8', 1, 'credit_card', 7, 153.46);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  AVG(payment_value) AS avg_boleto_value\nFROM order_payments\nWHERE payment_type = 'boleto'\n  AND payment_value >= 100;"
+    },
+    {
+        "instruction": "입력 텍스트: 주문별로 가장 큰 결제 금액과 그때의 결제 수단을 구해줘. 최대 금액이 여러 건이면 결제 순번이 가장 작은 건을 선택하니?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('6de19838b042f2da59ed21bf294b91d0', 1, 'credit_card', 8, 166.78), ('c4cc1f9e57162d961e267cf2f07d2fe1', 1, 'credit_card', 1, 136.83);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  payment_type,\n  payment_value\nFROM (\n  SELECT\n    order_id,\n    payment_type,\n    payment_value,\n    payment_sequential,\n    ROW_NUMBER() OVER (\n      PARTITION BY order_id\n      ORDER BY payment_value DESC, payment_sequential ASC\n    ) AS rn\n  FROM order_payments\n) t\nWHERE rn = 1;"
+    },
+    {
+        "instruction": "입력 텍스트: payment_sequential이 3인 결제들의 주문 ID, 결제 수단, 결제 금액.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  payment_type,\n  payment_value\nFROM order_payments\nWHERE payment_sequential = 3;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 금액이 50 미만인 결제가 한 건도 없는 주문의 주문 ID를 모두 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('e4a4be9057b0723c5014f56c6d4ba6ca', 1, 'credit_card', 4, 44.71);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id\nFROM order_payments\nGROUP BY order_id\nHAVING MIN(payment_value) >= 50;"
+    },
+    {
+        "instruction": "입력 텍스트: 두 건 이상으로 나뉘어 결제된 주문들의 주문별 총 결제 금액을 계산하고, 주문 ID 오름차순으로 정렬해 주나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('a222e8f1ab02211d0f1b3e374c5e689e', 1, 'credit_card', 5, 102.72), ('29d81fbe3a3300902407cf57272030c6', 1, 'credit_card', 5, 297.94);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  SUM(payment_value) AS total_payment_value\nFROM order_payments\nGROUP BY order_id\nHAVING COUNT(*) >= 2\nORDER BY order_id ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 결제 금액이 200 이상인 건수와 200 미만인 건수를 각각 집계해 주는 것임?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('b791cc8ae56058fd49a44d77c52f9150', 1, 'boleto', 1, 108.58), ('77a5bfa62225470464b913edec2910a3', 1, 'boleto', 1, 53.0), ('81757cfaa9d5ebd87fd0021a808f4ca9', 1, 'credit_card', 4, 235.3), ('e4f929a2bd281bee714090bdca460bbd', 1, 'credit_card', 3, 259.33);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  SUM(CASE WHEN payment_value >= 200 THEN 1 ELSE 0 END) AS cnt_ge_200,\n  SUM(CASE WHEN payment_value < 200 THEN 1 ELSE 0 END) AS cnt_lt_200\nFROM order_payments\nGROUP BY payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 최대 결제 금액, 최소 결제 금액, 평균 결제 금액을 알려주나?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('f7959f8385f34c4f645327465a1c9fc4', 1, 'credit_card', 1, 6.83), ('37a5490daa64aa8fd7c9de7dbc36677e', 1, 'credit_card', 1, 38.71), ('c1ca4dea0d87cd383f5790fa7a5bd78f', 1, 'credit_card', 3, 34.13), ('4c8962d1aff37c5cafe5190f4f9b6839', 1, 'credit_card', 1, 114.93);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  MAX(payment_value) AS max_payment_value,\n  MIN(payment_value) AS min_payment_value,\n  AVG(payment_value) AS avg_payment_value\nFROM order_payments\nGROUP BY payment_type\nORDER BY payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 가장 많이 사용된 결제 수단 상위 3개와 각각의 사용 건수를 보여줍니까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  COUNT(*) AS payment_count\nFROM order_payments\nGROUP BY payment_type\nORDER BY payment_count DESC, payment_type ASC\nLIMIT 3;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주문에서 마지막 결제 순번과 그때의 결제 수단, 결제 금액을 알려주시겠어요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('6ae81f46190acfedd354db1a69ecfb03', 1, 'credit_card', 1, 183.62), ('14cb3b3caf8abdd2361971932a664cf5', 1, 'credit_card', 1, 225.96), ('ccebcd5c2e0f34354c3a594331678a52', 1, 'credit_card', 2, 179.6), ('b57b0acd76c7d8a845ed77134b2a1af8', 1, 'credit_card', 1, 53.01);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  payment_sequential,\n  payment_type,\n  payment_value\nFROM (\n  SELECT\n    order_id,\n    payment_sequential,\n    payment_type,\n    payment_value,\n    ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY payment_sequential DESC) AS rn\n  FROM order_payments\n) t\nWHERE rn = 1\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 금액이 큰 순으로 상위 10건의 결제 내역을 주문 ID와 함께 보여주나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('93bfa8d308b3feeb69f9ab51f55b5987', 1, 'credit_card', 1, 87.81), ('5a6566ca1aa7d313e6a34e0443e32ba1', 1, 'boleto', 1, 273.88), ('1482f7aea7e4031900a723ccb869f8d4', 1, 'credit_card', 6, 152.99), ('b0e6a68b73514f6bc8fbc29c98b88a39', 1, 'credit_card', 1, 47.69), ('47a0dd64c37d493b6979b404f36ccc6b', 1, 'credit_card', 2, 138.5);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  payment_type,\n  payment_value\nFROM order_payments\nORDER BY payment_value DESC, order_id ASC, payment_sequential ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 동일한 결제 수단을 두 번 이상 사용한 주문의 주문 ID를 모두 알려줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('add699884e555b7dc441e33f35ddade0', 1, 'credit_card', 6, 106.57), ('1c7bc1d2107c0101a38e3096fa42aa56', 1, 'credit_card', 2, 84.79), ('0893ae2dd572c400965d60fa77f45076', 1, 'boleto', 1, 126.9), ('25dae1a0efc5bba5a14622eaf552ad78', 1, 'boleto', 1, 128.09);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT order_id\nFROM (\n  SELECT\n    order_id,\n    payment_type,\n    COUNT(*) AS cnt\n  FROM order_payments\n  GROUP BY order_id, payment_type\n  HAVING COUNT(*) >= 2\n) s\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 3회 이상 할부된 결제의 건수와 총 결제 금액을 집계해 주시겠어요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  COUNT(*) AS cnt,\n  SUM(payment_value) AS total_value\nFROM order_payments\nWHERE payment_installments >= 3\nGROUP BY payment_type\nORDER BY total_value DESC, payment_type ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 금액 구간별(0-50, 50-100, 100-200, 200 이상) 결제 건수 분포를 보여줍니까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('5f9b8704ad096052823d6e006cf03443', 1, 'credit_card', 1, 66.48), ('e153a0dcb8018427c43753f0e1edba6e', 1, 'credit_card', 2, 190.48), ('419c1fa500ceff6a8d5ee78cf19d2a6d', 1, 'credit_card', 1, 138.08), ('86f81c004682148df5165e2730148b07', 1, 'credit_card', 1, 56.69);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  amount_bucket,\n  COUNT(*) AS cnt\nFROM (\n  SELECT\n    CASE\n      WHEN payment_value < 50 THEN '0-50'\n      WHEN payment_value < 100 THEN '50-100'\n      WHEN payment_value < 200 THEN '100-200'\n      ELSE '200+'\n    END AS amount_bucket\n  FROM order_payments\n) t\nGROUP BY amount_bucket\nORDER BY\n  CASE amount_bucket\n    WHEN '0-50' THEN 1\n    WHEN '50-100' THEN 2\n    WHEN '100-200' THEN 3\n    ELSE 4\n  END;"
+    },
+    {
+        "instruction": "입력 텍스트: 주문별 총 결제 금액 대비 가장 큰 단일 결제 비율의 비율이 큰 순서.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('d738a4231586b1053ffdc9e064e9b1ab', 1, 'boleto', 1, 248.29), ('d63f6af53a35a1d7e6a58ec09548b9ed', 1, 'boleto', 1, 126.92), ('a9c8ac0c26c178f0ad33618f96225a01', 1, 'credit_card', 8, 1950.2);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH order_stats AS (\n  SELECT\n    order_id,\n    SUM(payment_value) AS total_amount,\n    MAX(payment_value) AS max_single\n  FROM order_payments\n  GROUP BY order_id\n)\nSELECT\n  order_id,\n  total_amount,\n  max_single,\n  (max_single / NULLIF(total_amount, 0)) AS max_share\nFROM order_stats\nORDER BY max_share DESC, order_id ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 결제된 고유 주문 수를 집계해 주겠니?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('54ac92ea720b2574ecf18f372f41ea71', 1, 'voucher', 1, 22.06);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  COUNT(DISTINCT order_id) AS orders_count\nFROM order_payments\nGROUP BY payment_type\nORDER BY orders_count DESC, payment_type ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 주문 ID가 'ea9bd69504d710943f9f20a822fd49ee'인 주문의 결제 내역을 결제 순번 오름차순으로 보여줄 수 있나?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('961c6413a68361bbcd366dcac23671ae', 1, 'credit_card', 5, 72.99), ('3d86c4b9522b58a104b2fca7421713d2', 1, 'credit_card', 3, 286.66), ('be63f8e1110d08f5003ca1a255ff4fb1', 1, 'credit_card', 4, 71.03), ('9e782eef55c0f6f0a4de48f967232e91', 1, 'credit_card', 1, 74.18), ('801e8e7738a06b96bda344c9ff1d738c', 1, 'boleto', 1, 54.28);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  payment_sequential,\n  payment_type,\n  payment_installments,\n  payment_value\nFROM order_payments\nWHERE order_id = 'ea9bd69504d710943f9f20a822fd49ee'\nORDER BY payment_sequential ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 할부 횟수 구간(1회, 2~5회, 6~12회, 13회 이상)별 결제 건수를 집계해 줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('d134a745dbca5e4a22709d57e23d4f8d', 1, 'credit_card', 4, 190.34), ('06a10466a6e3befcdcb37637948fea4a', 1, 'credit_card', 1, 84.54), ('f7edcde7bb586c1b9465d46632f4e45f', 1, 'credit_card', 6, 83.52);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  SUM(CASE WHEN payment_installments = 1 THEN 1 ELSE 0 END) AS cnt_1,\n  SUM(CASE WHEN payment_installments BETWEEN 2 AND 5 THEN 1 ELSE 0 END) AS cnt_2_5,\n  SUM(CASE WHEN payment_installments BETWEEN 6 AND 12 THEN 1 ELSE 0 END) AS cnt_6_12,\n  SUM(CASE WHEN payment_installments >= 13 THEN 1 ELSE 0 END) AS cnt_13_plus\nFROM order_payments\nGROUP BY payment_type\nORDER BY payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 동일한 주문에서 직불 카드와 보레토를 모두 사용한 주문 ID를 알려주세요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('41ff2ba0d19e828f41b858fbf8b3c3cb', 1, 'boleto', 1, 42.68);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id\nFROM order_payments\nWHERE payment_type IN ('debit_card', 'boleto')\nGROUP BY order_id\nHAVING COUNT(DISTINCT payment_type) = 2\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 순번별로 결제 건수와 평균 결제 금액을 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('f6dbdcbe96b4cd2904cf75bbda5c6ac1', 1, 'credit_card', 6, 87.92), ('d877b306ef910af8ed6dc15022dbbc65', 1, 'credit_card', 1, 109.69), ('d1317386b0c2c4396a15bc89ec59b04c', 1, 'boleto', 1, 73.34), ('de71edfe47563ab657846c3d3f028ac9', 1, 'credit_card', 2, 29.05), ('a65e0938a2f3dc167ee856d4feb33290', 1, 'credit_card', 1, 214.63);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_sequential,\n  COUNT(*) AS payment_count,\n  AVG(payment_value) AS avg_payment_value\nFROM order_payments\nGROUP BY payment_sequential\nORDER BY payment_sequential;"
+    },
+    {
+        "instruction": "입력 텍스트: 같은 주문에서 결제 수단이 모두 동일하면서 결제가 2건 이상인 주문의 주문 ID와 결제 건수를 알려주겠느냐?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  COUNT(*) AS payment_count\nFROM order_payments\nGROUP BY order_id\nHAVING COUNT(*) >= 2\n   AND COUNT(DISTINCT payment_type) = 1\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별 총 결제 금액과 전체 대비 금액 비중, 금액이 큰 순으로 정렬한 결과.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('7d695cbb791e6b56ac8a913e1fa9fbe8', 1, 'credit_card', 1, 29.09), ('03e5d6a8dd520898f86f8429ccd07c21', 1, 'voucher', 1, 46.8), ('b1b74907a120888550f895aca299e24b', 1, 'credit_card', 3, 56.6);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  p.payment_type,\n  SUM(p.payment_value) AS total_payment_value,\n  SUM(p.payment_value) / t.total_all AS value_share\nFROM order_payments p\nCROSS JOIN (SELECT SUM(payment_value) AS total_all FROM order_payments) t\nGROUP BY p.payment_type, t.total_all\nORDER BY total_payment_value DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 할부 횟수별 결제 건수와 평균 결제 금액.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_installments,\n  COUNT(*) AS payment_count,\n  AVG(payment_value) AS avg_payment_value\nFROM order_payments\nGROUP BY payment_installments\nORDER BY payment_installments;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 6회 이상 할부된 결제와 6회 미만 할부된 결제의 평균 결제 금액.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  AVG(CASE WHEN payment_installments >= 6 THEN payment_value END) AS avg_value_ge6,\n  AVG(CASE WHEN payment_installments < 6 THEN payment_value END) AS avg_value_lt6\nFROM order_payments\nGROUP BY payment_type\nORDER BY payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 주문별로 가장 작은 결제 금액과 그때의 결제 수단, 결제 순번을 구해 주실 수 있나요? 최소 금액이 여러 건이면 결제 순번이 가장 작은 건을 선택해 주세요.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('3a6cbf7c8d48ea3b2f5594779dc6d23d', 1, 'credit_card', 3, 408.64);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  payment_type,\n  payment_value,\n  payment_sequential\nFROM (\n  SELECT\n    order_id,\n    payment_type,\n    payment_value,\n    payment_sequential,\n    ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY payment_value ASC, payment_sequential ASC) AS rn\n  FROM order_payments\n) s\nWHERE rn = 1;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제가 3건 이상인 주문들에 대해 최소·최대·총 결제 금액을 계산하고, 총액이 큰 순으로 정렬해 주시겠습니까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('877a74a0ee5c1f719f39f4f11d2fc19a', 1, 'boleto', 1, 2759.88);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  MIN(payment_value) AS min_payment_value,\n  MAX(payment_value) AS max_payment_value,\n  SUM(payment_value) AS total_payment_value\nFROM order_payments\nGROUP BY order_id\nHAVING COUNT(*) >= 3\nORDER BY total_payment_value DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 첫 결제만 대상으로 한 결제 수단별 건수와 평균 결제 금액, 건수 기준 정렬.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('212754a30f758c661afd6430bc7841fc', 1, 'credit_card', 5, 103.26), ('df940e48580d0f2c2283d0782c7f99e3', 1, 'credit_card', 8, 218.58), ('b832b44bf5dbb96feec7409c23977046', 1, 'credit_card', 1, 38.0), ('6353efc1d0d95c4b6b631151651307d3', 1, 'credit_card', 4, 168.29);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  COUNT(*) AS payment_count,\n  AVG(payment_value) AS avg_payment_value\nFROM order_payments\nWHERE payment_sequential = 1\nGROUP BY payment_type\nORDER BY payment_count DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 주문별 결제 건수와 총 결제 금액을 계산하고, 결제 건수가 많은 순(동률이면 총액 큰 순)으로 보여줄 수 있니?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('00b4a910f64f24dbcac04fe54088a443', 1, 'credit_card', 1, 2.54);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  COUNT(*) AS payment_count,\n  SUM(payment_value) AS total_payment_value\nFROM order_payments\nGROUP BY order_id\nORDER BY payment_count DESC, total_payment_value DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단 사용 건수를 기준으로 적은 순서로 전부 나열해 주실 수 있습니까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('99384088fb9152a53cddf69d0510dd86', 1, 'credit_card', 1, 55.1), ('4c4a931a93ef9f28f4746db1e2e0e753', 1, 'credit_card', 1, 510.12), ('c62746805b3e3593801b7880cd85c8f5', 1, 'boleto', 1, 75.64), ('812f5bd0b8bf2c0b7a1ca7589cefac73', 1, 'credit_card', 5, 112.42);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  COUNT(*) AS usage_count\nFROM order_payments\nGROUP BY payment_type\nORDER BY usage_count ASC, payment_type ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 금액이 100 이상인 결제들의 평균 할부 횟수는 얼마인가요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('2613fb342bec59126f9c5180a5bc95ec', 1, 'credit_card', 6, 62.59), ('abc61b624c9611e850c2f84c17acc0c3', 1, 'credit_card', 1, 95.65);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  AVG(payment_installments) AS avg_installments_for_payments_ge_100\nFROM order_payments\nWHERE payment_value >= 100;"
+    },
+    {
+        "instruction": "입력 텍스트: 모든 결제가 1회 할부로만 이루어진 주문의 주문 ID를 알려주시나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id\nFROM order_payments\nGROUP BY order_id\nHAVING MIN(payment_installments) = 1\n   AND MAX(payment_installments) = 1\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로, 그 수단이 사용된 주문에서의 주문당 평균 결제 총액을 계산해서 큰 순으로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH order_type_sums AS (\n  SELECT\n    order_id,\n    payment_type,\n    SUM(payment_value) AS type_total\n  FROM order_payments\n  GROUP BY order_id, payment_type\n)\nSELECT\n  payment_type,\n  AVG(type_total) AS avg_order_total_using_type\nFROM order_type_sums\nGROUP BY payment_type\nORDER BY avg_order_total_using_type DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 첫 결제 금액이 100 이상인 주문 건수는 몇 건인가?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('35c16e53e67eb73077166edd4aa57fd7', 1, 'credit_card', 1, 77.89), ('342426d7317aac507750dd7c1c9e1014', 1, 'credit_card', 5, 902.38);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  COUNT(*) AS order_count\nFROM order_payments\nWHERE payment_sequential = 1\n  AND payment_value >= 100;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 금액이 정확히 같은 결제가 2건 이상 있는 주문 ID를 모두 보여줄 수 있나?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('48a9fe940572375f2eb135b1e0ca0829', 1, 'credit_card', 4, 167.09), ('88367c23420c866abd6157288f3c7a0d', 1, 'credit_card', 5, 182.51);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT\n  order_id\nFROM (\n  SELECT\n    order_id\n  FROM order_payments\n  GROUP BY order_id, payment_value\n  HAVING COUNT(*) >= 2\n) t\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 1회당 결제 금액(결제 금액/할부 횟수)의 평균을 구하고, 큰 순으로 정렬해 주는 것이 임?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('e5c7ffa799e1c5ba20007aae8e48a824', 1, 'credit_card', 1, 27.68);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  AVG(payment_value / NULLIF(payment_installments, 0)) AS avg_value_per_installment\nFROM order_payments\nGROUP BY payment_type\nORDER BY avg_value_per_installment DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 단일 주문에서 해당 수단이 사용된 최대 결제 건수는 얼마인가요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH type_order_counts AS (\n  SELECT\n    payment_type,\n    order_id,\n    COUNT(*) AS cnt\n  FROM order_payments\n  GROUP BY payment_type, order_id\n)\nSELECT\n  payment_type,\n  MAX(cnt) AS max_payments_in_single_order\nFROM type_order_counts\nGROUP BY payment_type\nORDER BY max_payments_in_single_order DESC, payment_type ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 두 가지 이상의 결제 수단이 사용된 주문들에 대해, 각 주문에서 결제 수단별 결제 금액 합계를 보여주고 주문 ID와 결제 수단을 오름차순으로 정렬해줄 수 있나?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH multi_type_orders AS (\n  SELECT\n    order_id\n  FROM order_payments\n  GROUP BY order_id\n  HAVING COUNT(DISTINCT payment_type) >= 2\n)\nSELECT\n  p.order_id,\n  p.payment_type,\n  SUM(p.payment_value) AS type_payment_total\nFROM order_payments p\nJOIN multi_type_orders m ON p.order_id = m.order_id\nGROUP BY p.order_id, p.payment_type\nORDER BY p.order_id ASC, p.payment_type ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 주문별로 두 번째로 큰 결제 금액과 그때의 결제 수단, 결제 순번을 알려주실 수 있나요? 결제가 2건 이상인 주문만 포함해 주시고, 금액이 같은 경우에는 결제 순번이 작은 걸로 선택해 주세요.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT order_id, payment_sequential, payment_type, payment_value\nFROM (\n  SELECT order_id,\n         payment_sequential,\n         payment_type,\n         payment_value,\n         ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY payment_value DESC, payment_sequential ASC) AS rn\n  FROM order_payments\n) t\nWHERE rn = 2;"
+    },
+    {
+        "instruction": "입력 텍스트: credit_card로만 결제한 주문 중 총 결제 금액이 500을 초과하는 주문의 주문 ID와 총액을 보여줍니까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('5a36e0cadeb1361495426b6f5b8c01ae', 1, 'credit_card', 1, 43.88);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT order_id, SUM(payment_value) AS total_payment\nFROM order_payments\nGROUP BY order_id\nHAVING SUM(CASE WHEN payment_type <> 'credit_card' THEN 1 ELSE 0 END) = 0\n   AND SUM(payment_value) > 500\nORDER BY total_payment DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 할부 횟수가 10회를 초과한 결제가 있는 결제 수단별로 해당 건수를 집계해 주시겠어요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('df2a380947167bc1d9d863cf7247713d', 1, 'credit_card', 1, 86.87), ('3d308f2c115e6931c3ca351c4fc35ae3', 1, 'credit_card', 2, 25.05), ('2d3bc1f6ed458a137c51adc3cab7a488', 1, 'credit_card', 6, 1139.17), ('9858c41d96443ebb71329d305f62302d', 1, 'credit_card', 4, 58.05);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT payment_type, COUNT(*) AS count_over_10_installments\nFROM order_payments\nWHERE payment_installments > 10\nGROUP BY payment_type\nORDER BY count_over_10_installments DESC, payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 주문별 결제 금액 범위(최대−최소)와 범위가 큰 상위 20개 주문의 주문 ID.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT order_id,\n       MAX(payment_value) - MIN(payment_value) AS amount_range\nFROM order_payments\nGROUP BY order_id\nORDER BY amount_range DESC, order_id\nLIMIT 20;"
+    },
+    {
+        "instruction": "입력 텍스트: 같은 주문에서 함께 사용된 결제 수단의 조합과 각 조합이 나타난 주문 수를 집계해 주는 임?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('25046cd9dd88041134abd808c4719a36', 1, 'credit_card', 10, 229.69);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT p1.payment_type AS payment_type_1,\n       p2.payment_type AS payment_type_2,\n       COUNT(DISTINCT p1.order_id) AS order_count\nFROM order_payments p1\nJOIN order_payments p2\n  ON p1.order_id = p2.order_id\n AND p1.payment_type < p2.payment_type\nGROUP BY p1.payment_type, p2.payment_type\nORDER BY order_count DESC, payment_type_1, payment_type_2;"
+    },
+    {
+        "instruction": "입력 텍스트: 단일 결제 수단만 사용된 주문들의 결제 수단별 주문당 평균 결제 총액 정렬.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('856f18ac2d008bc9a92673a46c6057ce', 1, 'credit_card', 1, 161.9), ('0ebf39cd91e6c7f650db30a438805518', 1, 'credit_card', 2, 117.76), ('bee9e2345c4d8f186d2aa7d57e1589f3', 2, 'voucher', 1, 73.8), ('840ee6b10ece14a3b4612f72e1fe6c75', 1, 'credit_card', 1, 31.75);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH single_type_orders AS (\n  SELECT order_id,\n         MIN(payment_type) AS payment_type,\n         SUM(payment_value) AS order_total\n  FROM order_payments\n  GROUP BY order_id\n  HAVING COUNT(DISTINCT payment_type) = 1\n)\nSELECT payment_type,\n       AVG(order_total) AS avg_order_total\nFROM single_type_orders\nGROUP BY payment_type\nORDER BY avg_order_total DESC, payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 주문별 모든 결제의 할부 횟수 합산값과 상위 5개 주문의 주문 ID.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('1879b2219f6eeb88592378483e06c702', 1, 'boleto', 1, 35.96), ('ae51ca5d283359defc7f5ff6f471f1dc', 1, 'credit_card', 5, 111.6), ('e06c6d2cccfbf53339917bf60c317955', 1, 'credit_card', 4, 87.67), ('9f998c349e0b18e16fd662653297b4da', 1, 'credit_card', 3, 148.17);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT order_id,\n       SUM(payment_installments) AS total_installments\nFROM order_payments\nGROUP BY order_id\nORDER BY total_installments DESC, order_id\nLIMIT 5;"
+    },
+    {
+        "instruction": "입력 텍스트: 할부 결제 중 1회당 금액이 100을 초과하는 결제의 주문 ID, 결제 순번, 결제 수단, 1회당 금액.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('d6fd1a476eb810f979d9cbd33ce43bd2', 1, 'credit_card', 2, 125.42);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT order_id,\n       payment_sequential,\n       payment_type,\n       payment_value / NULLIF(payment_installments, 0) AS per_installment_amount\nFROM order_payments\nWHERE payment_installments > 1\n  AND payment_value / NULLIF(payment_installments, 0) > 100\nORDER BY per_installment_amount DESC, order_id, payment_sequential;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 사용된 서로 다른 할부 횟수의 개수와 개수가 큰 순으로 정렬.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('62ffdc08aacc0d5763a38e07039234d8', 1, 'credit_card', 2, 184.7), ('29a78ee4f09c8306a3a5551825acc903', 1, 'debit_card', 1, 56.17), ('9f6ae9af23299996f0a1bdd6a35f08a1', 1, 'credit_card', 1, 68.75), ('0c47aeb0b91c17647935a2b53c38d083', 1, 'credit_card', 5, 229.28), ('7b598857cddf46a156640f69f70a6e6d', 1, 'credit_card', 8, 741.33);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT payment_type,\n       COUNT(DISTINCT payment_installments) AS distinct_installment_counts\nFROM order_payments\nGROUP BY payment_type\nORDER BY distinct_installment_counts DESC, payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주문에서 결제 순번이 1부터 시작해서 중간에 빠진 번호 없이 연속된 주문 ID만 보여줍니까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT order_id\nFROM order_payments\nGROUP BY order_id\nHAVING MIN(payment_sequential) = 1\n   AND MAX(payment_sequential) = COUNT(*)\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: voucher 결제 수단으로 결제된 금액 합이 200을 초과하는 주문의 주문 ID와 해당 합계를 보여주나요? 합계가 큰 순으로 정렬해 주나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  SUM(CASE WHEN payment_type = 'voucher' THEN payment_value ELSE 0 END) AS voucher_total\nFROM order_payments\nGROUP BY order_id\nHAVING SUM(CASE WHEN payment_type = 'voucher' THEN payment_value ELSE 0 END) > 200\nORDER BY voucher_total DESC, order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 첫 결제인 주문이 존재하지 않는 주문의 주문 ID를 모두 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('7d923e68a94ad8d7a6f8e5041a147c17', 1, 'credit_card', 3, 189.56), ('972570f8874c3f706d151201aca20e08', 1, 'boleto', 1, 93.48), ('54f17a6fb99f59adc37b22166a7f1871', 1, 'boleto', 1, 205.52);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT order_id\nFROM order_payments\nGROUP BY order_id\nHAVING SUM(CASE WHEN payment_sequential = 1 THEN 1 ELSE 0 END) = 0\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 항상 1회 할부로만 사용된 결제 수단.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('3a8b1e565c498e2688ae1e60745544d8', 1, 'credit_card', 2, 70.91), ('e677b67c28dfc75969bbf0ff515c0983', 1, 'credit_card', 2, 244.78);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT payment_type\nFROM order_payments\nGROUP BY payment_type\nHAVING MAX(payment_installments) = 1\nORDER BY payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 주문별로 사용된 서로 다른 할부 횟수의 개수를 계산하고, 그 개수가 많은 순으로 상위 10개 주문의 주문 ID와 개수를 보여주니?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  COUNT(DISTINCT payment_installments) AS distinct_installment_counts\nFROM order_payments\nGROUP BY order_id\nORDER BY distinct_installment_counts DESC, order_id\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로, 그 수단이 사용된 주문 중 해당 수단만으로 결제된 주문의 비중을 계산해 주시고, 비중이 큰 순으로 정렬해 주실 수 있습니까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  t.payment_type,\n  COUNT(DISTINCT CASE WHEN o.distinct_types = 1 THEN t.order_id END) AS mono_order_count,\n  COUNT(DISTINCT t.order_id) AS type_order_count,\n  COUNT(DISTINCT CASE WHEN o.distinct_types = 1 THEN t.order_id END) / CAST(COUNT(DISTINCT t.order_id) AS DECIMAL(18,4)) AS mono_order_ratio\nFROM order_payments t\nJOIN (\n  SELECT order_id, COUNT(DISTINCT payment_type) AS distinct_types\n  FROM order_payments\n  GROUP BY order_id\n) o ON o.order_id = t.order_id\nGROUP BY t.payment_type\nORDER BY mono_order_ratio DESC, t.payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 할부 결제 금액 합계와 일시불 금액 합계가 같은 주문 ID와 두 금액 합계 차이가 큰 순서.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('ac3b0c224349e4ca9a0b0f2e8fbc4c75', 1, 'credit_card', 1, 2.29), ('4735d69a263ba04fa00533b8f3d317b1', 1, 'credit_card', 1, 115.48), ('7013bcfc1c97fe719a7b5e05e61c12db', 1, 'boleto', 1, 65.52);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  SUM(CASE WHEN payment_installments > 1 THEN payment_value ELSE 0 END) AS installment_sum,\n  SUM(CASE WHEN payment_installments = 1 THEN payment_value ELSE 0 END) AS one_time_sum\nFROM order_payments\nGROUP BY order_id\nHAVING SUM(CASE WHEN payment_installments > 1 THEN payment_value ELSE 0 END) > SUM(CASE WHEN payment_installments = 1 THEN payment_value ELSE 0 END)\nORDER BY installment_sum - one_time_sum DESC, order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 금액이 300을 초과하거나 10 미만인 결제가 모두 포함된 주문의 주문 ID를 보여주니?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('122db42cf230e496258825c75d544c15', 1, 'credit_card', 8, 354.26), ('e13c8ddd0d03ac5525c6b54d0442e9a5', 2, 'voucher', 1, 53.88);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT order_id\nFROM order_payments\nGROUP BY order_id\nHAVING MAX(CASE WHEN payment_value > 300 THEN 1 ELSE 0 END) = 1\n   AND MAX(CASE WHEN payment_value < 10 THEN 1 ELSE 0 END) = 1\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별 최소 결제 금액을 기록한 개별 결제 내역의 주문 ID, 결제 수단, 결제 순번, 금액을 목록으로 보여주습니까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH type_min AS (\n  SELECT payment_type, MIN(payment_value) AS min_value\n  FROM order_payments\n  GROUP BY payment_type\n)\nSELECT p.order_id, p.payment_type, p.payment_sequential, p.payment_value\nFROM order_payments p\nJOIN type_min m\n  ON p.payment_type = m.payment_type AND p.payment_value = m.min_value\nORDER BY p.payment_type, p.order_id, p.payment_sequential;"
+    },
+    {
+        "instruction": "입력 텍스트: 정확히 한 건의 결제만 있는 주문은 몇 건이니?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('244e91c4c416908e17829094e3eb7aa6', 1, 'boleto', 1, 42.46), ('6e19c0ff384b7d4685333ee0a9342f21', 1, 'credit_card', 4, 111.81), ('7ef5eac7150ae4458bcfe5e3151a8f1f', 1, 'credit_card', 1, 52.32), ('22170faea0e48a083b8216ce465df183', 1, 'voucher', 1, 196.98);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS orders_with_single_payment\nFROM (\n  SELECT order_id\n  FROM order_payments\n  GROUP BY order_id\n  HAVING COUNT(*) = 1\n) s;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 12회 이상 할부된 결제의 비중(건수 기준)을 계산하고, 비중이 큰 순으로 정렬해 주는 임?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('e39190d1881f0e85df9c678ad44e2512', 1, 'credit_card', 2, 43.71), ('7425d957984121c030d282eb7cfdca25', 1, 'boleto', 1, 137.58), ('dceb8e88274c6f42a88a76ed979eb817', 1, 'credit_card', 3, 32.69), ('42ccc07cc09ff8b0c392b43f125ae1d7', 1, 'credit_card', 1, 40.79);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  SUM(CASE WHEN payment_installments >= 12 THEN 1 ELSE 0 END) AS cnt_12_or_more,\n  COUNT(*) AS total_cnt,\n  SUM(CASE WHEN payment_installments >= 12 THEN 1 ELSE 0 END) / CAST(COUNT(*) AS DECIMAL(18,4)) AS ratio_12_or_more\nFROM order_payments\nGROUP BY payment_type\nORDER BY ratio_12_or_more DESC, payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주문에서 결제 수단별 금액 합 중 가장 큰 결제 수단과 그 비중(해당 수단 금액/주문 총액)을 알고 싶습니다. 동률이면 결제 수단명을 사전순으로 골라주세요.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('2a4408332d5a4d37e075056a8b46d59e', 1, 'credit_card', 8, 203.14), ('a1bf6f909b1f799e5b1f460e8a348ab2', 1, 'boleto', 1, 86.15);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH type_sum AS (\n  SELECT order_id, payment_type, SUM(payment_value) AS type_amount\n  FROM order_payments\n  GROUP BY order_id, payment_type\n),\norder_tot AS (\n  SELECT order_id, SUM(payment_value) AS total_amount\n  FROM order_payments\n  GROUP BY order_id\n),\nranked AS (\n  SELECT\n    ts.order_id,\n    ts.payment_type,\n    ts.type_amount,\n    ot.total_amount,\n    ts.type_amount / ot.total_amount AS ratio,\n    ROW_NUMBER() OVER (\n      PARTITION BY ts.order_id\n      ORDER BY ts.type_amount DESC, ts.payment_type ASC\n    ) AS rn\n  FROM type_sum ts\n  JOIN order_tot ot ON ts.order_id = ot.order_id\n)\nSELECT order_id, payment_type, type_amount, total_amount, ratio\nFROM ranked\nWHERE rn = 1\nORDER BY ratio DESC, order_id ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 주문당 결제 건수에 따라 1건, 2건, 3건 이상으로 구분해서 각 구간의 주문 수를 집계해줄 수 있을까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH order_cnt AS (\n  SELECT order_id, COUNT(*) AS cnt\n  FROM order_payments\n  GROUP BY order_id\n)\nSELECT\n  CASE\n    WHEN cnt = 1 THEN '1건'\n    WHEN cnt = 2 THEN '2건'\n    ELSE '3건 이상'\n  END AS 결제건수구간,\n  COUNT(*) AS 주문수\nFROM order_cnt\nGROUP BY\n  CASE\n    WHEN cnt = 1 THEN '1건'\n    WHEN cnt = 2 THEN '2건'\n    ELSE '3건 이상'\n  END\nORDER BY\n  CASE\n    WHEN MIN(cnt) = 1 THEN 1\n    WHEN MIN(cnt) = 2 THEN 2\n    ELSE 3\n  END;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로, 그 수단이 사용된 각 주문에서 해당 수단의 결제 건수의 평균은 얼마임?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('75c65b37911c3543a4efd45a45ee4a92', 1, 'credit_card', 3, 130.17);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH per_order AS (\n  SELECT payment_type, order_id, COUNT(*) AS cnt\n  FROM order_payments\n  GROUP BY payment_type, order_id\n)\nSELECT\n  payment_type,\n  AVG(cnt) AS avg_usage_count_per_order\nFROM per_order\nGROUP BY payment_type\nORDER BY avg_usage_count_per_order DESC, payment_type ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 해당 수단 금액 합이 큰 상위 3개 주문과 금액 합계를 보여주는 것임?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('0e23af08f3f379f749739b61bad2cf29', 1, 'credit_card', 3, 58.62);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH sums AS (\n  SELECT payment_type, order_id, SUM(payment_value) AS amount\n  FROM order_payments\n  GROUP BY payment_type, order_id\n),\nranked AS (\n  SELECT\n    payment_type,\n    order_id,\n    amount,\n    ROW_NUMBER() OVER (\n      PARTITION BY payment_type\n      ORDER BY amount DESC, order_id ASC\n    ) AS rn\n  FROM sums\n)\nSELECT payment_type, order_id, amount\nFROM ranked\nWHERE rn <= 3\nORDER BY payment_type ASC, amount DESC, order_id ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 주문별 할부 횟수 범위(최대−최소)를 계산하고, 범위가 큰 순으로 상위 20개 주문의 주문 ID와 범위를 보여줄 수 있니?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('2d58f989c5e9344556ea2a9526699249', 1, 'credit_card', 10, 106.38);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  MAX(payment_installments) - MIN(payment_installments) AS installment_range\nFROM order_payments\nGROUP BY order_id\nORDER BY installment_range DESC, order_id ASC\nLIMIT 20;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주문에서 1회당 금액이 가장 큰 결제의 주문 ID, 결제 순번, 결제 수단, 1회당 금액을 알려줄 수 있나요? 동률이면 결제 순번이 작은 건을 선택해 주세요.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('5fd9fce5ad52aeebd4a05717b2990ca4', 1, 'boleto', 1, 74.72), ('98fdd250e01c66e91a1a2632a6445039', 1, 'credit_card', 1, 63.74), ('04b9ffa87087a2450449da3911146316', 1, 'credit_card', 1, 69.22), ('c8613f1f2b834e72422ddd76442f677c', 1, 'boleto', 1, 54.59), ('3478b113b28e0c77c5b870f927de40cc', 1, 'credit_card', 1, 52.04);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH base AS (\n  SELECT\n    order_id,\n    payment_sequential,\n    payment_type,\n    payment_value / NULLIF(payment_installments, 0) AS per_installment_amount\n  FROM order_payments\n),\nranked AS (\n  SELECT\n    order_id,\n    payment_sequential,\n    payment_type,\n    per_installment_amount,\n    ROW_NUMBER() OVER (\n      PARTITION BY order_id\n      ORDER BY per_installment_amount DESC, payment_sequential ASC\n    ) AS rn\n  FROM base\n)\nSELECT\n  order_id,\n  payment_sequential,\n  payment_type,\n  per_installment_amount\nFROM ranked\nWHERE rn = 1\nORDER BY per_installment_amount DESC, order_id ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 동일 주문에서 일시불과 할부가 모두 포함된 주문의 주문 ID.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('b11a2fc0664cad475e2700523625a1e6', 1, 'credit_card', 2, 71.13);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT order_id\nFROM order_payments\nGROUP BY order_id\nHAVING\n  SUM(CASE WHEN payment_installments = 1 THEN 1 ELSE 0 END) > 0\n  AND SUM(CASE WHEN payment_installments > 1 THEN 1 ELSE 0 END) > 0\nORDER BY order_id ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 가장 큰 결제 순번 값과 해당 결제 건수\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('b35d2c40061791df49f5e3fe718b0b0b', 1, 'credit_card', 1, 36.7), ('ca1be30219791e22648cca249a8681f2', 1, 'boleto', 1, 134.43);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH mx AS (\n  SELECT MAX(payment_sequential) AS max_seq\n  FROM order_payments\n)\nSELECT\n  m.max_seq AS max_payment_sequential,\n  COUNT(*) AS payments_count\nFROM order_payments op\nJOIN mx m\n  ON op.payment_sequential = m.max_seq;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 순번이 1부터 시작하지 않거나 중간에 빠진 번호가 있는 주문의 주문 ID를 모두 보여줄 수 있을까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('39012f748a03a617e56fd02e2326ccca', 1, 'credit_card', 3, 34.97), ('bc70e827b5531f116d2254b6696fc290', 1, 'credit_card', 6, 235.28), ('4bdb824616b048d04ab361c35af51e77', 1, 'boleto', 1, 35.4), ('9f58be0e75ed0e5862bd6dbf261a8b05', 1, 'boleto', 1, 257.94);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT order_id\nFROM order_payments\nGROUP BY order_id\nHAVING NOT (\n  SUM(CASE WHEN payment_sequential = 1 THEN 1 ELSE 0 END) > 0\n  AND COUNT(*) = MAX(payment_sequential)\n)\nORDER BY order_id ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 총 결제 금액 기준 상위 10개 주문의 주문 ID와 총액을 보여주는 것임?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('7bac1076797839872168be8c0e2b0f88', 1, 'credit_card', 1, 5.89), ('be604de4ce5e2e8658c03895db0621a9', 1, 'credit_card', 2, 44.34), ('cb4c7b5c4ba9391a068afd96cdd155c6', 1, 'credit_card', 3, 34.69), ('8c78d01de3a9009e23d6877a7cc9be20', 1, 'credit_card', 7, 249.72);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  SUM(payment_value) AS total_amount\nFROM order_payments\nGROUP BY order_id\nORDER BY total_amount DESC, order_id ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별 및 할부 횟수별 결제 건수를 집계해 주시고, 결제 수단과 할부 횟수를 오름차순으로 정렬해 주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('33bb79c28616262f5e3fdcf5e678b266', 1, 'voucher', 1, 60.75);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  payment_installments,\n  COUNT(*) AS cnt\nFROM order_payments\nGROUP BY payment_type, payment_installments\nORDER BY payment_type, payment_installments;"
+    },
+    {
+        "instruction": "입력 텍스트: 할부 횟수가 13회 이상인 결제가 포함된 주문의 주문 ID와 그런 결제 건수임?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('a88a97b1f64733fb73f753a519db23b9', 1, 'credit_card', 10, 863.75), ('1500f59278b33472734cddd11039033f', 1, 'credit_card', 10, 184.94), ('47c06c1588f9c9cb71462e6d39893f63', 1, 'boleto', 1, 192.15), ('ab8d7e03c02e35b89d4eee1dd9ab65ca', 1, 'credit_card', 1, 31.38);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  COUNT(*) AS cnt_13_plus\nFROM order_payments\nWHERE payment_installments >= 13\nGROUP BY order_id\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 주문 ID와 동일한 할부 횟수로 이루어진 결제의 할부 횟수, 할부 횟수 오름차순 및 주문 ID 오름차순 정렬.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('693c6ae1a1ab759aae8dd08ff9eff189', 1, 'credit_card', 10, 1270.7), ('d1d598b9c6fa6d135849e528650082c0', 1, 'credit_card', 10, 171.4), ('afb7c0f7929d4ac3b13a200b2137d90b', 1, 'credit_card', 1, 64.02);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  MIN(payment_installments) AS installments\nFROM order_payments\nGROUP BY order_id\nHAVING COUNT(DISTINCT payment_installments) = 1\nORDER BY installments, order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주문에서 누적 결제 금액이 처음으로 200을 넘는 시점의 결제 순번과 누적 금액을 알려주시고, 해당 시점이 없는 주문은 제외하며, 주문 ID 오름차순으로 정렬해 주시나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('bba21993f12d756b813c354103b3d248', 1, 'credit_card', 1, 81.63), ('1c07c0999a3f88b8c1b95e9a07cf5564', 1, 'debit_card', 1, 114.91), ('3c5c6fad12cccea3829606ddd4c3b7a0', 1, 'debit_card', 1, 98.14);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH t AS (\n  SELECT\n    order_id,\n    payment_sequential,\n    SUM(payment_value) OVER (\n      PARTITION BY order_id\n      ORDER BY payment_sequential\n      ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n    ) AS cum_sum\n  FROM order_payments\n),\nu AS (\n  SELECT\n    order_id,\n    payment_sequential,\n    cum_sum,\n    ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY payment_sequential) AS rn\n  FROM t\n  WHERE cum_sum > 200\n)\nSELECT\n  order_id,\n  payment_sequential,\n  cum_sum\nFROM u\nWHERE rn = 1\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주문별 결제 수단별 금액 합계와 주문 총액 대비 비중, 주문 ID 및 결제 수단 오름차순 정렬.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('c3f309f7d0ad0cf3b17a58447ed8ade8', 1, 'credit_card', 1, 124.07);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH order_sum AS (\n  SELECT order_id, SUM(payment_value) AS order_total\n  FROM order_payments\n  GROUP BY order_id\n),\ntype_sum AS (\n  SELECT order_id, payment_type, SUM(payment_value) AS type_total\n  FROM order_payments\n  GROUP BY order_id, payment_type\n)\nSELECT\n  t.order_id,\n  t.payment_type,\n  t.type_total,\n  t.type_total / o.order_total AS share\nFROM type_sum t\nJOIN order_sum o ON o.order_id = t.order_id\nORDER BY t.order_id, t.payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 평균적으로 한 주문에 사용되는 서로 다른 결제 수단의 개수는 얼마인가?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('3ea82ad47a5a11ed6d1cb5e1e8343b9a', 1, 'credit_card', 5, 51.05), ('a162da83b66ff8c619d83b87c1de93b9', 1, 'credit_card', 5, 291.72), ('e0f96cc1ba052fe2de161845c9f24ab0', 1, 'boleto', 1, 148.33), ('23e11352f110006a5cd8995c2ff3cd2a', 1, 'credit_card', 1, 34.85), ('0927a99c4c0b6c6b2487a4e869f7fc2d', 1, 'boleto', 1, 325.41);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH per_order AS (\n  SELECT order_id, COUNT(DISTINCT payment_type) AS type_cnt\n  FROM order_payments\n  GROUP BY order_id\n)\nSELECT AVG(type_cnt) AS avg_distinct_payment_types_per_order\nFROM per_order;"
+    },
+    {
+        "instruction": "입력 텍스트: 항상 다른 결제 수단과 함께만 사용된 결제 수단은 무엇인가요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH order_type_count AS (\n  SELECT order_id, COUNT(DISTINCT payment_type) AS type_cnt\n  FROM order_payments\n  GROUP BY order_id\n),\norder_types AS (\n  SELECT DISTINCT order_id, payment_type\n  FROM order_payments\n),\nper_type AS (\n  SELECT\n    ot.payment_type,\n    SUM(CASE WHEN otc.type_cnt = 1 THEN 1 ELSE 0 END) AS solo_orders,\n    COUNT(*) AS total_orders_with_type\n  FROM order_types ot\n  JOIN order_type_count otc ON otc.order_id = ot.order_id\n  GROUP BY ot.payment_type\n)\nSELECT payment_type\nFROM per_type\nWHERE solo_orders = 0;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별 마지막 결제 건수와 평균 결제 금액, 건수 많은 순서 및 동률 시 평균 금액 큰 순서로 정렬.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('d16fbfb439fe82b7efb949345d70611f', 1, 'boleto', 1, 43.1), ('4c48c455b847c7a5d291a519e1e42d28', 1, 'credit_card', 2, 32.66), ('beaa70f158221aa1ca0d8a5545b97569', 1, 'credit_card', 10, 219.51), ('bef91d8b2fdc7104c272e688abb17c4f', 1, 'credit_card', 6, 122.92), ('5f4232203a9f7cd910b49787d7f32437', 1, 'credit_card', 1, 50.3);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH last_pay AS (\n  SELECT p.*\n  FROM order_payments p\n  JOIN (\n    SELECT order_id, MAX(payment_sequential) AS last_seq\n    FROM order_payments\n    GROUP BY order_id\n  ) m\n    ON m.order_id = p.order_id\n   AND m.last_seq = p.payment_sequential\n)\nSELECT\n  payment_type,\n  COUNT(*) AS cnt,\n  AVG(payment_value) AS avg_value\nFROM last_pay\nGROUP BY payment_type\nORDER BY cnt DESC, avg_value DESC;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 금액별로 결제 건수와 서로 다른 주문 수를 집계해 금액 오름차순으로 보여줄 수 있나?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('2f313baa6fdec2fc305719ee717b26a2', 1, 'credit_card', 5, 115.45), ('9516708e3c4612677ddf7c9167b54076', 1, 'credit_card', 2, 137.55);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_value,\n  COUNT(*) AS payment_count,\n  COUNT(DISTINCT order_id) AS order_count\nFROM order_payments\nGROUP BY payment_value\nORDER BY payment_value;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 금액이 결제 순번이 증가할수록 항상 증가하는 주문의 주문 ID와 결제 건수가 2건 이상인 주문.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('6259fec518c1b381ebd6b4eb06ffbaab', 1, 'credit_card', 1, 37.29), ('c075bbb88b67014143bb3d046f0b8610', 1, 'credit_card', 8, 171.44), ('b9c9ae9ec1ae133cb9d76c6a4d38c316', 2, 'voucher', 1, 40.9), ('963ac22d582d11d2bef4a834a74ddaf8', 1, 'boleto', 1, 84.14);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH t AS (\n  SELECT\n    order_id,\n    payment_sequential,\n    payment_value,\n    LAG(payment_value) OVER (PARTITION BY order_id ORDER BY payment_sequential) AS prev_value\n  FROM order_payments\n),\nagg AS (\n  SELECT\n    order_id,\n    SUM(CASE WHEN prev_value IS NOT NULL AND payment_value <= prev_value THEN 1 ELSE 0 END) AS violations,\n    COUNT(*) AS cnt\n  FROM t\n  GROUP BY order_id\n)\nSELECT order_id\nFROM agg\nWHERE violations = 0 AND cnt >= 2\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 할부 횟수가 0인 결제가 포함된 주문의 주문 ID와 그런 결제 건수를 보여주냐?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  COUNT(*) AS zero_installment_count\nFROM order_payments\nWHERE payment_installments = 0\nGROUP BY order_id\nORDER BY zero_installment_count DESC, order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단이 정의되지 않은 결제들의 총 결제 금액과 평균 결제 금액을 알려주십니까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('5e5d6b5f5e7801991be4d2299bfa37eb', 1, 'credit_card', 1, 239.35), ('2dacc81722bbde834907930ea0ea3377', 1, 'boleto', 1, 134.15), ('bbcde37a6b3008557c47e31e37523380', 1, 'boleto', 1, 142.76), ('66d77662d1b603b2a132dc906f5ed8c0', 1, 'credit_card', 1, 102.66), ('90729c9368dfbc80cac0f98648c70379', 1, 'credit_card', 1, 31.38);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  SUM(payment_value) AS total_payment_value,\n  AVG(payment_value) AS avg_payment_value\nFROM order_payments\nWHERE payment_type = 'not_defined';"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 사용된 최댓값 할부 횟수와, 그 최댓값 할부로 이루어진 결제들의 평균 결제 금액을 알려주시겠니?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('cd49c5c6f772ac87200f116a7a5499e5', 1, 'boleto', 1, 116.43), ('807cabbf50cda6f87625bd1c61a6977c', 1, 'boleto', 1, 45.78), ('3ad7eae98c8f120f7a4e4cc64f4278e9', 1, 'credit_card', 5, 56.43), ('ef91935d3286023b33bb5020a3b26998', 1, 'voucher', 1, 73.05);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH max_inst AS (\n  SELECT\n    payment_type,\n    MAX(payment_installments) AS max_installments\n  FROM order_payments\n  GROUP BY payment_type\n)\nSELECT\n  m.payment_type,\n  m.max_installments,\n  AVG(p.payment_value) AS avg_payment_value_at_max_installments\nFROM max_inst m\nJOIN order_payments p\n  ON p.payment_type = m.payment_type\n AND p.payment_installments = m.max_installments\nGROUP BY m.payment_type, m.max_installments\nORDER BY m.payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 할부 횟수가 짝수(0 제외)인 결제의 건수와 총 결제 금액이 얼마냐?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('06499dd792313ae78e92e4819ffceff9', 1, 'credit_card', 1, 98.66), ('9ca192d3fd38d4aff0c137f84cf7e121', 1, 'credit_card', 3, 37.94), ('384b106622904903b1b9425b14f7dd0c', 1, 'credit_card', 5, 55.44), ('daa8ddef333b2e2a012ef233e4566cc2', 1, 'credit_card', 4, 156.68), ('8256729fe396aa16538e1790e33851f9', 1, 'credit_card', 3, 71.34);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  COUNT(*) AS even_installment_count,\n  SUM(payment_value) AS total_payment_value\nFROM order_payments\nWHERE payment_installments >= 2\n  AND MOD(payment_installments, 2) = 0;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 순번이 증가할수록 할부 횟수가 항상 감소하는 주문의 주문 ID를 모두 보여줄 수 있나? 결제가 2건 이상인 주문만 포함해 줘.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH seq AS (\n  SELECT\n    order_id,\n    payment_sequential,\n    payment_installments,\n    LAG(payment_installments) OVER (PARTITION BY order_id ORDER BY payment_sequential) AS prev_installments\n  FROM order_payments\n)\nSELECT\n  order_id\nFROM seq\nGROUP BY order_id\nHAVING COUNT(*) >= 2\n   AND SUM(CASE WHEN prev_installments IS NULL THEN 0\n                WHEN payment_installments < prev_installments THEN 0\n                ELSE 1 END) = 0\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 두 번째 결제 금액이 주문 총액의 절반을 넘는 주문의 주문 ID와 두 번째 결제 금액, 주문 총액을 보여주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('bdefd25a848afe646dfd9751002facdf', 1, 'credit_card', 7, 239.64), ('32e839df202e265a92fc882a73aca02f', 1, 'boleto', 1, 124.88);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH totals AS (\n  SELECT\n    order_id,\n    SUM(payment_value) AS order_total\n  FROM order_payments\n  GROUP BY order_id\n),\nsecond_pay AS (\n  SELECT\n    order_id,\n    payment_value AS second_payment\n  FROM order_payments\n  WHERE payment_sequential = 2\n)\nSELECT\n  t.order_id,\n  s.second_payment,\n  t.order_total\nFROM totals t\nJOIN second_pay s ON s.order_id = t.order_id\nWHERE s.second_payment > t.order_total / 2\nORDER BY s.second_payment / t.order_total DESC, t.order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 평균 결제 순번을 계산해서 오름차순으로 정렬해 줄 수 있냐?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  AVG(payment_sequential) AS avg_payment_sequential\nFROM order_payments\nGROUP BY payment_type\nORDER BY avg_payment_sequential ASC, payment_type ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 모든 결제 금액이 동일한 금액으로만 이루어진 주문의 주문 ID와 결제가 2건 이상인 주문.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('108901afd62abfc81344668ddc554620', 1, 'credit_card', 1, 28.2);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id\nFROM order_payments\nGROUP BY order_id\nHAVING COUNT(*) >= 2\n   AND MIN(payment_value) = MAX(payment_value)\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 단일 결제 수단만 사용된 주문의 비중(주문 기준)을 알려주실 수 있나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('39ff1e358efa92ceae42de6d5f9d37cf', 1, 'credit_card', 10, 170.95), ('4533633faea8cc724b34db6788786b5c', 1, 'credit_card', 3, 32.23), ('fdfe6a493395db719f0dbe0ff0c40400', 1, 'boleto', 1, 112.24);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH order_type_counts AS (\n  SELECT\n    order_id,\n    COUNT(DISTINCT payment_type) AS type_count\n  FROM order_payments\n  GROUP BY order_id\n)\nSELECT\n  SUM(CASE WHEN type_count = 1 THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS single_type_order_ratio\nFROM order_type_counts;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주문에서 결제 수단별로 처음 등장한 결제 순번과 주문 ID 및 결제 수단 오름차순으로 정렬된 결과임?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  payment_type,\n  MIN(payment_sequential) AS first_appearance_sequential\nFROM order_payments\nGROUP BY order_id, payment_type\nORDER BY order_id, payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로 해당 수단만으로 결제된 주문 수를 집계하고, 많은 순으로 정렬하는 임?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('616349dfee9e27679881b25bfc3af335', 1, 'credit_card', 1, 75.17), ('0c2989120592c0873f156da4204fbfb6', 1, 'credit_card', 5, 478.33), ('6811f439ad8873c28f8e1138e02229a5', 1, 'credit_card', 9, 669.98);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH one_type_orders AS (\n  SELECT order_id, MIN(payment_type) AS payment_type\n  FROM order_payments\n  GROUP BY order_id\n  HAVING COUNT(DISTINCT payment_type) = 1\n)\nSELECT payment_type, COUNT(*) AS order_count\nFROM one_type_orders\nGROUP BY payment_type\nORDER BY order_count DESC, payment_type ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 첫 결제가 해당 주문에서 가장 큰 금액의 결제인 주문만 골라 주문 ID, 첫 결제 금액, 주문 총액을 보여줄 수 있을까?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('5e4523cabf8f93bbd962cb5a9671f669', 1, 'credit_card', 4, 43.09), ('4eb2ff9ddc8c3a30a20b59bce294e136', 1, 'debit_card', 1, 35.69), ('122f75d9c2b30dfb21ca6950ec587b90', 1, 'credit_card', 10, 2638.64);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH order_stats AS (\n  SELECT order_id, SUM(payment_value) AS total_amount, MAX(payment_value) AS max_payment\n  FROM order_payments\n  GROUP BY order_id\n),\nfirst_pay AS (\n  SELECT order_id, payment_value\n  FROM order_payments\n  WHERE payment_sequential = 1\n)\nSELECT f.order_id, f.payment_value AS first_payment_value, s.total_amount\nFROM first_pay f\nJOIN order_stats s ON s.order_id = f.order_id\nWHERE f.payment_value = s.max_payment\nORDER BY s.total_amount DESC, f.order_id ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별 할부 결제 비중(건수 기준) 정렬.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('fb0e638d6e547a08f79bdadcddfb7dc5', 1, 'credit_card', 4, 80.21);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  payment_type,\n  SUM(CASE WHEN payment_installments > 1 THEN 1 ELSE 0 END) AS installment_count,\n  COUNT(*) AS total_count,\n  CAST(SUM(CASE WHEN payment_installments > 1 THEN 1 ELSE 0 END) AS DECIMAL(18,6)) / COUNT(*) AS installment_ratio\nFROM order_payments\nGROUP BY payment_type\nORDER BY installment_ratio DESC, installment_count DESC, payment_type ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단과 금액이 모두 동일한 결제가 2건 이상 있는 주문의 주문 ID.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('45060534aef780077c10103b60fe71c4', 1, 'credit_card', 8, 119.27), ('27716fa717ba13da31a469018472088d', 1, 'credit_card', 3, 169.56);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT DISTINCT order_id\nFROM (\n  SELECT order_id, payment_type, payment_value, COUNT(*) AS cnt\n  FROM order_payments\n  GROUP BY order_id, payment_type, payment_value\n  HAVING COUNT(*) >= 2\n) t\nORDER BY order_id;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주문에서 두 번 이상 사용된 결제 수단의 개수를 계산하고, 그 개수가 큰 순으로 상위 10개 주문의 주문 ID와 개수를 보여주는 것이 맞음?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH type_counts AS (\n  SELECT order_id, payment_type, COUNT(*) AS cnt\n  FROM order_payments\n  GROUP BY order_id, payment_type\n),\norder_multi_type_cnt AS (\n  SELECT order_id, COUNT(*) AS repeated_type_count\n  FROM type_counts\n  WHERE cnt >= 2\n  GROUP BY order_id\n)\nSELECT order_id, repeated_type_count\nFROM order_multi_type_cnt\nORDER BY repeated_type_count DESC, order_id ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 결제 수단별로, 해당 수단으로 결제된 각 주문에서 그 수단의 단일 결제 최대 금액을 구한 뒤 그 최대값들의 평균을 계산해 주실 수 있나요? 평균이 큰 순으로 정렬해 주세요.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH per_order_type_max AS (\n  SELECT order_id, payment_type, MAX(payment_value) AS max_value_per_order_type\n  FROM order_payments\n  GROUP BY order_id, payment_type\n)\nSELECT payment_type,\n       AVG(max_value_per_order_type) AS avg_of_order_max_values\nFROM per_order_type_max\nGROUP BY payment_type\nORDER BY avg_of_order_max_values DESC, payment_type ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 서로 다른 결제 수단을 가장 많이 사용한 상위 10개 주문의 주문 ID와 수단 개수, 동률일 경우 주문 총액 기준.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('73cfcda5215dcc0c2a5839f4ea320288', 1, 'boleto', 1, 142.87), ('f826855672324b0ba0f50c0d67d00ac6', 1, 'credit_card', 1, 91.66), ('03344155603005842bd94ce8d65f2607', 1, 'credit_card', 6, 148.33), ('686fb1c21e29924074b592b5c2ebf96b', 2, 'voucher', 1, 193.93);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT\n  order_id,\n  COUNT(DISTINCT payment_type) AS distinct_types,\n  SUM(payment_value) AS total_amount\nFROM order_payments\nGROUP BY order_id\nORDER BY distinct_types DESC, total_amount DESC, order_id ASC\nLIMIT 10;"
+    },
+    {
+        "instruction": "입력 텍스트: 마지막 결제 수단으로 한 번도 사용되지 않은 모든 결제 수단.\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('396a800e1a64e6e4db379d941a4bc7d7', 1, 'credit_card', 12, 380.29), ('b8d83281a0c89e3157c9cd7c37ff7273', 1, 'credit_card', 6, 387.67), ('1704f22579a5be1ff00ac2cdcc1e582c', 1, 'boleto', 1, 85.14), ('7fc930983a4062abd3407e7d6a0141a5', 1, 'boleto', 1, 245.44), ('c8b5282d408a1646c2b36a65f3d6fc80', 1, 'credit_card', 4, 45.23);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH last_payments AS (\n  SELECT op.order_id, op.payment_type\n  FROM order_payments op\n  JOIN (\n    SELECT order_id, MAX(payment_sequential) AS max_seq\n    FROM order_payments\n    GROUP BY order_id\n  ) m ON m.order_id = op.order_id AND op.payment_sequential = m.max_seq\n),\nall_types AS (\n  SELECT DISTINCT payment_type FROM order_payments\n)\nSELECT a.payment_type\nFROM all_types a\nLEFT JOIN (SELECT DISTINCT payment_type FROM last_payments) l\n  ON a.payment_type = l.payment_type\nWHERE l.payment_type IS NULL\nORDER BY a.payment_type;"
+    },
+    {
+        "instruction": "입력 텍스트: 각 주문에서 특정 결제 수단의 금액 합이 주문 총액의 70%를 초과하는 경우만 골라, 주문 ID와 해당 결제 수단, 비중을 비중이 큰 순으로 보여줄 수 있나요?\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\nINSERT INTO order_payments (order_id, payment_sequential, payment_type, payment_installments, payment_value) VALUES ('700070e69858b585d65a370ed6204d3e', 1, 'credit_card', 8, 609.43), ('6a4b06a2b62d1f2c69cf1f7a4eae074a', 1, 'credit_card', 1, 46.85), ('1f72c797b1b82ab729c38055a2921b2c', 1, 'credit_card', 5, 124.18), ('2ce3c61f3add382691fcad6a04f52680', 1, 'boleto', 1, 1501.45);\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: WITH order_totals AS (\n  SELECT order_id, SUM(payment_value) AS total_amount\n  FROM order_payments\n  GROUP BY order_id\n),\ntype_sums AS (\n  SELECT order_id, payment_type, SUM(payment_value) AS type_amount\n  FROM order_payments\n  GROUP BY order_id, payment_type\n)\nSELECT t.order_id, t.payment_type,\n       CAST(t.type_amount AS DECIMAL(18,6)) / o.total_amount AS type_ratio\nFROM type_sums t\nJOIN order_totals o ON o.order_id = t.order_id\nWHERE CAST(t.type_amount AS DECIMAL(18,6)) / o.total_amount > 0.7\nORDER BY type_ratio DESC, t.order_id ASC, t.payment_type ASC;"
+    },
+    {
+        "instruction": "입력 텍스트: 주문 총액이 100 이상 300 미만인 주문 수\n\nDDL statements:\n\nCREATE TABLE order_payments (order_id VARCHAR(32) NOT NULL, payment_sequential INT NOT NULL, payment_type VARCHAR(20) NOT NULL, payment_installments INT NOT NULL, payment_value DECIMAL(10,2) NOT NULL, PRIMARY KEY (order_id, payment_sequential));\n\n\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS order_count\nFROM (\n  SELECT order_id, SUM(payment_value) AS total_amount\n  FROM order_payments\n  GROUP BY order_id\n) s\nWHERE total_amount >= 100 AND total_amount < 300;"
+    }
+]
