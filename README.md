@@ -15,6 +15,7 @@ v- 실전 : gpt-5.5, 5000개.
 3. (완료) Olist 기반 데이터 생성 - 단일
 v- POC : GPT-5 DB 1개 * 9개 (Olist_orders_text_to_sql_data.json)
 v- 실전 : GPT-5 DB 8개 * 100개씩 
+-> 6/20) 단일 데이터 검증 오류난거 처리
 
 4. (완료) Olist 기반 데이터 생성 - 복합
 v - POC : GPT-5 DB 연결고리 1개 * 3개 (Olist_orders_n_order_items_text_to_sql_data.json)
@@ -85,3 +86,71 @@ exact match 문자열 비교 X -> execution accracy 실행 기반 평가 O
 
 README 추가할 내용
 - 왜 일반 Llama Instruction이 아닌 allganize를 base model로 사용했는지도 적기. (한국어 성능 더 좋음)
+
+
+
+
+# 데이터 검증 결과
+
+## Rule-Based 검증 내용
+```
+# 데이터 형식
+1. 모든 list의 원소가 dictionary type인지
+2. instruction, input, output 키 존재여부
+3. instruction과 output의 값 null 여부
+
+# instruction 값
+1. 값이 string 형인지 확인
+2. 값에 '입력 텍스트', 'DDL statements' 존재여부
+3. '입력 텍스트'가 항상 'DDL statements'보다 앞에 오는지
+
+DDL statements에 INSERT문이 있다면
+1. CREATE문에 적힌 테이블명과 INSERT 문에 쓰인 테이블명이 일치하는지
+2. CREATE문에 적힌 칼럼명과 INSERT 문에 쓰인 칼럼명이 전체 일치하는지
+3. INSERT문에 쓰인 칼럼 개수와 값의 개수가 일치하는지.
+4. VALUES 값이 칼럼 데이터형에 맞는 올바른 자료형인지
+5. VALUES 값이 칼럼 NULL 허용 여부에 맞는지.
+6. 전체 INSERT을 봤을 때 PK의 중복 여부
+
+# input 값
+1. 항상 빈 문자열인지 체크
+
+# output 값
+1. 값이 string 형인지 확인
+2. '쿼리 작성' 존재여부
+SQL 확인
+1. SQL 실제 실행 되는지 여부
+2. SQL이 참조하는 컬럼이 DDL statements에 정의된 칼럼인지 여부
+
+# 중복 여부
+1. 전체 데이터에서 instruction이 중복되는 것이 있는지 확인
+2. 전체 데이터에서 output의 쿼리문이 중복되는 것이 있는지 확인
+```
+
+## 검증 대상
+- 단일 DB SQL 데이터 총 800건
+
+Olist_geolocation_text_to_sql_data.json (100건) <br>
+Olist_order_reviews_text_to_sql_data.json (100건) <br>
+Olist_customers_text_to_sql_data.json (100건) <br>
+Olist_order_items_text_to_sql_data.json (100건) <br>
+Olist_order_payments_text_to_sql_data.json (100건) <br>
+Olist_orders_text_to_sql_data.json (100건) <br>
+Olist_products_text_to_sql_data.json (100건) <br>
+Olist_sellers_text_to_sql_data.json (100건) <br>
+
+
+## 검증 결과
+
+[output(SQL) - SQL 실제 실행 가능 여부] 
+
+Olist_order_reviews_text_to_sql_data.json 위반 2건
+  - index=75 | 1차 오류=no such function: SUBSTRING_INDEX / LLM 변환 후 오류=near "ORDER": syntax error
+  - index=79 | 1차 오류=no such function: CHAR_LENGTH / LLM 변환 후 오류=near "(": syntax error
+
+Olist_geolocation_text_to_sql_data.json
+  - index=57 | 1차 오류=no such function: STDDEV_POP / LLM 변환 후 오류=no such column: avg_table.geolocation_state
+  - index=83 | 1차 오류=no such function: STDDEV_SAMP / LLM 변환 후 오류=no such column: avg_lng
+  - index=96 | 1차 오류=no such function: STDDEV_SAMP / LLM 변환 후 오류=misuse of aggregate function avg()
+
+총 5건 삭제. 795건 데이터 확보.
