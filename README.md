@@ -19,15 +19,22 @@ v- 실전 : GPT-5 DB 8개 * 100개씩
 
 4. (완료) Olist 기반 데이터 생성 - 복합
 v - POC : GPT-5 DB 연결고리 1개 * 3개 (Olist_orders_n_order_items_text_to_sql_data.json)
-- 실전 : GPT-5 DB 연결고리 8개 * 30개씩 
+v - 실전 : GPT-5 DB 연결고리 8개 * 30개씩 
 
 5. (완료) Olist 데이터셋 검증
 v - POC : 건뛰
 - 실전 : rule-based + LLM-as-a-Judge
 
-6. (완료)gretelai와 Olist 데이터 섞어 Fine-Tuning
+6. gretelai와 Olist 데이터 섞어 Fine-Tuning
 v- POC : A100 & 모델은 아무거나.
 - 실전 : 비싼 GPU
+
+no data                 | 3B, 7B, 10<=B
+base data               | 3B, 7B, 10<=B
+base data + olist data  | 3B, 7B, 10<=B
+
+test dataset으로 테스트 결과 비교
+
 
 7. POC 발견 TroubleShooting
 (완료)- 이미 만들어져 있는 text-to-sql용 데이터 5000행이 있었음. 근데 다 instruction이 입력 텍스트, DDL statements 순으로 되어 있음. Olist 데이터 생성할 때 바꿔주어야 할 듯.
@@ -89,6 +96,57 @@ README 추가할 내용
 
 
 
+# 데이터 생성시 신경 쓴 것
+
+## 프롬프트에 작성한 내용
+도메인 지식
+1. 데이터 도메인에 대한 지식을 갖추도록 Olist Kaggle 사이트 내 README 데이터 집어넣어 각 칼럼의 역할과 쓰임에 대한 정보를 제공.
+2. 컬럼 별 unique한 값 예시 3개씩 추가해줌으로써 정확히 어떤 데이터가 DB에 추가되어 있는지 더 명확하게 알도록 정보를 제공.
+3. base dataset의 질문을 랜덤으로 추출해 예시를 제공함으로써 사람이 직접 할 법한 질문을 생성하도록 유도.
+
+```
+프롬프트 예시 하나 추가
+```
+
+
+
+## 질문 형태 다양화
+일반화를 학습하지 않고 사용자가 다양한 말투로 질문을 할 경우 성능을 높이기 위해 종결어미, 말투 등 다방면으로 변경.
+
+1. 명사구 형태
+
+완전한 문장으로 끝나지 않고 명사구 형태로 끝나는 질문.
+예) "마을 변호사는 몇 명이었는가?" -> "마을변호사 인원 수"
+예) "각 고객별 첫 구매 일시를 알고 싶습니다. 고객 ID와 첫 구매 타임스탬프를 반환해 주세요."
+    -> "각 고객별 첫 구매 일시에 대한 고객 ID와 첫 구매 타임스탬프."
+예) "2018년 2분기(Q2)에 구매된 주문들의 구매 시각부터 배송사 인계까지 평균 며칠이 걸렸는지 알려주세요"
+    -> "2018년 2분기 구매 시각부터 배송사 인계까지 평균일."
+
+2. 문장 종결 어미 변경
+
+"~요?", "~까?", "~임?", "~나?", "~습니까?", "~나요?", "~가요?", "~니?", "~냐?" 등 다양한 물음에 적응 할 수 있도록 종결어미 다양화.
+예) 결제 수단별로 결제 승인까지 평균 몇 시간이 걸리는가요?
+    -> 결제 수단별로 결제 승인까지 평균 몇 시간이 걸리나?
+예)  RS 주에서 고객 수가 가장 많은 우편번호 접두어 상위 5개와 각 고객 수를 보여주세요
+    ->  RS 주에서 고객 수가 가장 많은 우편번호 접두어 상위 5개와 각 고객 수를 보여주시겠습니까?
+예) 고객이 단 1명만 있는 도시와 주 목록을 도시명 오름차순으로 보여주세요
+    -> 고객이 단 1명만 있는 도시와 주 목록을 도시명 오름차순으로 보여줄 수 있으심?
+
+3. 컬럼명 직접/간접 언급
+
+LLM에게 질문 시 영문 칼럼명을 직접 작성할 수 있지만 한국어로 질문할 수도 있음. 간접 언급시에도 올바르게 작동하도록 질의 변형.
+예) "각 country_of_origin별 모든 satellites의 최대 거리는 얼마인가요?"
+    -> "각 국가별로 지구 표면으로부터 모든 위성의 최대 거리는 얼마인가요?"
+예) "country가 Africa인 모든 org_name 값과 그들이 진행한 num_projects 수를 나열하세요"
+    -> "아프리카에서 활동하는 모든 식량 정의 단체와 그들이 진행한 프로젝트 수를 나열하세요."
+
+
+## DDL 선언문 뒤 값 예시 추가
+DDL 선언문 뒤 INSERT INTO ~ VALUES ~ 문의 개수를 0개에서 5개 사이로 랜덤하게 추가해줌. 값 예시가 적든 많든 올바르게 동작하도록 하기 위해.
+
+
+
+
 
 # 데이터 검증 결과
 
@@ -104,7 +162,7 @@ README 추가할 내용
 2. 값에 '입력 텍스트', 'DDL statements' 존재여부
 3. '입력 텍스트'가 항상 'DDL statements'보다 앞에 오는지
 
-DDL statements에 INSERT문이 있다면
+-> DDL statements에 INSERT문이 있다면
 1. CREATE문에 적힌 테이블명과 INSERT 문에 쓰인 테이블명이 일치하는지
 2. CREATE문에 적힌 칼럼명과 INSERT 문에 쓰인 칼럼명이 전체 일치하는지
 3. INSERT문에 쓰인 칼럼 개수와 값의 개수가 일치하는지.
@@ -128,7 +186,7 @@ SQL 확인
 ```
 
 ## 검증 대상
-- 단일 DB SQL 데이터 총 800건
+- 단일 DB 사용 SQL 데이터 총 800건
 
 Olist_geolocation_text_to_sql_data.json (100건) <br>
 Olist_order_reviews_text_to_sql_data.json (100건) <br>
@@ -138,19 +196,43 @@ Olist_order_payments_text_to_sql_data.json (100건) <br>
 Olist_orders_text_to_sql_data.json (100건) <br>
 Olist_products_text_to_sql_data.json (100건) <br>
 Olist_sellers_text_to_sql_data.json (100건) <br>
+- 복합 DB 사용 SQL 데이터 총 800건
 
+Olist_customers_and_geolocation_text_to_sql_data.json (100건)<br>
+Olist_order_items_and_products_text_to_sql_data.json (100건)<br>
+Olist_order_items_and_sellers_text_to_sql_data.json (100건)<br>
+Olist_orders_and_customers_text_to_sql_data.json (100건)<br>
+Olist_orders_and_order_items_text_to_sql_data.json (100건)<br>
+Olist_orders_and_order_payments_text_to_sql_data.json (100건)<br>
+Olist_orders_and_order_reviews_text_to_sql_data.json (100건)<br>
+Olist_sellers_and_geolocation_text_to_sql_data.json (100건)<br>
 
 ## 검증 결과
+
+- 단일 DB 사용 SQL 데이터
 
 [output(SQL) - SQL 실제 실행 가능 여부] 
 
 Olist_order_reviews_text_to_sql_data.json 위반 2건
+[output(SQL) - SQL 실제 실행 가능 여부] 위반 2건
   - index=75 | 1차 오류=no such function: SUBSTRING_INDEX / LLM 변환 후 오류=near "ORDER": syntax error
   - index=79 | 1차 오류=no such function: CHAR_LENGTH / LLM 변환 후 오류=near "(": syntax error
 
-Olist_geolocation_text_to_sql_data.json
+Olist_geolocation_text_to_sql_data.json 위반 3건
+[output(SQL) - SQL 실제 실행 가능 여부] 위반 3건
   - index=57 | 1차 오류=no such function: STDDEV_POP / LLM 변환 후 오류=no such column: avg_table.geolocation_state
   - index=83 | 1차 오류=no such function: STDDEV_SAMP / LLM 변환 후 오류=no such column: avg_lng
   - index=96 | 1차 오류=no such function: STDDEV_SAMP / LLM 변환 후 오류=misuse of aggregate function avg()
 
 총 5건 삭제. 795건 데이터 확보.
+
+- 복합 DB 사용 SQL 데이터
+
+Olist_customers_and_geolocation_text_to_sql_data.json
+[output(SQL) - SQL이 참조하는 컬럼이 DDL에 정의되어 있는지] 위반 1건
+  - index=92 | 미정의 컬럼={'gEolocation_lat'}
+[output(SQL) - SQL 실제 실행 가능 여부] 위반 2건
+  - index=58 | 1차 오류=no such function: STDDEV_POP / LLM 변환 후 오류=ambiguous column name: geolocation_zip_code_prefix
+  - index=88 | 1차 오류=no such function: STDDEV_SAMP / LLM 변환 후 오류=misuse of aggregate: MIN()
+
+총 3건 삭제. 797건 데이터 확보.
