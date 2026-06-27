@@ -23,7 +23,7 @@ v - 실전 : GPT-5 DB 연결고리 8개 * 30개씩
 
 5. (완료) Olist 데이터셋 검증
 v - POC : 건뛰
-- 실전 : rule-based + LLM-as-a-Judge
+v- 실전 : rule-based + LLM-as-a-Judge
 
 6. gretelai와 Olist 데이터 섞어 Fine-Tuning
 v- POC : A100 & 모델은 아무거나.
