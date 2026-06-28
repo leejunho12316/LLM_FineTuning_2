@@ -31,12 +31,12 @@ v- POC : A100 & 모델은 아무거나.
 
 no data                 | 3B, 7B, 10<=B
 base data               | 3B, 7B, 10<=B
-base data + olist data  | 3B, 7B, 10<=B
+ㅇ base data + olist data  | 3B, 7B, 10<=B
 
 test dataset으로 테스트 결과 비교
 
 
-7. POC 발견 TroubleShooting
+7. (완료) POC 발견 TroubleShooting
 (완료)- 이미 만들어져 있는 text-to-sql용 데이터 5000행이 있었음. 근데 다 instruction이 입력 텍스트, DDL statements 순으로 되어 있음. Olist 데이터 생성할 때 바꿔주어야 할 듯.
 
 (완료) - query 정교화
@@ -236,3 +236,34 @@ Olist_customers_and_geolocation_text_to_sql_data.json
   - index=88 | 1차 오류=no such function: STDDEV_SAMP / LLM 변환 후 오류=misuse of aggregate: MIN()
 
 총 3건 삭제. 797건 데이터 확보.
+
+
+
+# 파인 튜닝 결과
+
+## Trouble Shooting
+1. 8B 형식 미준수
+8B-Instruct를 1B, 3B FT할때와 같은 Config로 FT 진행.
+1B와 3B의 경우에 비해 Response에 '쿼리 작성:'으로 시작하는 걸 충분히 학습하지 못함.
+큰 모델이라 사전 학습으로 이미 가지고 있는 지식을 바꾸기에 학습이 충분하지 못했음.
+
+```
+=== 평가 요약 ===
+전체:                  477개
+Response 실행 성공:     205개
+Label 실행 성공:        473개
+실행 결과 일치 (정답):   56개 (11.7%)
+```
+
+해결 방법
+- r, lora_alpha, target_modules 늘리기
+peft_config = LoraConfig(
+    r=32,           # 16 -> 32
+    lora_alpha=64,  # 32 -> 64 (보통 alpha = 2 × r)
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],  # MLP도 포함
+)
+- epochs 늘리기
+args = SFTConfig(
+    num_train_epochs=5,   #3 -> 5
+    ...
+)
