@@ -267,3 +267,15 @@ args = SFTConfig(
     num_train_epochs=5,   #3 -> 5
     ...
 )
+
+2. 평가 성능 저조
+fine tuning된 모델들이 생성한 SQL문이 실행이 안되는 경우가 너무 많음.
+LLM-as-a-Judge로 query와 실행결과 퀄리티를 평가했는데 점수가 너무 낮음. 
+FineTuning된 모델의 SQL을 실행할 때 DB 방언때문에 실행이 안되면 sqlite 형식으로 변환하는데, 이 때 사용한 gpt-4o-mini라 오류가 많은 것 같음.
+-> gpt-5.4로 테스트셋 다시만들기. (xxx.csv -> xxx_with_exec과정만 다시 하면 됨.)
+
+테스트 데이터셋에 DB 실행결과 저장 시 INSERT, DELETE, UPDATE 같은 SQL문이 적용되어서 완전히 같은 SQL을 실행해도 다른 실행결과가 저장됨. 
+-> 예외처리 진행.
+
+
+
