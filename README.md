@@ -258,41 +258,7 @@ Olist_customers_and_geolocation_text_to_sql_data.json [output(SQL) - SQL 실제 
 
 # 파인 튜닝 결과
 
-## Trouble Shooting
-1. 8B 형식 미준수
-8B-Instruct를 1B, 3B FT할때와 같은 Config로 FT 진행.
-1B와 3B의 경우에 비해 Response에 '쿼리 작성:'으로 시작하는 걸 충분히 학습하지 못함.
-큰 모델이라 사전 학습으로 이미 가지고 있는 지식을 바꾸기에 학습이 충분하지 못했음.
 
-```
-=== 평가 요약 ===
-전체:                  477개
-Response 실행 성공:     205개
-Label 실행 성공:        473개
-실행 결과 일치 (정답):   56개 (11.7%)
-```
-
-해결 방법
-- r, lora_alpha, target_modules 늘리기
-peft_config = LoraConfig(
-    r=32,           # 16 -> 32
-    lora_alpha=64,  # 32 -> 64 (보통 alpha = 2 × r)
-    target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],  # MLP도 포함
-)
-- epochs 늘리기
-args = SFTConfig(
-    num_train_epochs=5,   #3 -> 5
-    ...
-)
-
-2. 평가 성능 저조
-fine tuning된 모델들이 생성한 SQL문이 실행이 안되는 경우가 너무 많음.
-LLM-as-a-Judge로 query와 실행결과 퀄리티를 평가했는데 점수가 너무 낮음. 
-FineTuning된 모델의 SQL을 실행할 때 DB 방언때문에 실행이 안되면 sqlite 형식으로 변환하는데, 이 때 사용한 gpt-4o-mini라 오류가 많은 것 같음.
--> gpt-5.4로 테스트셋 다시만들기. (xxx.csv -> xxx_with_exec과정만 다시 하면 됨.)
-
-테스트 데이터셋에 DB 실행결과 저장 시 INSERT, DELETE, UPDATE 같은 SQL문이 적용되어서 완전히 같은 SQL을 실행해도 다른 실행결과가 저장됨. 
--> 예외처리 진행.
 
 
 
@@ -383,3 +349,51 @@ Llama-3.2-1B-Instruct 평가 결과 예시 <br>
 |...|...|...|...|...|...|...|
 
 점수 표 시각화
+
+
+
+
+# Trouble Shooting
+1. 8B FineTuning시 형식 미준수
+
+8B-Instruct를 1B, 3B FT할때와 같은 Config로 FT 진행.
+1B와 3B의 경우에 비해 Response에 '쿼리 작성:'으로 시작하는 걸 충분히 학습하지 못함.
+큰 모델이라 사전 학습으로 이미 가지고 있는 지식을 바꾸기에 학습이 충분하지 못했음.
+
+```
+=== 평가 요약 ===
+전체:                  477개
+Response 실행 성공:     205개
+Label 실행 성공:        473개
+실행 결과 일치 (정답):   56개 (11.7%)
+```
+
+해결 방법
+- r, lora_alpha, target_modules 늘리기
+peft_config = LoraConfig(
+    r=32,           # 16 -> 32
+    lora_alpha=64,  # 32 -> 64 (보통 alpha = 2 × r)
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],  # MLP도 포함
+)
+- epochs 늘리기
+args = SFTConfig(
+    num_train_epochs=5,   #3 -> 5
+    ...
+)
+
+2. 평가 성능 저조
+fine tuning된 모델들이 생성한 SQL문이 실행이 안되는 경우가 너무 많음.
+LLM-as-a-Judge로 query와 실행결과 퀄리티를 평가했는데 점수가 너무 낮음. 
+FineTuning된 모델의 SQL을 실행할 때 DB 방언때문에 실행이 안되면 sqlite 형식으로 변환하는데, 이 때 사용한 gpt-4o-mini라 오류가 많은 것 같음.
+-> gpt-5.4로 테스트셋 다시만들기. (xxx.csv -> xxx_with_exec과정만 다시 하면 됨.)
+
+테스트 데이터셋에 DB 실행결과 저장 시 INSERT, DELETE, UPDATE 같은 SQL문이 적용되어서 완전히 같은 SQL을 실행해도 다른 실행결과가 저장됨.
+-> 테스트 데이터셋에 SQL 실행 시 rollback 적용으로 DB가 수정되지 않도록 수정.
+
+6/27) FineTuning
+v 1B짜리 colab에서 FT 해보고 평가까지 뽑는 코드 완성.
+v Runpod로 3B, 8B, allganize8B 전부 FT 진행.
+v 8B모델들 RunPod 비싼 GPU로 Pod만들고 HuggingFace에서 불러와서 테스트 데이터 만들기.
+v 테스트 데이터 만드는동안 테스트 데이터 평가 프롬프트 작성하기.
+v 테스트 데이터 GPT-5.4로 다시만들기
+gpt-4o-mini -> gpt-5.4
