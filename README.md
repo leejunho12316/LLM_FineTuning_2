@@ -1,6 +1,6 @@
 # LLM_FineTuning_2
 
-# text-to-sql 파인튜닝
+# text-to-sql 파인튜닝 계획 모음
 
 진행
 
@@ -95,10 +95,30 @@ README 추가할 내용
 - 왜 일반 Llama Instruction이 아닌 allganize를 base model로 사용했는지도 적기. (한국어 성능 더 좋음)
 
 
+---
 
-# 데이터 생성시 신경 쓴 것
+# 개요
 
-## 프롬프트에 작성한 내용
+
+
+# Dataset
+
+<img src="https://camo.githubusercontent.com/e70f2a6a8c8f5bf0f4211dd32a0b5311c7464b65098006e654986f6738bfe034/68747470733a2f2f68756767696e67666163652e636f2f64617461736574732f68756767696e67666163652f646f63756d656e746174696f6e2d696d616765732f7261772f6d61696e2f68756767696e67666163655f6875622e737667">
+
+자체제작 Olist Dataset : https://huggingface.co/datasets/leejunho12316/Olist_text_to_sql_FineTuning_dataset/tree/main
+
+Base Fine-Tuning Dataset : https://raw.githubusercontent.com/leejunho12316/LLaMA-Factory/main/data/text_to_sql_data.json
+
+# FineTuned Models
+
+Llama-3.2-1B-Instruct : https://huggingface.co/leejunho12316/Llama-3.2-1B-Instruct-text-to-sql-FT-olist <br>
+Llama-3.2-3B-Instruct : https://huggingface.co/leejunho12316/Llama-3.2-3B-Instruct-text-to-sql-FT-olist <br>
+Llama-3.1-8B-Instruct : https://huggingface.co/leejunho12316/Llama-3.1-8B-Instruct-text-to-sql-FT-olist-config-edit <br>
+allganize-Llama-3-Alpha-Ko-8B-Instruct : https://huggingface.co/leejunho12316/allganize-Llama-3-Alpha-Ko-8B-Instruct-text-to-sql-FT-olist <br>
+
+# 데이터 생성
+
+## 데이터 생성 프롬프트
 도메인 지식
 1. 데이터 도메인에 대한 지식을 갖추도록 Olist Kaggle 사이트 내 README 데이터 집어넣어 각 칼럼의 역할과 쓰임에 대한 정보를 제공.
 2. 컬럼 별 unique한 값 예시 3개씩 추가해줌으로써 정확히 어떤 데이터가 DB에 추가되어 있는지 더 명확하게 알도록 정보를 제공.
@@ -108,6 +128,8 @@ README 추가할 내용
 프롬프트 예시 하나 추가
 ```
 
+## JOIN 데이터
+DB 두개를 사용하는 query-SQL문을 만들기 위한 나의 사투 적기
 
 
 ## 질문 형태 다양화
@@ -115,34 +137,34 @@ README 추가할 내용
 
 1. 명사구 형태
 
-완전한 문장으로 끝나지 않고 명사구 형태로 끝나는 질문.
-예) "마을 변호사는 몇 명이었는가?" -> "마을변호사 인원 수"
+완전한 문장으로 끝나지 않고 명사구 형태로 끝나는 질문. <br>
+예) "마을 변호사는 몇 명이었는가?" -> "마을변호사 인원 수"<br>
 예) "각 고객별 첫 구매 일시를 알고 싶습니다. 고객 ID와 첫 구매 타임스탬프를 반환해 주세요."
-    -> "각 고객별 첫 구매 일시에 대한 고객 ID와 첫 구매 타임스탬프."
+    -> "각 고객별 첫 구매 일시에 대한 고객 ID와 첫 구매 타임스탬프."<br>
 예) "2018년 2분기(Q2)에 구매된 주문들의 구매 시각부터 배송사 인계까지 평균 며칠이 걸렸는지 알려주세요"
-    -> "2018년 2분기 구매 시각부터 배송사 인계까지 평균일."
+    -> "2018년 2분기 구매 시각부터 배송사 인계까지 평균일."<br>
 
 2. 문장 종결 어미 변경
 
-"~요?", "~까?", "~임?", "~나?", "~습니까?", "~나요?", "~가요?", "~니?", "~냐?" 등 다양한 물음에 적응 할 수 있도록 종결어미 다양화.
+"~요?", "~까?", "~임?", "~나?", "~습니까?", "~나요?", "~가요?", "~니?", "~냐?" 등 다양한 물음에 적응 할 수 있도록 종결어미 다양화.<br>
 예) 결제 수단별로 결제 승인까지 평균 몇 시간이 걸리는가요?
-    -> 결제 수단별로 결제 승인까지 평균 몇 시간이 걸리나?
+    -> 결제 수단별로 결제 승인까지 평균 몇 시간이 걸리나?<br>
 예)  RS 주에서 고객 수가 가장 많은 우편번호 접두어 상위 5개와 각 고객 수를 보여주세요
-    ->  RS 주에서 고객 수가 가장 많은 우편번호 접두어 상위 5개와 각 고객 수를 보여주시겠습니까?
+    ->  RS 주에서 고객 수가 가장 많은 우편번호 접두어 상위 5개와 각 고객 수를 보여주시겠습니까?<br>
 예) 고객이 단 1명만 있는 도시와 주 목록을 도시명 오름차순으로 보여주세요
-    -> 고객이 단 1명만 있는 도시와 주 목록을 도시명 오름차순으로 보여줄 수 있으심?
+    -> 고객이 단 1명만 있는 도시와 주 목록을 도시명 오름차순으로 보여줄 수 있으심?<br>
 
 3. 컬럼명 직접/간접 언급
 
-LLM에게 질문 시 영문 칼럼명을 직접 작성할 수 있지만 한국어로 질문할 수도 있음. 간접 언급시에도 올바르게 작동하도록 질의 변형.
+LLM에게 질문 시 영문 칼럼명을 직접 작성할 수 있지만 한국어로 질문할 수도 있음. 간접 언급시에도 올바르게 작동하도록 질의 변형.<br>
 예) "각 country_of_origin별 모든 satellites의 최대 거리는 얼마인가요?"
-    -> "각 국가별로 지구 표면으로부터 모든 위성의 최대 거리는 얼마인가요?"
+    -> "각 국가별로 지구 표면으로부터 모든 위성의 최대 거리는 얼마인가요?"<br>
 예) "country가 Africa인 모든 org_name 값과 그들이 진행한 num_projects 수를 나열하세요"
-    -> "아프리카에서 활동하는 모든 식량 정의 단체와 그들이 진행한 프로젝트 수를 나열하세요."
+    -> "아프리카에서 활동하는 모든 식량 정의 단체와 그들이 진행한 프로젝트 수를 나열하세요."<br>
 
 
-## DDL 선언문 뒤 값 예시 추가
-DDL 선언문 뒤 INSERT INTO ~ VALUES ~ 문의 개수를 0개에서 5개 사이로 랜덤하게 추가해줌. 값 예시가 적든 많든 올바르게 동작하도록 하기 위해.
+## DDL 선언문 Values 개수 다영화
+DDL 선언문 뒤 INSERT INTO ~ VALUES ~ 문의 개수를 0개에서 5개 사이로 랜덤하게 추가. 입력되는 Value 개수가 적든 많든 올바르게 동작하도록 하기 위함.
 
 
 
@@ -211,27 +233,22 @@ Olist_sellers_and_geolocation_text_to_sql_data.json (100건)<br>
 
 - 단일 DB 사용 SQL 데이터
 
-[output(SQL) - SQL 실제 실행 가능 여부] 
-
-Olist_order_reviews_text_to_sql_data.json 위반 2건
-[output(SQL) - SQL 실제 실행 가능 여부] 위반 2건
+Olist_order_reviews_text_to_sql_data.json [output(SQL) - SQL 실제 실행 가능 여부] 위반 2건
   - index=75 | 1차 오류=no such function: SUBSTRING_INDEX / LLM 변환 후 오류=near "ORDER": syntax error
   - index=79 | 1차 오류=no such function: CHAR_LENGTH / LLM 변환 후 오류=near "(": syntax error
 
-Olist_geolocation_text_to_sql_data.json 위반 3건
-[output(SQL) - SQL 실제 실행 가능 여부] 위반 3건
+Olist_geolocation_text_to_sql_data.json [output(SQL) - SQL 실제 실행 가능 여부] 위반 3건
   - index=57 | 1차 오류=no such function: STDDEV_POP / LLM 변환 후 오류=no such column: avg_table.geolocation_state
   - index=83 | 1차 오류=no such function: STDDEV_SAMP / LLM 변환 후 오류=no such column: avg_lng
   - index=96 | 1차 오류=no such function: STDDEV_SAMP / LLM 변환 후 오류=misuse of aggregate function avg()
 
 총 5건 삭제. 795건 데이터 확보.
 
-- 복합 DB 사용 SQL 데이터
+- 다중 DB 사용 SQL 데이터
 
-Olist_customers_and_geolocation_text_to_sql_data.json
-[output(SQL) - SQL이 참조하는 컬럼이 DDL에 정의되어 있는지] 위반 1건
+Olist_customers_and_geolocation_text_to_sql_data.json [output(SQL) - SQL이 참조하는 컬럼이 DDL에 정의되어 있는지] 위반 1건
   - index=92 | 미정의 컬럼={'gEolocation_lat'}
-[output(SQL) - SQL 실제 실행 가능 여부] 위반 2건
+Olist_customers_and_geolocation_text_to_sql_data.json [output(SQL) - SQL 실제 실행 가능 여부] 위반 2건
   - index=58 | 1차 오류=no such function: STDDEV_POP / LLM 변환 후 오류=ambiguous column name: geolocation_zip_code_prefix
   - index=88 | 1차 오류=no such function: STDDEV_SAMP / LLM 변환 후 오류=misuse of aggregate: MIN()
 
@@ -279,3 +296,87 @@ FineTuning된 모델의 SQL을 실행할 때 DB 방언때문에 실행이 안되
 
 
 
+# 평가
+
+## 평가1 - response_status
+
+테스트 데이터셋의 query를 입력하고 리턴받은 SQL문을 DB에 실행했을 때 response_status 비율.
+```
+response_status 종류
+1. success/success(converted) : 성공 / DB마다 다른 SQL문의 형식을 sqlite 형식으로 변환해서 성공
+2. error : SQL too long (** chars) : 비정상적으로 긴 SQL
+3. error: Execution failed on sql <SQL문> : SQL문 실행 오류
+```
+
+![test1_response_status_ratio.png](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test1_response_status_ratio.png)
+
+
+## 평가2 - tabels_match
+
+테스트 데이터셋의 query를 입력하고 리턴받은 SQL문이 사용한 table명 정확도
+
+```
+카테고리:
+1. exact_match:  완전히 같음
+2. subset:       response ⊂ label (부족)
+3. superset:     response ⊃ label (초과)
+4. overlap:      일부 겹침
+5. no_match:     겹치는 테이블 없음
+6. empty:        response 또는 label이 비어있음
+```
+
+![test2_tables_match_ratio.png](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test2_tables_match_ratio.png)
+
+
+## 평가3 - LLM-as-a-Judge - response 품질
+
+테스트 데이터셋을 실행한 response와 prompt, DDL문, label을 비교해 생성된 SQL문의 퀄리티를 평가.
+
+LLM-as-a-Judge 프롬프트 전문
+```
+SYSTEM_PROMPT = """
+#역할
+당신은 Text-to-SQL FineTuning 평가자입니다.
+입력된 정보들을 보고 LLM이 올바르게 Fine Tuning 되었는지 평가해주세요.
+
+prompt는 입력된 프롬프트, ddl_statement는 사용된 DB의 DDL문과 예시 값입니다.
+response는 Fine-Tuning된 모델의 응답, label은 모범 정답입니다.
+
+#평가 기준
+1. response가 prompt의 요구사항을 충족하는지
+2. response가 label과 동일한 의도/결과를 제공하는지
+3. ddl statement를 보았을 때 response가 존재하는 컬럼/테이블을 참조하는지
+4. response의 SQL 형식/문법이 올바른지
+5. response가 prompt에서 요구하는 조건을 충족하는지 (LIMIT, ORDER BY, DISTINCT 등)
+
+#출력 형식
+평가 기준 별 만족 여부와 그 이유를 적고 만족한 평가 기준 개수로 총점을 매겨주세요.총점은 무조건 정수 하나로만 대답하세요
+예시)
+[평가]
+1 - 만족. 이유.
+2 - 불만족. 이유.
+3 - 만족. 이유.
+...
+[총점]
+4
+"""
+
+HUMAN_PROMPT = """
+prompt : {prompt}
+ddl_statement : {ddl_statement}
+response : {response}
+label : {label}
+"""
+```
+
+Llama-3.2-1B-Instruct 평가 결과 예시
+
+
+| ID | 프롬프트 | DDL 스키마 | 생성된 쿼리 | 정답 쿼리 | 상세 평가 | 점수 |
+| --- | --- | --- | --- | --- | --- | --- |
+| **13** | 주별 고객 수를 많은 순서로 보여줄 수 있나? | `CREATE TABLE customers (customer_id VARCHAR(32) NOT NULL, ...)` | `SELECT customer_state, COUNT(*) AS customer_count FROM customers GROUP BY ...` | `SELECT customer_state, COUNT(*) AS customer_count FROM customers GROUP BY ...` | `[평가] 1 - 만족. 주별 고객 수를 많은 순서로 정렬해 보여주고 있습니다. ... [총점] 5` | 5 |
+| **14** | 사진 수가 0장이거나 사진 수 정보가 없는 제품 수는 몇 개인가요? | `CREATE TABLE products (product_id VARCHAR(32) NOT NULL, ...); INSERT INTO ...` | `SELECT COUNT(*) AS cnt FROM products WHERE product_photos_qty IS NULL OR ...` | `SELECT COUNT(*) AS product_count FROM products WHERE product_photos_qty IS NULL OR ...` | `[평가] 1 - 만족. 이유: product_photos_qty가 NULL이거나 0인 제품의 개수를... [총점] 5` | 5 |
+| **15** | 위치 데이터에서 주 코드가 'SP'인 지역에 해당하는 우편번호가 최소 3개 이상 사용되는 고객 도시와... | `CREATE TABLE customers (...); INSERT INTO ...; CREATE TABLE geolocation (...); ...` | `SELECT c.customer_city, c.customer_state, COUNT(DISTINCT c.customer_zip_code_prefix) ...` | `WITH sp_zips AS ( SELECT DISTINCT geolocation_zip_code_prefix AS zip ... ) ...` | `[평가] 1 - 불만족. 이유: prompt는 “해당 우편번호 개수와 고객 수”를 각 도시별로... [총점] 2` | 2 |
+|...|...|...|...|...|...|...|
+
+점수 표 시각화
