@@ -128,8 +128,8 @@ allganize-Llama-3-Alpha-Ko-8B-Instruct : https://huggingface.co/leejunho12316/al
 프롬프트 예시 하나 추가
 ```
 
-## JOIN 데이터
-DB 두개를 사용하는 query-SQL문을 만들기 위한 나의 사투 적기
+## 다중 DB 사용 데이터 (JOIN 데이터)
+DB 두개를 사용하는 query-SQL문을 만들기 위한 나의 엄청난 킹왕짱 사투 적기
 
 
 ## 질문 형태 다양화
@@ -369,7 +369,10 @@ label : {label}
 """
 ```
 
-Llama-3.2-1B-Instruct 평가 결과 예시
+Llama-3.2-1B-Instruct 평가 결과 예시 <br>
+- [Llama-3.2-1B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.2-1B-Instruct_llm_eval.csv) <br>
+- [Llama-3.2-3B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.2-3B-Instruct_llm_eval.csv) <br>
+- [Llama-3.1-8B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.1-8B-Instruct_llm_eval.csv) <br>
 
 
 | ID | 프롬프트 | DDL 스키마 | 생성된 쿼리 | 정답 쿼리 | 상세 평가 | 점수 |
