@@ -1,115 +1,22 @@
 # LLM_FineTuning_2
+LLM
 
-# text-to-sql 파인튜닝 계획 모음
+## 개요
 
-진행
+Llama 모델의 Text-to-SQL용 LoRA Fine-Tuning 프로젝트 입니다.<br>
+gretelai에서 제공하는 text-to-sql용 데이터셋을 베이스로 사용했습니다.
+브라질 이커머스 사이트 Olist를 타게팅해 Fine-Tuning을 진행했으며, 작동 정확도를 높이기 위해 Kaggle에 공개된 Olist 데이터셋을 사용해 text-to-sql 데이터셋을 생성해 학습했습니다.
 
-1. (완료) 특정 기관, 정부의 특정 부처 특정 짓고 그곳의 실제 데이터, 스키마, 진짜 질문 예시 확보 (train/test 분리)
-https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce : ⭐Olist 브라질 이커머스 데이터셋
-    
-2. (완료) gretelai로 base 데이터 생성 (코드)
-https://huggingface.co/datasets/gretelai/synthetic_text_to_sql : base 데이터셋
-v- POC : gpt-4o-mini, 100개로 먼저 POC 진행. (text_to_sql_data.json)
-v- 실전 : gpt-5.5, 5000개.
-
-3. (완료) Olist 기반 데이터 생성 - 단일
-v- POC : GPT-5 DB 1개 * 9개 (Olist_orders_text_to_sql_data.json)
-v- 실전 : GPT-5 DB 8개 * 100개씩 
--> 6/20) 단일 데이터 검증 오류난거 처리
-
-4. (완료) Olist 기반 데이터 생성 - 복합
-v - POC : GPT-5 DB 연결고리 1개 * 3개 (Olist_orders_n_order_items_text_to_sql_data.json)
-v - 실전 : GPT-5 DB 연결고리 8개 * 30개씩 
-
-5. (완료) Olist 데이터셋 검증
-v - POC : 건뛰
-v- 실전 : rule-based + LLM-as-a-Judge
-
-6. gretelai와 Olist 데이터 섞어 Fine-Tuning
-v- POC : A100 & 모델은 아무거나.
-- 실전 : 비싼 GPU
-
-no data                 | 3B, 7B, 10<=B
-base data               | 3B, 7B, 10<=B
-ㅇ base data + olist data  | 3B, 7B, 10<=B
-
-test dataset으로 테스트 결과 비교
-
-
-7. (완료) POC 발견 TroubleShooting
-(완료)- 이미 만들어져 있는 text-to-sql용 데이터 5000행이 있었음. 근데 다 instruction이 입력 텍스트, DDL statements 순으로 되어 있음. Olist 데이터 생성할 때 바꿔주어야 할 듯.
-
-(완료) - query 정교화
-ㅇ 질문 text-to-sql Base 데이터의 query와 내가 생성한 Olist 데이터의 query 형태의 차이점 파악하기.
-ㅇ Base데이터에 내 데이터 생성 프롬프트에서 지시한 것처럼 완전 구체적인 값을 사용한 질문이 있는지.
-ㅇ 사람이 진짜 이렇게 질문을 할 것 같은지.
--> base data 의질문을 예시로 넣어주며 보완
-
-(완료) - 질문 말투 다양화
-1. column 이름 직접언급/간접언급
-ex) 각 country_of_origin별 모든 statellites의 최대 거리는 얼마인가요? -> 각 국가별로 지구 표면으로부터 모든 위성의 최대 거리는 얼마인가요?
-ex) country가 Africa인 모든 org_name 값과 그들이 진행한 num_projects 수를 나열하세요 -> 아프리카에서 활동하는 모든 식량 정의 단체와 그들이 진행한 프로젝트 수를 나열하세요.
-2. 명사구 질문.
-ex) 마을 변호사는 몇 명이었는가? -> 마을변호사 인원 수
-ex) 각 고객별 첫 구매 일시를 알고 싶습니다. 고객 ID와 첫 구매 타임스탬프를 반환해 주세요. -> 각 고객별 첫 구매 일시에 대한 고객 ID와 첫 구매 타임스탬프.
-ex) 2018년 2분기(Q2)에 구매된 주문들의 구매 시각부터 배송사 인계까지 평균 며칠이 걸렸는지 알려주세요 -> 2018년 2분기 구매 시각부터 배송사 인계까지 평균일.
-4. 끝 말투 변경 (~요? ~까? ~임? ~나?)
-ex)태평양 해양의 연간 평균 해수면 온도는 얼마인가요?
--> 태평양 해양의 연간 평균 해수면 온도는 얼마입니까?
--> 태평양 해양의 연간 평균 해수면 온도는 얼마임?
--> 태평양 해양의 연간 평균 해수면 온도는 얼마이나?
-
-영어로 된 칼럼명을 한글로 말해도 알아듣도록 데이터가 만들어져있는지. (데이터의 query가 칼럼명을 있는 그대로 영어로 말하면 FT 후 한글로 질문하면 성능 저하)
--> 위 규칙을 적용해 LLM으로 말투 다양화
-
-(완료) - DDL문
-데이터 생성시에는 필요없지만 최종 데이터 생성 시 DDL문에는 INSERT INTO VALUES 까지 있어야 함.
-VALUES 개수는 일반화를 막기 위해 0~5개까지 계속 바뀜. 이걸 수동으로 해주긴 좀 그럼.
-
-CREATE TABLE salesperson (salesperson_id INT, name TEXT, region TEXT); 
-INSERT INTO salesperson (salesperson_id, name, region) 
-VALUES (1, 'John Doe', 'North'), (2, 'Jane Smith', 'South');
--> INSERT문 만드는 함수 새로 작성해 basedata형식으로 전환하는 함수에 추가.
-
-- 복합 DB 데이터
-DDL 문에 -- 하고 각 칼럼별 설명 써있음. 복합 DB 데이터에만 되어있는데 수정해야할 듯.
-복합 데이턴데 둘 다 쓰는 JOIN같은 SQL문이 아니라 그냥 단일 DB SQL문인 경우가 있음.
-
-7. 평가
-SQL문이 정확히 같은지 여부가 아니라 SQL을 실제 DB에 실행 시 돌아온 값이 같은지 여부로 판단하기. SQL문을 쓰는 방식은 아주 다양하기 때문.
-exact match 문자열 비교 X -> execution accracy 실행 기반 평가 O
-
-
-----------
-
-데이터 생성시 문제
-
-1. 도메인 지식
-데이터와 도메인에 대한 어느 정도의 지식이 있어야 가능한 질문이 필요함
--> 칼럼 별 unique 값 중 랜덤 n개 추가.
-2. 질문 복잡성
-실제 사람이 한 것 같은 질문을 만들도록 하고 싶었음. 하지만 특정 SELECT, GROUP BY, COUNT, JOIN 등 어떠한 SQL문을 쓰라고 직접적으로 명시하면 거기에 LLM이 몰두해 대답이 한정적이게 됨. 나노단위 통제보다 유연하게 만들도록 예시를 추가함 추가함.
--> base Text-to-SQL 데이터 중 랜덤 n개에서 질문만 추출해 추가.
-
-README 추가할 내용
-- 왜 일반 Llama Instruction이 아닌 allganize를 base model로 사용했는지도 적기. (한국어 성능 더 좋음)
-
-
----
-
-# 개요
-
-
-
-# Dataset
+## Dataset
 
 <img src="https://camo.githubusercontent.com/e70f2a6a8c8f5bf0f4211dd32a0b5311c7464b65098006e654986f6738bfe034/68747470733a2f2f68756767696e67666163652e636f2f64617461736574732f68756767696e67666163652f646f63756d656e746174696f6e2d696d616765732f7261772f6d61696e2f68756767696e67666163655f6875622e737667">
 
+Brazilian E-Commerce Public Dataset by Olist (Kaggle) : https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
 자체제작 Olist Dataset : https://huggingface.co/datasets/leejunho12316/Olist_text_to_sql_FineTuning_dataset/tree/main
 
 Base Fine-Tuning Dataset : https://raw.githubusercontent.com/leejunho12316/LLaMA-Factory/main/data/text_to_sql_data.json
 
-# FineTuned Models
+## FineTuned Models
 
 Llama-3.2-1B-Instruct : https://huggingface.co/leejunho12316/Llama-3.2-1B-Instruct-text-to-sql-FT-olist <br>
 Llama-3.2-3B-Instruct : https://huggingface.co/leejunho12316/Llama-3.2-3B-Instruct-text-to-sql-FT-olist <br>
@@ -118,19 +25,136 @@ allganize-Llama-3-Alpha-Ko-8B-Instruct : https://huggingface.co/leejunho12316/al
 
 # 데이터 생성
 
-## 데이터 생성 프롬프트
-도메인 지식
-1. 데이터 도메인에 대한 지식을 갖추도록 Olist Kaggle 사이트 내 README 데이터 집어넣어 각 칼럼의 역할과 쓰임에 대한 정보를 제공.
-2. 컬럼 별 unique한 값 예시 3개씩 추가해줌으로써 정확히 어떤 데이터가 DB에 추가되어 있는지 더 명확하게 알도록 정보를 제공.
-3. base dataset의 질문을 랜덤으로 추출해 예시를 제공함으로써 사람이 직접 할 법한 질문을 생성하도록 유도.
+Kaggle에 공개된 Olist 데이터셋을 사용해 Fine-Tuning용 데이터를 제작했습니다. <br>
+하나의 DB를 사용하는 질문-SQL 쌍과 JOIN이 필요한 질문-SQL 쌍을 각 800개씩 GPT-5.5 model을 사용해 생성했습니다. <br>
 
+
+## 일반 데이터 생성
+
+사용자 query - SQL 쌍을 생성하는 과정에서 다음을 고려했습니다.
+
+- DDL 선언문 (DDL) : 사용할 DB의 DDL문을 제공해 데이터 생성 시 자료형에 실수가 없도록 했습니다.
+- 컬럼 설명 (column descriptions) : 데이터 도메인에 대한 지식을 갖추도록 Olist Kaggle 데이터의 README에 제공된 칼럼 설명을 집어넣어 각 칼럼의 역할과 쓰임에 대한 정보를 제공.
+- 질문 예시 (question examples) : gretel text-to-sql dataset의 질문을 랜덤으로 추출해 모범 질문 예시를 제공함으로써 사람이 직접 할 법한 질문을 생성하도록 유도했습니다.
+- 컬럼 값 예시 (column examples) : 컬럼 별 unique한 값 예시를 3개씩 추가해줌으로써 정확히 어떤 데이터가 DB에 추가되어 있는지 명확하게 알도록 정보를 제공했습니다.
+- 중복 방지 (history) : 이전 단계에서 생성한 질문을 전체 추가해 중복된 질문을 생성하지 않게 설계했습니다.
+
+
+프롬프트 전문
 ```
-프롬프트 예시 하나 추가
+"""
+#역할
+당신은 Text-to-SQL을 수행해야합니다.
+DDL 선언문, 칼럼 설명, 칼럼 값 예시, 질문 예시를 참고해 사용자가 할 법한 질문-SQL 쌍을 작성해주세요.
+실제 사용자가 Text-to-SQL LLM에게 자연스럽게 물어볼 법한 질문과 그에 정확히 대응하는 SQL을 작성하세요.
+질문-SQL쌍은 10개 생성하세요.
+
+#최우선 중요 원칙
+사람이 실제로 어떻게 질문할지 생각하세요. 그리고 그 질문에 정확히 대응하는 SQL 문을 작성하세요.
+질문 예시를 적극적으로 참고하세요.
+
+#규칙
+1. 반드시 코드 블록 없이 순수 SQL만 출력하세요.
+2. history를 참고해 중복이 없게끔 하세요.
+3. 다음 리스트 같은 질문은 비현실적인 질문입니다
+- '2017-03-14 12:58:42'에 구매된 주문의 배송 예정일을 '2018-11-01'로 업데이트하고 싶습니다. : 사람은 날짜 단위를 시분초까지 쪼개서 요청하지 않습니다.
+4. SQL 작성시 주의
+- BETWEEN : 기간을 조회할 때 BETWEEN으로 끝 날짜를 지정하면 마지막 날이 누락됩니다. 기간 조회는 ">= 시작일 AND < 다음 기간 시작일" 패턴을, 하루 조회는 DATE() 함수를 사용하세요.
+   - 나쁨: WHERE col BETWEEN '2018-06-01' AND '2018-06-30'  (6월 30일 누락)
+   - 좋음: WHERE col >= '2018-06-01' AND col < '2018-07-01'
+   - 좋음: WHERE DATE(col) = '2018-06-04'
+- 현재 날짜/시간 : 현재 시각이나 오늘 날짜에 의존하는 질문·SQL을 만들지 마세요.
+"지금", "오늘", "최근 1년", "이번 달" 처럼 실행 시점에 따라 답이 달라지는 표현을 쓰지 마세요.
+NOW(), CURRENT_DATE, CURRENT_TIMESTAMP, DATE_ADD/SUB(NOW()...) 같은 함수도 사용 금지입니다.
+날짜 조건은 '2018-05-01' 처럼 고정된 날짜 리터럴로만 작성하세요.
+
+#출력 형식
+반드시 다음 형식을 지켜 출력해주세요.
+[질문]
+자연어 질문
+[SQL]
+SQL문
+"""
+```
+
+데이터 예시
+```
+[
+    {
+        "instruction": "입력 텍스트: 전체 고객 수는 몇 명?\n\nDDL statements:\n\nCREATE TABLE customers (customer_id VARCHAR(32) NOT NULL, customer_unique_id VARCHAR(32) NOT NULL, customer_zip_code_prefix VARCHAR(5) NOT NULL, customer_city VARCHAR(40) NOT NULL, customer_state VARCHAR(2) NOT NULL, PRIMARY KEY (customer_id));\n\nINSERT INTO customers (customer_id, customer_unique_id, customer_zip_code_prefix, customer_city, customer_state) VALUES ('b7c13b2df92dc0d616315d518bbb97c7', 'd2308b8cb44552f9245efd95f4e73092', '29045', 'vitoria', 'ES'), ('de625bb01c8658149de04dc8100bacf0', '1479fd41a84fd3737d0705434c33f388', '85301', 'laranjeiras do sul', 'PR'), ('4579d869bafb50f24c4bc5cf3ad6b17b', '95df5159db6002b35b9c645006abb4a7', '39915', 'mata verde', 'MG'), ('41db322bbc128ead2b4dcb94280a9ce0', '003a5571a07dcf09bf117d13d2980ba3', '40270', 'salvador', 'BA');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(*) AS customer_count\nFROM customers;"
+    },
+    {
+        "instruction": "입력 텍스트: 서로 다른 고객 수는 몇 명인가?\n\nDDL statements:\n\nCREATE TABLE customers (customer_id VARCHAR(32) NOT NULL, customer_unique_id VARCHAR(32) NOT NULL, customer_zip_code_prefix VARCHAR(5) NOT NULL, customer_city VARCHAR(40) NOT NULL, customer_state VARCHAR(2) NOT NULL, PRIMARY KEY (customer_id));\n\nINSERT INTO customers (customer_id, customer_unique_id, customer_zip_code_prefix, customer_city, customer_state) VALUES ('bf000e1497eca1ec2c097e01a061cf6c', 'de083d6adb27920ff993b75eac74be01', '80320', 'curitiba', 'PR'), ('91c1a9b5aa26614df29288c389940214', 'e9620047052f3edb9a429db5b04df663', '09791', 'sao bernardo do campo', 'SP'), ('d23dbe35b79ea70cff4cc930c890ffc5', '7ab32f5a014504061b56ada723666c45', '09111', 'santo andre', 'SP'), ('4e1bf9ec00867edf7c5b3a70f37a1c85', '3f2fc946869677eba242bdea21fc4266', '13327', 'salto', 'SP'), ('5bdca9b7358a3437a36317aa40783eb0', 'e9b0b94dbd472812c6d5cfe014ab7a96', '36900', 'manhuacu', 'MG');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(DISTINCT customer_unique_id) AS unique_customer_count\nFROM customers;"
+    },
+    ...
 ```
 
 ## 다중 DB 사용 데이터 (JOIN 데이터)
-DB 두개를 사용하는 query-SQL문을 만들기 위한 나의 엄청난 킹왕짱 사투 적기
 
+사용자 query - SQL 쌍을 생성하는 과정에서 다음을 추가적으로 고려했습니다.
+
+- 두 테이블 사용 여부 : 두 table을 JOIN했지만 결국 하나의 table만 사용하는 경우, 애초에 JOIN을 하지 않는 경우를 체크하였습니다.
+- 공통key : 두 테이블 사이 공통 key가 무엇인지 명시적으로 입력해주어 임의의 칼럼으로 JOIN해 오류를 생성하지 않도록 했습니다.
+
+프롬프트 추가내용
+```
+"""
+#역할
+당신은 Text-to-SQL을 수행해야합니다.
+DDL 선언문 2개, 칼럼 설명 2개, 칼럼 값 예시 2개, 질문 예시를 참고해 사용자가 할 법한 질문-SQL 쌍을 작성해주세요.
+실제 사용자가 Text-to-SQL LLM에게 자연스럽게 물어볼 법한 질문과 그에 정확히 대응하는 SQL을 작성하세요.
+제공되는 테이블은 2개입니다. 2개의 테이블을 전부 다 사용하는 예시를 생성하세요.
+질문-SQL쌍은 10개 생성하세요.
+
+...
+
+5. [핵심] 두 테이블을 '진짜로' 사용하는 질문만 생성하세요.
+- "두 테이블을 사용한다"는 의미는 SELECT, WHERE, GROUP BY, 계산식 등 어디에서든
+  두 테이블의 컬럼이 각각 최소 1개 이상 실제로 쓰여야 한다는 뜻입니다.
+- JOIN을 걸었더라도 JOIN한 테이블의 컬럼이 SELECT/WHERE/GROUP BY 어디에도 등장하지 않는다면
+  그 JOIN은 불필요한 JOIN입니다. 이런 쿼리는 작성하지 마세요.
+- 자가 검증: SQL을 작성한 후 "이 질문이 테이블 하나만으로도 답할 수 있는가?"를 스스로 확인하세요.
+  만약 한 테이블만으로 답할 수 있다면, 두 테이블이 모두 필요한 질문으로 바꾸세요.
+
+- 나쁜 예 (orders 컬럼만 쓰고 order_items는 JOIN만 해둔 경우):
+  SELECT AVG(DATEDIFF(o.order_delivered_customer_date, o.order_purchase_timestamp))
+  FROM orders o
+  JOIN order_items i ON i.order_id = o.order_id  -- i.* 컬럼이 어디에도 안 쓰임
+  WHERE o.order_status = 'delivered'
+
+- 좋은 예 (두 테이블 컬럼을 모두 실제로 사용):
+  SELECT o.order_status, COUNT(*) AS item_count, SUM(i.price) AS total_price
+  FROM orders o
+  JOIN order_items i ON i.order_id = o.order_id  -- i.price가 SELECT에서 쓰임
+  WHERE o.order_purchase_timestamp >= '2018-01-01'
+  AND o.order_purchase_timestamp < '2019-01-01'
+  GROUP BY o.order_status
+  
+...
+
+"""
+```
+
+```
+[
+    {
+        "instruction": "입력 텍스트: 위치 정보 기준으로 RO 주에 속한 우편번호를 사용하는 고객은 몇 명\n\nDDL statements:\nCREATE TABLE customers (customer_id VARCHAR(32) NOT NULL, customer_unique_id VARCHAR(32) NOT NULL, customer_zip_code_prefix VARCHAR(5) NOT NULL, customer_city VARCHAR(40) NOT NULL, customer_state VARCHAR(2) NOT NULL, PRIMARY KEY (customer_id));\nINSERT INTO customers (customer_id, customer_unique_id, customer_zip_code_prefix, customer_city, customer_state) VALUES ('666f5286f980c33c3129f745dacc1fb4', 'f72c6460deee2a05cde9d4475a3d973e', '79500', 'paranaiba', 'MS'), ('98cf5a598b51e6d8e0e169bb54bc807e', '12d5abe8e60cbc8c330cd36fcda842c6', '63112', 'crato', 'CE'), ('49e31013afa5a0bfd5cb51d26ce10a57', 'ab071ec5dbdbd6f95c6ae54cfbb39424', '86041', 'londrina', 'PR'), ('d3ecf0664acdf35f6e78389ed3e223f0', 'b33650d9735418f61571dfe3f4963135', '11674', 'caraguatatuba', 'SP');\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('06454', -23.4961967532221, -46.84535739528676, 'barueri', 'SP'), ('19470', -21.76514393006027, -52.12189554707464, 'presidente epitácio', 'SP'), ('73062', -15.647882067272675, -47.82574315969692, 'brasília', 'DF'), ('17013', -22.325398597264805, -49.06351087702708, 'bauru', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT COUNT(DISTINCT c.customer_id) AS customer_count\nFROM customers c\nJOIN geolocation g\n  ON g.geolocation_zip_code_prefix = c.customer_zip_code_prefix\nWHERE g.geolocation_state = 'RO';"
+    },
+    {
+        "instruction": "입력 텍스트: 주 코드가 RO인 고객들의 평균 위도와 평균 경도는 얼마니?\n\nDDL statements:\nCREATE TABLE customers (customer_id VARCHAR(32) NOT NULL, customer_unique_id VARCHAR(32) NOT NULL, customer_zip_code_prefix VARCHAR(5) NOT NULL, customer_city VARCHAR(40) NOT NULL, customer_state VARCHAR(2) NOT NULL, PRIMARY KEY (customer_id));\nINSERT INTO customers (customer_id, customer_unique_id, customer_zip_code_prefix, customer_city, customer_state) VALUES ('b3011b12b04e3e8423157ca40dba4e1f', 'd18125b8c0fcffd0da676d56fb581bee', '07081', 'guarulhos', 'SP'), ('2be14928b31b20bf6788d731a1bae71f', '645a04fe8ffc2dc4ad44f194a455cfdf', '22780', 'rio de janeiro', 'RJ'), ('32c1efea2354fe9bc32216cd88c912cf', '17dd17831e154d29bda87731718c5958', '98340', 'cerro grande', 'RS'), ('1e223899442e479b03b6e0056d14b25d', '3ec3b9e0f51059e087237fc0cb06427b', '83860', 'pien', 'PR');\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('18150', -23.655204, -47.10876300000001, 'ibiuna', 'SP'), ('58040', -7.125054978071453, -34.86559985636794, 'joao pessoa', 'PB'), ('04006', -23.57882600859834, -46.64933242437529, 'sao paulo', 'SP'), ('06703', -23.59976890313923, -46.90933038579832, 'cotia', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
+        "input": "",
+        "output": "쿼리 작성: SELECT AVG(gz.avg_lat) AS avg_latitude, AVG(gz.avg_lng) AS avg_longitude\nFROM customers c\nJOIN (\n  SELECT geolocation_zip_code_prefix, AVG(geolocation_lat) AS avg_lat, AVG(geolocation_lng) AS avg_lng\n  FROM geolocation\n  GROUP BY geolocation_zip_code_prefix\n) gz\n  ON gz.geolocation_zip_code_prefix = c.customer_zip_code_prefix\nWHERE c.customer_state = 'RO';"
+    },
+    ...
+```
+
+# 일반화 방지 
 
 ## 질문 형태 다양화
 일반화를 학습하지 않고 사용자가 다양한 말투로 질문을 할 경우 성능을 높이기 위해 종결어미, 말투 등 다방면으로 변경.
@@ -162,10 +186,12 @@ LLM에게 질문 시 영문 칼럼명을 직접 작성할 수 있지만 한국�
 예) "country가 Africa인 모든 org_name 값과 그들이 진행한 num_projects 수를 나열하세요"
     -> "아프리카에서 활동하는 모든 식량 정의 단체와 그들이 진행한 프로젝트 수를 나열하세요."<br>
 
-
 ## DDL 선언문 Values 개수 다영화
 DDL 선언문 뒤 INSERT INTO ~ VALUES ~ 문의 개수를 0개에서 5개 사이로 랜덤하게 추가. 입력되는 Value 개수가 적든 많든 올바르게 동작하도록 하기 위함.
 
+```
+값 예시
+```
 
 
 
@@ -402,3 +428,101 @@ v 8B모델들 RunPod 비싼 GPU로 Pod만들고 HuggingFace에서 불러와서 �
 v 테스트 데이터 만드는동안 테스트 데이터 평가 프롬프트 작성하기.
 v 테스트 데이터 GPT-5.4로 다시만들기
 gpt-4o-mini -> gpt-5.4
+
+
+# text-to-sql 파인튜닝 계획 모음
+
+진행
+
+1. (완료) 특정 기관, 정부의 특정 부처 특정 짓고 그곳의 실제 데이터, 스키마, 진짜 질문 예시 확보 (train/test 분리)
+https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce : ⭐Olist 브라질 이커머스 데이터셋
+    
+2. (완료) gretelai로 base 데이터 생성 (코드)
+https://huggingface.co/datasets/gretelai/synthetic_text_to_sql : base 데이터셋
+v- POC : gpt-4o-mini, 100개로 먼저 POC 진행. (text_to_sql_data.json)
+v- 실전 : gpt-5.5, 5000개.
+
+3. (완료) Olist 기반 데이터 생성 - 단일
+v- POC : GPT-5 DB 1개 * 9개 (Olist_orders_text_to_sql_data.json)
+v- 실전 : GPT-5 DB 8개 * 100개씩 
+-> 6/20) 단일 데이터 검증 오류난거 처리
+
+4. (완료) Olist 기반 데이터 생성 - 복합
+v - POC : GPT-5 DB 연결고리 1개 * 3개 (Olist_orders_n_order_items_text_to_sql_data.json)
+v - 실전 : GPT-5 DB 연결고리 8개 * 30개씩 
+
+5. (완료) Olist 데이터셋 검증
+v - POC : 건뛰
+v- 실전 : rule-based + LLM-as-a-Judge
+
+6. gretelai와 Olist 데이터 섞어 Fine-Tuning
+v- POC : A100 & 모델은 아무거나.
+- 실전 : 비싼 GPU
+
+no data                 | 3B, 7B, 10<=B
+base data               | 3B, 7B, 10<=B
+ㅇ base data + olist data  | 3B, 7B, 10<=B
+
+test dataset으로 테스트 결과 비교
+
+
+7. (완료) POC 발견 TroubleShooting
+(완료)- 이미 만들어져 있는 text-to-sql용 데이터 5000행이 있었음. 근데 다 instruction이 입력 텍스트, DDL statements 순으로 되어 있음. Olist 데이터 생성할 때 바꿔주어야 할 듯.
+
+(완료) - query 정교화
+ㅇ 질문 text-to-sql Base 데이터의 query와 내가 생성한 Olist 데이터의 query 형태의 차이점 파악하기.
+ㅇ Base데이터에 내 데이터 생성 프롬프트에서 지시한 것처럼 완전 구체적인 값을 사용한 질문이 있는지.
+ㅇ 사람이 진짜 이렇게 질문을 할 것 같은지.
+-> base data 의질문을 예시로 넣어주며 보완
+
+(완료) - 질문 말투 다양화
+1. column 이름 직접언급/간접언급
+ex) 각 country_of_origin별 모든 statellites의 최대 거리는 얼마인가요? -> 각 국가별로 지구 표면으로부터 모든 위성의 최대 거리는 얼마인가요?
+ex) country가 Africa인 모든 org_name 값과 그들이 진행한 num_projects 수를 나열하세요 -> 아프리카에서 활동하는 모든 식량 정의 단체와 그들이 진행한 프로젝트 수를 나열하세요.
+2. 명사구 질문.
+ex) 마을 변호사는 몇 명이었는가? -> 마을변호사 인원 수
+ex) 각 고객별 첫 구매 일시를 알고 싶습니다. 고객 ID와 첫 구매 타임스탬프를 반환해 주세요. -> 각 고객별 첫 구매 일시에 대한 고객 ID와 첫 구매 타임스탬프.
+ex) 2018년 2분기(Q2)에 구매된 주문들의 구매 시각부터 배송사 인계까지 평균 며칠이 걸렸는지 알려주세요 -> 2018년 2분기 구매 시각부터 배송사 인계까지 평균일.
+4. 끝 말투 변경 (~요? ~까? ~임? ~나?)
+ex)태평양 해양의 연간 평균 해수면 온도는 얼마인가요?
+-> 태평양 해양의 연간 평균 해수면 온도는 얼마입니까?
+-> 태평양 해양의 연간 평균 해수면 온도는 얼마임?
+-> 태평양 해양의 연간 평균 해수면 온도는 얼마이나?
+
+영어로 된 칼럼명을 한글로 말해도 알아듣도록 데이터가 만들어져있는지. (데이터의 query가 칼럼명을 있는 그대로 영어로 말하면 FT 후 한글로 질문하면 성능 저하)
+-> 위 규칙을 적용해 LLM으로 말투 다양화
+
+(완료) - DDL문
+데이터 생성시에는 필요없지만 최종 데이터 생성 시 DDL문에는 INSERT INTO VALUES 까지 있어야 함.
+VALUES 개수는 일반화를 막기 위해 0~5개까지 계속 바뀜. 이걸 수동으로 해주긴 좀 그럼.
+
+CREATE TABLE salesperson (salesperson_id INT, name TEXT, region TEXT); 
+INSERT INTO salesperson (salesperson_id, name, region) 
+VALUES (1, 'John Doe', 'North'), (2, 'Jane Smith', 'South');
+-> INSERT문 만드는 함수 새로 작성해 basedata형식으로 전환하는 함수에 추가.
+
+- 복합 DB 데이터
+DDL 문에 -- 하고 각 칼럼별 설명 써있음. 복합 DB 데이터에만 되어있는데 수정해야할 듯.
+복합 데이턴데 둘 다 쓰는 JOIN같은 SQL문이 아니라 그냥 단일 DB SQL문인 경우가 있음.
+
+7. 평가
+SQL문이 정확히 같은지 여부가 아니라 SQL을 실제 DB에 실행 시 돌아온 값이 같은지 여부로 판단하기. SQL문을 쓰는 방식은 아주 다양하기 때문.
+exact match 문자열 비교 X -> execution accracy 실행 기반 평가 O
+
+
+----------
+
+데이터 생성시 문제
+
+1. 도메인 지식
+데이터와 도메인에 대한 어느 정도의 지식이 있어야 가능한 질문이 필요함
+-> 칼럼 별 unique 값 중 랜덤 n개 추가.
+2. 질문 복잡성
+실제 사람이 한 것 같은 질문을 만들도록 하고 싶었음. 하지만 특정 SELECT, GROUP BY, COUNT, JOIN 등 어떠한 SQL문을 쓰라고 직접적으로 명시하면 거기에 LLM이 몰두해 대답이 한정적이게 됨. 나노단위 통제보다 유연하게 만들도록 예시를 추가함 추가함.
+-> base Text-to-SQL 데이터 중 랜덤 n개에서 질문만 추출해 추가.
+
+README 추가할 내용
+- 왜 일반 Llama Instruction이 아닌 allganize를 base model로 사용했는지도 적기. (한국어 성능 더 좋음)
+
+
+---
