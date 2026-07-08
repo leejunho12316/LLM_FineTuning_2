@@ -1,18 +1,22 @@
 # LLM_FineTuning_2
 LLM
 
-## 개요
+# 개요
 
 Llama 모델의 Text-to-SQL용 LoRA Fine-Tuning 프로젝트 입니다.<br>
-gretelai에서 제공하는 text-to-sql용 데이터셋을 베이스로 사용했습니다.
-브라질 이커머스 사이트 Olist를 타게팅해 Fine-Tuning을 진행했으며, 작동 정확도를 높이기 위해 Kaggle에 공개된 Olist 데이터셋을 사용해 text-to-sql 데이터셋을 생성해 학습했습니다.
+브라질 이커머스 사이트 Olist의 DataBase를 자연어로 쉽게 사용할 수 있도록 타게팅해 Fine-Tuning을 진행했습니다. 
+작동 정확도를 높이기 위해 Kaggle에 공개된 Olist 데이터셋을 사용해 text-to-sql 데이터셋을 생성해 학습했습니다. <br>
+베이스 데이터셋으로는 gretelai에서 제공하는 text-to-sql용 데이터셋을 사용했습니다.
 
-## Dataset
+
+# HuggingFace
 
 <img src="https://camo.githubusercontent.com/e70f2a6a8c8f5bf0f4211dd32a0b5311c7464b65098006e654986f6738bfe034/68747470733a2f2f68756767696e67666163652e636f2f64617461736574732f68756767696e67666163652f646f63756d656e746174696f6e2d696d616765732f7261772f6d61696e2f68756767696e67666163655f6875622e737667">
 
+## Dataset
+
 Brazilian E-Commerce Public Dataset by Olist (Kaggle) : https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
-자체제작 Olist Dataset : https://huggingface.co/datasets/leejunho12316/Olist_text_to_sql_FineTuning_dataset/tree/main
+Text-to-SQL Olist Dataset : https://huggingface.co/datasets/leejunho12316/Olist_text_to_sql_FineTuning_dataset/tree/main
 
 Base Fine-Tuning Dataset : https://raw.githubusercontent.com/leejunho12316/LLaMA-Factory/main/data/text_to_sql_data.json
 
@@ -26,21 +30,34 @@ allganize-Llama-3-Alpha-Ko-8B-Instruct : https://huggingface.co/leejunho12316/al
 # 데이터 생성
 
 Kaggle에 공개된 Olist 데이터셋을 사용해 Fine-Tuning용 데이터를 제작했습니다. <br>
-하나의 DB를 사용하는 질문-SQL 쌍과 JOIN이 필요한 질문-SQL 쌍을 각 800개씩 GPT-5.5 model을 사용해 생성했습니다. <br>
+하나의 DB를 사용하는 질문-SQL 쌍과 두 개 이상의 table을 사용해 JOIN이 필요한 질문-SQL 쌍을 각 800개씩 총 1,600개를 GPT-5.5 model을 사용해 생성했습니다. <br>
 
 
-## 일반 데이터 생성
+## 1. 데이터 생성
 
-사용자 query - SQL 쌍을 생성하는 과정에서 다음을 고려했습니다.
+사용 Model : GPT-5.5 / 데이터 개수 : 800행
 
+하나의 table을 사용해 대답할 수 있는 질문과 그 SQL 쌍 데이터를 생성했습니다. 그 과정에서 다음을 고려했습니다.
+1. DB에 대한 정보
 - DDL 선언문 (DDL) : 사용할 DB의 DDL문을 제공해 데이터 생성 시 자료형에 실수가 없도록 했습니다.
-- 컬럼 설명 (column descriptions) : 데이터 도메인에 대한 지식을 갖추도록 Olist Kaggle 데이터의 README에 제공된 칼럼 설명을 집어넣어 각 칼럼의 역할과 쓰임에 대한 정보를 제공.
+- 컬럼 설명 (column descriptions) : 데이터 도메인에 대한 지식을 갖추도록 Olist Kaggle 데이터의 README에 제공된 칼럼 설명을 집어넣어 각 칼럼의 역할과 쓰임에 대한 정보를 제공했습니다.
 - 질문 예시 (question examples) : gretel text-to-sql dataset의 질문을 랜덤으로 추출해 모범 질문 예시를 제공함으로써 사람이 직접 할 법한 질문을 생성하도록 유도했습니다.
 - 컬럼 값 예시 (column examples) : 컬럼 별 unique한 값 예시를 3개씩 추가해줌으로써 정확히 어떤 데이터가 DB에 추가되어 있는지 명확하게 알도록 정보를 제공했습니다.
 - 중복 방지 (history) : 이전 단계에서 생성한 질문을 전체 추가해 중복된 질문을 생성하지 않게 설계했습니다.
 
+2. 비현실적인 질문
+사람은 질문을 할 때 너무 디테일한 값을 포함한 질문은 하지 않습니다. 날짜 값을 포함한 질문을 할 때 ```2017-03-14 12:58:42'에 구매된 주문의 배송 예정일```처럼 초 단위까지의 질문을 생성하는 경우가 있었습니다.
+이 오류를 막기 위해 명시적으로 프롬프트에 규칙을 추가해 주었습니다.
 
-프롬프트 전문
+3. BETWEEN
+기간 조회 시 끝 날짜를 BETWEEN으로 지정하면 마지막 날짜가 누락됩니다. 2018년 6월 30일까지의 데이터를 조회해야 한다면 ```BETWEEN ㅇㅇ AND '2018-07-01'``` 처럼 그 다음 날짜를 입력해야 합니다.
+LLM은 이 규칙을 몰라 명시적으로 추가해 주었습니다.
+
+
+
+<details>
+<summary>프롬프트 전문 (펼치기)</summary>
+
 ```
 """
 #역할
@@ -77,32 +94,53 @@ SQL문
 """
 ```
 
-데이터 예시
+</details>
+
+
+<details>
+
+<summary>데이터 예시 (펼치기)</summary>
+
+**instruction**
+
 ```
-[
-    {
-        "instruction": "입력 텍스트: 전체 고객 수는 몇 명?\n\nDDL statements:\n\nCREATE TABLE customers (customer_id VARCHAR(32) NOT NULL, customer_unique_id VARCHAR(32) NOT NULL, customer_zip_code_prefix VARCHAR(5) NOT NULL, customer_city VARCHAR(40) NOT NULL, customer_state VARCHAR(2) NOT NULL, PRIMARY KEY (customer_id));\n\nINSERT INTO customers (customer_id, customer_unique_id, customer_zip_code_prefix, customer_city, customer_state) VALUES ('b7c13b2df92dc0d616315d518bbb97c7', 'd2308b8cb44552f9245efd95f4e73092', '29045', 'vitoria', 'ES'), ('de625bb01c8658149de04dc8100bacf0', '1479fd41a84fd3737d0705434c33f388', '85301', 'laranjeiras do sul', 'PR'), ('4579d869bafb50f24c4bc5cf3ad6b17b', '95df5159db6002b35b9c645006abb4a7', '39915', 'mata verde', 'MG'), ('41db322bbc128ead2b4dcb94280a9ce0', '003a5571a07dcf09bf117d13d2980ba3', '40270', 'salvador', 'BA');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
-        "input": "",
-        "output": "쿼리 작성: SELECT COUNT(*) AS customer_count\nFROM customers;"
-    },
-    {
-        "instruction": "입력 텍스트: 서로 다른 고객 수는 몇 명인가?\n\nDDL statements:\n\nCREATE TABLE customers (customer_id VARCHAR(32) NOT NULL, customer_unique_id VARCHAR(32) NOT NULL, customer_zip_code_prefix VARCHAR(5) NOT NULL, customer_city VARCHAR(40) NOT NULL, customer_state VARCHAR(2) NOT NULL, PRIMARY KEY (customer_id));\n\nINSERT INTO customers (customer_id, customer_unique_id, customer_zip_code_prefix, customer_city, customer_state) VALUES ('bf000e1497eca1ec2c097e01a061cf6c', 'de083d6adb27920ff993b75eac74be01', '80320', 'curitiba', 'PR'), ('91c1a9b5aa26614df29288c389940214', 'e9620047052f3edb9a429db5b04df663', '09791', 'sao bernardo do campo', 'SP'), ('d23dbe35b79ea70cff4cc930c890ffc5', '7ab32f5a014504061b56ada723666c45', '09111', 'santo andre', 'SP'), ('4e1bf9ec00867edf7c5b3a70f37a1c85', '3f2fc946869677eba242bdea21fc4266', '13327', 'salto', 'SP'), ('5bdca9b7358a3437a36317aa40783eb0', 'e9b0b94dbd472812c6d5cfe014ab7a96', '36900', 'manhuacu', 'MG');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
-        "input": "",
-        "output": "쿼리 작성: SELECT COUNT(DISTINCT customer_unique_id) AS unique_customer_count\nFROM customers;"
-    },
-    ...
+입력 텍스트: 전체 고객 수는 몇 명?
+
+DDL statements:
+CREATE TABLE customers (customer_id VARCHAR(32) NOT NULL, customer_unique_id VARCHAR(32) NOT NULL, 
+    customer_zip_code_prefix VARCHAR(5) NOT NULL, customer_city VARCHAR(40) NOT NULL,
+    customer_state VARCHAR(2) NOT NULL, PRIMARY KEY (customer_id));
+
+INSERT INTO customers (customer_id, customer_unique_id, customer_zip_code_prefix, customer_city, customer_state)
+
+VALUES ('b7c13b2df92dc0d616315d518bbb97c7', 'd2308b8cb44552f9245efd95f4e73092', '29045', 'vitoria', 'ES'), 
+    ('de625bb01c8658149de04dc8100bacf0', '1479fd41a84fd3737d0705434c33f388', '85301', 'laranjeiras do sul', 'PR'),
+    ('4579d869bafb50f24c4bc5cf3ad6b17b', '95df5159db6002b35b9c645006abb4a7', '39915', 'mata verde', 'MG'), 
+    ('41db322bbc128ead2b4dcb94280a9ce0', '003a5571a07dcf09bf117d13d2980ba3', '40270', 'salvador', 'BA');
+
+```
+**output**
+```
+쿼리 작성: SELECT COUNT(*) AS customer_count FROM customers;
 ```
 
-## 다중 DB 사용 데이터 (JOIN 데이터)
+</details>
+
+
+## 2. 다중 테이블 사용 데이터 (JOIN 데이터)
 
 사용자 query - SQL 쌍을 생성하는 과정에서 다음을 추가적으로 고려했습니다.
 
+두 테이블 사용 관련
 - 두 테이블 사용 여부 : 두 table을 JOIN했지만 결국 하나의 table만 사용하는 경우, 애초에 JOIN을 하지 않는 경우를 체크하였습니다.
 - 공통key : 두 테이블 사이 공통 key가 무엇인지 명시적으로 입력해주어 임의의 칼럼으로 JOIN해 오류를 생성하지 않도록 했습니다.
 
-프롬프트 추가내용
+
+<details>
+
+<summary>프롬프트 추가내용 (펼치기)</summary>
+
 ```
-"""
 #역할
 당신은 Text-to-SQL을 수행해야합니다.
 DDL 선언문 2개, 칼럼 설명 2개, 칼럼 값 예시 2개, 질문 예시를 참고해 사용자가 할 법한 질문-SQL 쌍을 작성해주세요.
@@ -135,62 +173,115 @@ DDL 선언문 2개, 칼럼 설명 2개, 칼럼 값 예시 2개, 질문 예시를
   GROUP BY o.order_status
   
 ...
-
-"""
 ```
 
+</details>
+
+<details>
+
+<summary>데이터 예시 (펼치기)</summary>
+
+instruction
 ```
-[
-    {
-        "instruction": "입력 텍스트: 위치 정보 기준으로 RO 주에 속한 우편번호를 사용하는 고객은 몇 명\n\nDDL statements:\nCREATE TABLE customers (customer_id VARCHAR(32) NOT NULL, customer_unique_id VARCHAR(32) NOT NULL, customer_zip_code_prefix VARCHAR(5) NOT NULL, customer_city VARCHAR(40) NOT NULL, customer_state VARCHAR(2) NOT NULL, PRIMARY KEY (customer_id));\nINSERT INTO customers (customer_id, customer_unique_id, customer_zip_code_prefix, customer_city, customer_state) VALUES ('666f5286f980c33c3129f745dacc1fb4', 'f72c6460deee2a05cde9d4475a3d973e', '79500', 'paranaiba', 'MS'), ('98cf5a598b51e6d8e0e169bb54bc807e', '12d5abe8e60cbc8c330cd36fcda842c6', '63112', 'crato', 'CE'), ('49e31013afa5a0bfd5cb51d26ce10a57', 'ab071ec5dbdbd6f95c6ae54cfbb39424', '86041', 'londrina', 'PR'), ('d3ecf0664acdf35f6e78389ed3e223f0', 'b33650d9735418f61571dfe3f4963135', '11674', 'caraguatatuba', 'SP');\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('06454', -23.4961967532221, -46.84535739528676, 'barueri', 'SP'), ('19470', -21.76514393006027, -52.12189554707464, 'presidente epitácio', 'SP'), ('73062', -15.647882067272675, -47.82574315969692, 'brasília', 'DF'), ('17013', -22.325398597264805, -49.06351087702708, 'bauru', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
-        "input": "",
-        "output": "쿼리 작성: SELECT COUNT(DISTINCT c.customer_id) AS customer_count\nFROM customers c\nJOIN geolocation g\n  ON g.geolocation_zip_code_prefix = c.customer_zip_code_prefix\nWHERE g.geolocation_state = 'RO';"
-    },
-    {
-        "instruction": "입력 텍스트: 주 코드가 RO인 고객들의 평균 위도와 평균 경도는 얼마니?\n\nDDL statements:\nCREATE TABLE customers (customer_id VARCHAR(32) NOT NULL, customer_unique_id VARCHAR(32) NOT NULL, customer_zip_code_prefix VARCHAR(5) NOT NULL, customer_city VARCHAR(40) NOT NULL, customer_state VARCHAR(2) NOT NULL, PRIMARY KEY (customer_id));\nINSERT INTO customers (customer_id, customer_unique_id, customer_zip_code_prefix, customer_city, customer_state) VALUES ('b3011b12b04e3e8423157ca40dba4e1f', 'd18125b8c0fcffd0da676d56fb581bee', '07081', 'guarulhos', 'SP'), ('2be14928b31b20bf6788d731a1bae71f', '645a04fe8ffc2dc4ad44f194a455cfdf', '22780', 'rio de janeiro', 'RJ'), ('32c1efea2354fe9bc32216cd88c912cf', '17dd17831e154d29bda87731718c5958', '98340', 'cerro grande', 'RS'), ('1e223899442e479b03b6e0056d14b25d', '3ec3b9e0f51059e087237fc0cb06427b', '83860', 'pien', 'PR');\nCREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);\nINSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) VALUES ('18150', -23.655204, -47.10876300000001, 'ibiuna', 'SP'), ('58040', -7.125054978071453, -34.86559985636794, 'joao pessoa', 'PB'), ('04006', -23.57882600859834, -46.64933242437529, 'sao paulo', 'SP'), ('06703', -23.59976890313923, -46.90933038579832, 'cotia', 'SP');\n\n위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
-        "input": "",
-        "output": "쿼리 작성: SELECT AVG(gz.avg_lat) AS avg_latitude, AVG(gz.avg_lng) AS avg_longitude\nFROM customers c\nJOIN (\n  SELECT geolocation_zip_code_prefix, AVG(geolocation_lat) AS avg_lat, AVG(geolocation_lng) AS avg_lng\n  FROM geolocation\n  GROUP BY geolocation_zip_code_prefix\n) gz\n  ON gz.geolocation_zip_code_prefix = c.customer_zip_code_prefix\nWHERE c.customer_state = 'RO';"
-    },
-    ...
+"입력 텍스트: 위치 정보 기준으로 RO 주에 속한 우편번호를 사용하는 고객은 몇 명
+DDL statements:
+CREATE TABLE customers (customer_id VARCHAR(32) NOT NULL, customer_unique_id VARCHAR(32) NOT NULL,
+    customer_zip_code_prefix VARCHAR(5) NOT NULL, customer_city VARCHAR(40) NOT NULL,
+    customer_state VARCHAR(2) NOT NULL, PRIMARY KEY (customer_id));
+INSERT INTO customers (customer_id, customer_unique_id, customer_zip_code_prefix, customer_city, customer_state)
+VALUES ('666f5286f980c33c3129f745dacc1fb4', 'f72c6460deee2a05cde9d4475a3d973e', '79500', 'paranaiba', 'MS'),
+    ('98cf5a598b51e6d8e0e169bb54bc807e', '12d5abe8e60cbc8c330cd36fcda842c6', '63112', 'crato', 'CE'),
+    ('49e31013afa5a0bfd5cb51d26ce10a57', 'ab071ec5dbdbd6f95c6ae54cfbb39424', '86041', 'londrina', 'PR'), 
+    ('d3ecf0664acdf35f6e78389ed3e223f0', 'b33650d9735418f61571dfe3f4963135', '11674', 'caraguatatuba', 'SP');
+
+CREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL,
+    geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);
+INSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state)
+VALUES ('06454', -23.4961967532221, -46.84535739528676, 'barueri', 'SP'), 
+    ('19470', -21.76514393006027, -52.12189554707464, 'presidente epitácio', 'SP'), 
+    ('73062', -15.647882067272675, -47.82574315969692, 'brasília', 'DF'), 
+    ('17013', -22.325398597264805, -49.06351087702708, 'bauru', 'SP');
+
+위의 테이블 명세와 사용자의 입력 텍스트를 바탕으로 SQL 쿼리를 작성합니다.",
 ```
 
-# 일반화 방지 
+output
+```
+쿼리 작성:
+SELECT COUNT(DISTINCT c.customer_id) AS customer_count
+FROM customers c
+JOIN geolocation g
+ON g.geolocation_zip_code_prefix = c.customer_zip_code_prefix
+WHERE g.geolocation_state = 'RO';
+```
 
-## 질문 형태 다양화
+
+</details>
+
+## 3. 일반화 방지 
+
+### 질문 형태 다양화
 일반화를 학습하지 않고 사용자가 다양한 말투로 질문을 할 경우 성능을 높이기 위해 종결어미, 말투 등 다방면으로 변경.
 
 1. 명사구 형태
 
-완전한 문장으로 끝나지 않고 명사구 형태로 끝나는 질문. <br>
-예) "마을 변호사는 몇 명이었는가?" -> "마을변호사 인원 수"<br>
-예) "각 고객별 첫 구매 일시를 알고 싶습니다. 고객 ID와 첫 구매 타임스탬프를 반환해 주세요."
-    -> "각 고객별 첫 구매 일시에 대한 고객 ID와 첫 구매 타임스탬프."<br>
-예) "2018년 2분기(Q2)에 구매된 주문들의 구매 시각부터 배송사 인계까지 평균 며칠이 걸렸는지 알려주세요"
-    -> "2018년 2분기 구매 시각부터 배송사 인계까지 평균일."<br>
+완전한 문장으로 끝나지 않고 명사구 형태로 끝나는 질문.
+```
+"마을 변호사는 몇 명이었는가?"
+    -> "마을변호사 인원 수"
+    
+"각 고객별 첫 구매 일시를 알고 싶습니다. 고객 ID와 첫 구매 타임스탬프를 반환해 주세요."
+    -> "각 고객별 첫 구매 일시에 대한 고객 ID와 첫 구매 타임스탬프."
+    
+"2018년 2분기(Q2)에 구매된 주문들의 구매 시각부터 배송사 인계까지 평균 며칠이 걸렸는지 알려주세요"
+    -> "2018년 2분기 구매 시각부터 배송사 인계까지 평균일."
+```
 
 2. 문장 종결 어미 변경
 
 "~요?", "~까?", "~임?", "~나?", "~습니까?", "~나요?", "~가요?", "~니?", "~냐?" 등 다양한 물음에 적응 할 수 있도록 종결어미 다양화.<br>
-예) 결제 수단별로 결제 승인까지 평균 몇 시간이 걸리는가요?
-    -> 결제 수단별로 결제 승인까지 평균 몇 시간이 걸리나?<br>
-예)  RS 주에서 고객 수가 가장 많은 우편번호 접두어 상위 5개와 각 고객 수를 보여주세요
-    ->  RS 주에서 고객 수가 가장 많은 우편번호 접두어 상위 5개와 각 고객 수를 보여주시겠습니까?<br>
-예) 고객이 단 1명만 있는 도시와 주 목록을 도시명 오름차순으로 보여주세요
-    -> 고객이 단 1명만 있는 도시와 주 목록을 도시명 오름차순으로 보여줄 수 있으심?<br>
+```
+결제 수단별로 결제 승인까지 평균 몇 시간이 걸리는가요?
+    -> 결제 수단별로 결제 승인까지 평균 몇 시간이 걸리나?
+    
+RS 주에서 고객 수가 가장 많은 우편번호 접두어 상위 5개와 각 고객 수를 보여주세요
+    ->  RS 주에서 고객 수가 가장 많은 우편번호 접두어 상위 5개와 각 고객 수를 보여주시겠습니까?
+    
+고객이 단 1명만 있는 도시와 주 목록을 도시명 오름차순으로 보여주세요
+    -> 고객이 단 1명만 있는 도시와 주 목록을 도시명 오름차순으로 보여줄 수 있으심?
+```
 
 3. 컬럼명 직접/간접 언급
 
-LLM에게 질문 시 영문 칼럼명을 직접 작성할 수 있지만 한국어로 질문할 수도 있음. 간접 언급시에도 올바르게 작동하도록 질의 변형.<br>
-예) "각 country_of_origin별 모든 satellites의 최대 거리는 얼마인가요?"
-    -> "각 국가별로 지구 표면으로부터 모든 위성의 최대 거리는 얼마인가요?"<br>
-예) "country가 Africa인 모든 org_name 값과 그들이 진행한 num_projects 수를 나열하세요"
-    -> "아프리카에서 활동하는 모든 식량 정의 단체와 그들이 진행한 프로젝트 수를 나열하세요."<br>
+LLM에게 질문 시 영문 칼럼명을 직접적으로 작성할 수 있지만 한국어로 질문할 수도 있음. 간접적으로 언급할 시에도 올바르게 작동하도록 질의 변형.
 
-## DDL 선언문 Values 개수 다영화
+```
+"각 country_of_origin별 모든 satellites의 최대 거리는 얼마인가요?"
+    -> "각 국가별로 지구 표면으로부터 모든 위성의 최대 거리는 얼마인가요?"
+    
+"country가 Africa인 모든 org_name 값과 그들이 진행한 num_projects 수를 나열하세요"
+    -> "아프리카에서 활동하는 모든 식량 정의 단체와 그들이 진행한 프로젝트 수를 나열하세요."
+```
+
+### DDL 선언문 Values 개수 다영화
 DDL 선언문 뒤 INSERT INTO ~ VALUES ~ 문의 개수를 0개에서 5개 사이로 랜덤하게 추가. 입력되는 Value 개수가 적든 많든 올바르게 동작하도록 하기 위함.
 
 ```
-값 예시
+DDL statements:
+CREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);
+INSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state)
+VALUES ('32606', -19.93580921426511, -44.20401884624039, 'betim', 'MG'), 
+    ('99020', -28.245192000258783, -52.41230010818784, 'passo fundo', 'RS'), 
+    ('40150', -12.997402296164845, -38.52653491517864, 'salvador', 'BA'), 
+    ('29902', -19.3816031449327, -40.063048580531, 'linhares', 'ES');
+
+DDL statements:
+CREATE TABLE geolocation (geolocation_zip_code_prefix VARCHAR(5) NOT NULL, geolocation_lat DOUBLE NOT NULL, geolocation_lng DOUBLE NOT NULL, geolocation_city VARCHAR(40) NOT NULL, geolocation_state VARCHAR(2) NOT NULL);
+INSERT INTO geolocation (geolocation_zip_code_prefix, geolocation_lat, geolocation_lng, geolocation_city, geolocation_state) 
+VALUES ('60160', -3.734779452680465, -38.48632107799065, 'fortaleza', 'CE'), 
+    ('28994', -22.895379547549297, -42.471193456997135, 'saquarema', 'RJ');
+
+...
 ```
 
 
@@ -234,30 +325,12 @@ SQL 확인
 ```
 
 ## 검증 대상
-- 단일 DB 사용 SQL 데이터 총 800건
-
-Olist_geolocation_text_to_sql_data.json (100건) <br>
-Olist_order_reviews_text_to_sql_data.json (100건) <br>
-Olist_customers_text_to_sql_data.json (100건) <br>
-Olist_order_items_text_to_sql_data.json (100건) <br>
-Olist_order_payments_text_to_sql_data.json (100건) <br>
-Olist_orders_text_to_sql_data.json (100건) <br>
-Olist_products_text_to_sql_data.json (100건) <br>
-Olist_sellers_text_to_sql_data.json (100건) <br>
-- 복합 DB 사용 SQL 데이터 총 800건
-
-Olist_customers_and_geolocation_text_to_sql_data.json (100건)<br>
-Olist_order_items_and_products_text_to_sql_data.json (100건)<br>
-Olist_order_items_and_sellers_text_to_sql_data.json (100건)<br>
-Olist_orders_and_customers_text_to_sql_data.json (100건)<br>
-Olist_orders_and_order_items_text_to_sql_data.json (100건)<br>
-Olist_orders_and_order_payments_text_to_sql_data.json (100건)<br>
-Olist_orders_and_order_reviews_text_to_sql_data.json (100건)<br>
-Olist_sellers_and_geolocation_text_to_sql_data.json (100건)<br>
-
+|단일 table 사용 SQL 데이터 총 800건 | 2개 table 사용 SQL 데이터 총 800건|
+|--|--|
+|Olist_geolocation_text_to_sql_data.json(100건) <br> Olist_order_reviews_text_to_sql_data.json(100건) <br>Olist_customers_text_to_sql_data.json(100건) <br>Olist_order_items_text_to_sql_data.json(100건) <br>Olist_order_payments_text_to_sql_data.json(100건) <br>Olist_orders_text_to_sql_data.json(100건) <br>Olist_products_text_to_sql_data.json(100건) <br>Olist_sellers_text_to_sql_data.json(100건) <br>|Olist_customers_and_geolocation_text_to_sql_data.json(100건)<br>Olist_order_items_and_products_text_to_sql_data.json(100건)<br>Olist_order_items_and_sellers_text_to_sql_data.json(100건)<br>Olist_orders_and_customers_text_to_sql_data.json(100건)<br>Olist_orders_and_order_items_text_to_sql_data.json(100건)<br>Olist_orders_and_order_payments_text_to_sql_data.json(100건)<br>Olist_orders_and_order_reviews_text_to_sql_data.json(100건)<br>Olist_sellers_and_geolocation_text_to_sql_data.json(100건)<br>|
 ## 검증 결과
 
-- 단일 DB 사용 SQL 데이터
+- 단일 table 사용 SQL 데이터
 
 Olist_order_reviews_text_to_sql_data.json [output(SQL) - SQL 실제 실행 가능 여부] 위반 2건
   - index=75 | 1차 오류=no such function: SUBSTRING_INDEX / LLM 변환 후 오류=near "ORDER": syntax error
@@ -270,7 +343,7 @@ Olist_geolocation_text_to_sql_data.json [output(SQL) - SQL 실제 실행 가능 
 
 총 5건 삭제. 795건 데이터 확보.
 
-- 다중 DB 사용 SQL 데이터
+- 다중 table 사용 SQL 데이터
 
 Olist_customers_and_geolocation_text_to_sql_data.json [output(SQL) - SQL이 참조하는 컬럼이 DDL에 정의되어 있는지] 위반 1건
   - index=92 | 미정의 컬럼={'gEolocation_lat'}
@@ -282,23 +355,108 @@ Olist_customers_and_geolocation_text_to_sql_data.json [output(SQL) - SQL 실제 
 
 
 
-# 파인 튜닝 결과
+# 파인 튜닝
+
+## 1B, 3B model Configs
+
+### LoRA 설정 (`LoraConfig`)
+
+| 항목 | 값 |
+|---|---|
+| `lora_alpha` | 32 |
+| `lora_dropout` | 0.1 |
+| `r` | 8 |
+| `bias` | `"none"` |
+| `target_modules` | `["q_proj", "v_proj"]` |
+| `task_type` | `"CAUSAL_LM"` |
+
+### 학습 설정 (`SFTConfig`)
+
+| 항목 | 값 |
+|---|---|
+| `output_dir` | `"llama3-8b-text-to-sql"` |
+| `num_train_epochs` | 3 |
+| `per_device_train_batch_size` | 2 |
+| `gradient_accumulation_steps` | 2 |
+| `gradient_checkpointing` | `True` |
+| `optim` | `"adamw_torch_fused"` |
+| `logging_steps` | 10 |
+| `save_strategy` | `"steps"` |
+| `save_steps` | 50 |
+| `bf16` | `True` |
+| `learning_rate` | 1e-4 |
+| `max_grad_norm` | 0.3 |
+| `warmup_ratio` | 0.03 |
+| `lr_scheduler_type` | `"constant"` |
+| `push_to_hub` | `False` |
+| `remove_unused_columns` | `False` |
+| `dataset_kwargs` | `{"skip_prepare_dataset": True}` |
+| `report_to` | `None` |
+
+### 토큰화 관련
+
+| 항목 | 값 |
+|---|---|
+| `max_seq_length` | 8192 |
+
+
+## 8B Model Configs
+
+### LoRA 설정 (`LoraConfig`)
+
+| 항목 | 값 | 비고 |
+|---|---|---|
+| `lora_alpha` | **64** | 32 → 64 |
+| `lora_dropout` | 0.1 | 변경 없음 |
+| `r` | **32** | 8 → 32 |
+| `bias` | `"none"` | 변경 없음 |
+| `target_modules` | **`["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]`** | attention(`q,k,v,o`) + MLP(`gate,up,down`) 전체 포함 |
+| `task_type` | `"CAUSAL_LM"` | 변경 없음 |
+
+### 학습 설정 (`SFTConfig`) 
+
+| 항목 | 값 | 비고 |
+|---|---|---|
+| `output_dir` | `"llama3-8b-text-to-sql"` | 변경 없음 |
+| `num_train_epochs` | **5** | 3 → 5 |
+| `per_device_train_batch_size` | 2 | 변경 없음 |
+| `gradient_accumulation_steps` | 2 | 변경 없음 |
+| `gradient_checkpointing` | `True` | 변경 없음 |
+| `optim` | `"adamw_torch_fused"` | 변경 없음 |
+| `logging_steps` | 10 | 변경 없음 |
+| `save_strategy` | `"steps"` | 변경 없음 |
+| `save_steps` | 50 | 변경 없음 |
+| `bf16` | `True` | 변경 없음 |
+| `learning_rate` | 1e-4 | 변경 없음 |
+| `max_grad_norm` | 0.3 | 변경 없음 |
+| `warmup_ratio` | 0.03 | 변경 없음 |
+| `lr_scheduler_type` | `"constant"` | 변경 없음 |
+| `push_to_hub` | `False` | 변경 없음 |
+| `remove_unused_columns` | `False` | 변경 없음 |
+| `dataset_kwargs` | `{"skip_prepare_dataset": True}` | 변경 없음 |
+| `report_to` | `None` | 변경 없음 |
+
+### 토큰화 관련
+
+| 항목 | 값 |
+|---|---|
+| `max_seq_length` | 8192 |
 
 
 
+## Training Loss
 
-
-# 평가
+![training_loss_by_model_plot.png](5.FineTuning_result/training_loss_by_model_plot.png)
 
 ## 평가1 - response_status
 
 테스트 데이터셋의 query를 입력하고 리턴받은 SQL문을 DB에 실행했을 때 response_status 비율.
-```
+
 response_status 종류
 1. success/success(converted) : 성공 / DB마다 다른 SQL문의 형식을 sqlite 형식으로 변환해서 성공
 2. error : SQL too long (** chars) : 비정상적으로 긴 SQL
 3. error: Execution failed on sql <SQL문> : SQL문 실행 오류
-```
+
 
 ![test1_response_status_ratio.png](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test1_response_status_ratio.png)
 
@@ -307,15 +465,14 @@ response_status 종류
 
 테스트 데이터셋의 query를 입력하고 리턴받은 SQL문이 사용한 table명 정확도
 
-```
-카테고리:
+
+카테고리
 1. exact_match:  완전히 같음
 2. subset:       response ⊂ label (부족)
 3. superset:     response ⊃ label (초과)
 4. overlap:      일부 겹침
 5. no_match:     겹치는 테이블 없음
 6. empty:        response 또는 label이 비어있음
-```
 
 ![test2_tables_match_ratio.png](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test2_tables_match_ratio.png)
 
@@ -324,7 +481,15 @@ response_status 종류
 
 테스트 데이터셋을 실행한 response와 prompt, DDL문, label을 비교해 생성된 SQL문의 퀄리티를 평가.
 
-LLM-as-a-Judge 프롬프트 전문
+[Llama-3.2-1B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.2-1B-Instruct_llm_eval.csv) <br>
+[Llama-3.2-3B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.2-3B-Instruct_llm_eval.csv) <br>
+[Llama-3.1-8B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.1-8B-Instruct_llm_eval.csv) <br>
+[Llama-3-Alpha-Ko-8B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3-Alpha-Ko-8B-Instruct_llm_eval.csv)<br>
+
+<details>
+
+<summary>LLM-as-a-Judge 프롬프트 전문</summary>
+
 ```
 SYSTEM_PROMPT = """
 #역할
@@ -361,11 +526,14 @@ label : {label}
 """
 ```
 
-Llama-3.2-1B-Instruct 평가 결과 예시 <br>
-- [Llama-3.2-1B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.2-1B-Instruct_llm_eval.csv) <br>
-- [Llama-3.2-3B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.2-3B-Instruct_llm_eval.csv) <br>
-- [Llama-3.1-8B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.1-8B-Instruct_llm_eval.csv) <br>
+</details>
 
+
+
+
+<details>
+
+<summary>데이터 예시</summary>
 
 | ID | 프롬프트 | DDL 스키마 | 생성된 쿼리 | 정답 쿼리 | 상세 평가 | 점수 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -374,15 +542,26 @@ Llama-3.2-1B-Instruct 평가 결과 예시 <br>
 | **15** | 위치 데이터에서 주 코드가 'SP'인 지역에 해당하는 우편번호가 최소 3개 이상 사용되는 고객 도시와... | `CREATE TABLE customers (...); INSERT INTO ...; CREATE TABLE geolocation (...); ...` | `SELECT c.customer_city, c.customer_state, COUNT(DISTINCT c.customer_zip_code_prefix) ...` | `WITH sp_zips AS ( SELECT DISTINCT geolocation_zip_code_prefix AS zip ... ) ...` | `[평가] 1 - 불만족. 이유: prompt는 “해당 우편번호 개수와 고객 수”를 각 도시별로... [총점] 2` | 2 |
 |...|...|...|...|...|...|...|
 
-점수 표 시각화
-
-
+</details>
 
 ![test3_score_visualization.png](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test3_score_visualization.png)
 
 
 
+a
 
+
+
+
+
+
+
+a
+
+
+
+
+a
 
 # Trouble Shooting
 1. 8B FineTuning시 형식 미준수
@@ -430,7 +609,7 @@ v 테스트 데이터 GPT-5.4로 다시만들기
 gpt-4o-mini -> gpt-5.4
 
 
-# text-to-sql 파인튜닝 계획 모음
+# text-to-sql 파인튜닝 계획
 
 진행
 
