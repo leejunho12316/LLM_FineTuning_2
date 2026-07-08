@@ -352,6 +352,11 @@ Llama-3.2-1B-Instruct 평가 결과 예시 <br>
 
 
 
+![test3_score_visualization.png](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test3_score_visualization.png)
+
+
+
+
 
 # Trouble Shooting
 1. 8B FineTuning시 형식 미준수
