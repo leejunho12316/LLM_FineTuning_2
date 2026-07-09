@@ -501,6 +501,47 @@ Olist_customers_and_geolocation_text_to_sql_data.json [output(SQL) - SQL 실제 
 
 <br><br><br>
 
+# Base-Model 평가
+
+Base-Model 사용 시 Prompt에 다음 추가해 일정한 형식 지키도록 함.
+
+<details>
+
+<summary>프롬프트 추가 내용 (펼치기)</summary>
+
+```
+FORMAT_SYSTEM_PROMPT = """당신은 text-to-sql을 수행해야 합니다.
+답변은 반드시 "쿼리 작성:"으로 시작하고, 그 뒤에 SQL 쿼리만 작성하세요. 다른 설명은 절대 추가하지 마세요.
+
+아래는 출력 형식 예시입니다.
+
+예시 1:
+쿼리 작성: SELECT AVG(CASE WHEN review_comment_title LIKE '%!%' OR review_comment_message LIKE '%!%' THEN 1.0 ELSE 0.0 END) AS exclamation_ratio
+FROM order_reviews;
+
+예시 2:
+쿼리 작성: SELECT
+  COUNT(DISTINCT order_id) AS order_count
+FROM order_reviews
+WHERE review_answer_timestamp >= '2018-01-01' AND review_answer_timestamp < '2018-07-01';
+
+예시 3:
+쿼리 작성: SELECT
+  p.payment_type,
+  AVG(TIMESTAMPDIFF(HOUR, o.order_purchase_timestamp, o.order_approved_at)) AS avg_hours_to_approval,
+  COUNT(DISTINCT o.customer_id) AS customer_count
+FROM orders o
+JOIN order_payments p ON p.order_id = o.order_id
+WHERE o.order_purchase_timestamp >= '2017-12-01'
+  AND o.order_purchase_timestamp < '2018-01-01'
+  AND o.order_approved_at IS NOT NULL
+GROUP BY p.payment_type
+ORDER BY avg_hours_to_approval DESC;
+"""
+```
+
+</details>
+
 
 # Fine-Tuning 평가
 
