@@ -16,7 +16,7 @@ Llama 모델의 Text-to-SQL용 LoRA Fine-Tuning 프로젝트 입니다.<br>
 
 <img src="https://camo.githubusercontent.com/e70f2a6a8c8f5bf0f4211dd32a0b5311c7464b65098006e654986f6738bfe034/68747470733a2f2f68756767696e67666163652e636f2f64617461736574732f68756767696e67666163652f646f63756d656e746174696f6e2d696d616765732f7261772f6d61696e2f68756767696e67666163655f6875622e737667">
 
-## Raw Data
+## 1. Raw Data
 <img src="https://storage.googleapis.com/kaggle-datasets-images/55151/105464/d59245a7014a35a35cc7f7b721de4dae/dataset-cover.png?t=2018-09-21-16-21-21">
 
 Brazilian E-Commerce Public Dataset by Olist (Kaggle) : https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
@@ -29,7 +29,7 @@ Brazilian E-Commerce Public Dataset by Olist (Kaggle) : https://www.kaggle.com/d
 
 
 
-## Dataset
+## 2. Dataset
 
 생성한 Text-to-SQL Dataset : https://huggingface.co/datasets/leejunho12316/Olist_text_to_sql_FineTuning_dataset/tree/main <br>
 Base Fine-Tuning Dataset : https://raw.githubusercontent.com/leejunho12316/LLaMA-Factory/main/data/text_to_sql_data.json
@@ -37,7 +37,7 @@ Base Fine-Tuning Dataset : https://raw.githubusercontent.com/leejunho12316/LLaMA
 
 
 
-## Models
+## 3. Models
 
 Fine Tuning에는 Llama모델을 사용했습니다.
 
@@ -332,7 +332,7 @@ VALUES ('60160', -3.734779452680465, -38.48632107799065, 'fortaleza', 'CE'),
 
 # 데이터 검증 결과
 
-## Rule-Based 검증 내용
+## 1. Rule-Based 검증 내용
 ```
 # 데이터 형식
 1. 모든 list의 원소가 dictionary type인지
@@ -369,14 +369,14 @@ SQL 확인
 
 <br>
 
-## 검증 대상
+## 2. 검증 대상
 |단일 table 사용 SQL 데이터 총 800건 | 2개 table 사용 SQL 데이터 총 800건|
 |--|--|
 |Olist_geolocation_text_to_sql_data.json(100건) <br> Olist_order_reviews_text_to_sql_data.json(100건) <br>Olist_customers_text_to_sql_data.json(100건) <br>Olist_order_items_text_to_sql_data.json(100건) <br>Olist_order_payments_text_to_sql_data.json(100건) <br>Olist_orders_text_to_sql_data.json(100건) <br>Olist_products_text_to_sql_data.json(100건) <br>Olist_sellers_text_to_sql_data.json(100건) <br>|Olist_customers_and_geolocation_text_to_sql_data.json(100건)<br>Olist_order_items_and_products_text_to_sql_data.json(100건)<br>Olist_order_items_and_sellers_text_to_sql_data.json(100건)<br>Olist_orders_and_customers_text_to_sql_data.json(100건)<br>Olist_orders_and_order_items_text_to_sql_data.json(100건)<br>Olist_orders_and_order_payments_text_to_sql_data.json(100건)<br>Olist_orders_and_order_reviews_text_to_sql_data.json(100건)<br>Olist_sellers_and_geolocation_text_to_sql_data.json(100건)<br>|
 
 <br>
 
-## 검증 결과
+## 3. 검증 결과
 
 - 단일 table 사용 SQL 데이터
 
@@ -405,7 +405,10 @@ Olist_customers_and_geolocation_text_to_sql_data.json [output(SQL) - SQL 실제 
 
 # Fine-Tuning
 
-## 1B, 3B model Configs
+이 Fine Tuning은 Runpod에서 A100 SXM GPU 1개로 진행되었습니다.
+
+
+## 1. 1B, 3B model Configs
 
 ### LoRA 설정 (`LoraConfig`)
 
@@ -449,7 +452,7 @@ Olist_customers_and_geolocation_text_to_sql_data.json [output(SQL) - SQL 실제 
 
 <br>
 
-## 8B Model Configs
+## 2. 8B Model Configs
 
 ### LoRA 설정 (`LoraConfig`)
 
@@ -491,7 +494,7 @@ Olist_customers_and_geolocation_text_to_sql_data.json [output(SQL) - SQL 실제 
 |---|---|
 | `max_seq_length` | 8192 |
 
-## Training Loss
+## 3. Training Loss
 
 ![training_loss_by_model_plot.png](5.FineTuning_result/training_loss_by_model_plot.png)
 
@@ -501,7 +504,9 @@ Olist_customers_and_geolocation_text_to_sql_data.json [output(SQL) - SQL 실제 
 
 # Fine-Tuning 평가
 
-## 평가1 - response_status
+평가 데이터셋으로 Olist Dataset을 참고해 GPT-5.5로 만든 정답 '질문-SQL쌍' 472건을 사용했습니다. Fine-Tuning된 모델이 출력한 SQL이 정상적으로 실행되는지, 정답 데이터와 같은 테이블을 사용했는지, SQL의 품질이 믿을만한지 Rule-Based와 LLM-as-a-Judge 방식으로 평가했습니다.
+
+## 1. 평가1 - response_status (Rule-Based)
 
 테스트 데이터셋의 query를 입력하고 리턴받은 SQL문을 DB에 실행했을 때 response_status 비율.
 
@@ -515,9 +520,9 @@ response_status 종류
 
 <br>
 
-## 평가2 - tabels_match
+## 2. 평가2 - tabels_match (Rule-Based)
 
-테스트 데이터셋의 query를 입력하고 리턴받은 SQL문이 사용한 table명 정확도
+테스트 데이터셋의 query를 입력하고 리턴받은 SQL문이 사용한 table명의 정확도.
 
 
 카테고리
@@ -532,7 +537,7 @@ response_status 종류
 
 <br>
 
-## 평가3 - LLM-as-a-Judge - response 품질
+## 3. 평가3 - response 품질 (LLM-as-a-Judge)
 
 테스트 데이터셋을 실행한 response와 prompt, DDL문, label을 비교해 생성된 SQL문의 퀄리티를 평가.
 
@@ -603,6 +608,9 @@ label : {label}
 
 
 
+<br><br><br>
+
+# 결론
 
 
 
@@ -610,55 +618,83 @@ label : {label}
 
 <br><br><br>
 
+# 폴더 설명
+2.geretel_data
+gretelai에서 제공하는 영문 text-to-sql 데이터의 질문을 한국어로 바꾼 data
 
+3.Olist_data
+생성한 data 전체 저장
 
+5.FineTuning_result
+ㄴ 모델명
+   모델명.csv :  테스트 데이터 FineTuning 모델로 실행한 결과
+   모델명_with_exec.zip : FineTuning모델로 실행해 나온 SQL DB에 실행한 결과 (2 있는 경우 1은 sqlite 문법으로 SQL 변환시 gpt-4o-mini model 쓴것, 2는 gpt-5.4-nano model 쓴 것)
+   모델명-training_log.csv : FineTuning 모델 실행 loss & grad_norm
+   모델명-training_log.json : FineTuning 모델 실행 loss & grad_norm
+
+6.평가 데이터
+   test1_response_status_ratio.json : Fine-Tuning 모델 별 response SQL DB 실행 결과
+   test2_tables_match_ratio.json : Fine-Tuning 모델 별 response SQL 정답 일치 결과
+   test3_response_score_llm_as_a_judge_results.json : 평가3 LLM-as-a-Judge 평가 결과
+   모델명.csv : response quality LLM-as-a-Judge 평가 데이터
 
 
 
 # Trouble Shooting
 1. 8B FineTuning시 형식 미준수
 
-8B-Instruct를 1B, 3B FT할때와 같은 Config로 FT 진행.
-1B와 3B의 경우에 비해 Response에 '쿼리 작성:'으로 시작하는 걸 충분히 학습하지 못함.
+8B Model을 1B, 3B FT할때와 같은 Config로 FT 진행. 8B모델이 1B와 3B보다 '쿼리 작성:'으로 시작해 대답하는 것을 충분히 학습하지 못함.
 큰 모델이라 사전 학습으로 이미 가지고 있는 지식을 바꾸기에 학습이 충분하지 못했음.
 
 ```
 === 평가 요약 ===
 전체:                  477개
-Response 실행 성공:     205개
+Response 실행 성공:     205개 -> SQL문 실행 성공한게 절반도 안됨.
 Label 실행 성공:        473개
 실행 결과 일치 (정답):   56개 (11.7%)
 ```
 
 해결 방법
-- r, lora_alpha, target_modules 늘리기
+1. r, lora_alpha, target_modules 늘리기
+```
 peft_config = LoraConfig(
     r=32,           # 16 -> 32
     lora_alpha=64,  # 32 -> 64 (보통 alpha = 2 × r)
     target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],  # MLP도 포함
 )
-- epochs 늘리기
+```
+```
+2. epochs 늘리기
 args = SFTConfig(
     num_train_epochs=5,   #3 -> 5
     ...
 )
+```
 
-2. 평가 성능 저조
-fine tuning된 모델들이 생성한 SQL문이 실행이 안되는 경우가 너무 많음.
-LLM-as-a-Judge로 query와 실행결과 퀄리티를 평가했는데 점수가 너무 낮음. 
-FineTuning된 모델의 SQL을 실행할 때 DB 방언때문에 실행이 안되면 sqlite 형식으로 변환하는데, 이 때 사용한 gpt-4o-mini라 오류가 많은 것 같음.
--> gpt-5.4로 테스트셋 다시만들기. (xxx.csv -> xxx_with_exec과정만 다시 하면 됨.)
+2. 평가 성능 저조 
 
-테스트 데이터셋에 DB 실행결과 저장 시 INSERT, DELETE, UPDATE 같은 SQL문이 적용되어서 완전히 같은 SQL을 실행해도 다른 실행결과가 저장됨.
--> 테스트 데이터셋에 SQL 실행 시 rollback 적용으로 DB가 수정되지 않도록 수정.
+Fine-Tuning된 모델들이 생성한 SQL문이 실행이 안되는 경우가 너무 많음. 그리고 LLM-as-a-Judge로 query와 실행결과 퀄리티를 평가했는데 점수가 너무 낮음.
+FineTuning된 모델의 SQL을 실행할 때 DB 방언때문에 실행이 안되면 sqlite 형식으로 변환하는데, 이 때 사용한 gpt-4o-mini라 오류가 많은 것 같음. <br>
+-> gpt-5.4 사용해 테스트셋 다시만들기. (xxx.csv -> xxx_with_exec과정만 다시 하면 됨.)
 
-6/27) FineTuning
-v 1B짜리 colab에서 FT 해보고 평가까지 뽑는 코드 완성.
-v Runpod로 3B, 8B, allganize8B 전부 FT 진행.
-v 8B모델들 RunPod 비싼 GPU로 Pod만들고 HuggingFace에서 불러와서 테스트 데이터 만들기.
-v 테스트 데이터 만드는동안 테스트 데이터 평가 프롬프트 작성하기.
-v 테스트 데이터 GPT-5.4로 다시만들기
-gpt-4o-mini -> gpt-5.4
+3. DB 상태 변환
+
+테스트 데이터셋에 SQL문을 DB에 실행해 실행결과 저장하는 작업 할 때 INSERT, DELETE, UPDATE 같은 SQL문이 table에 적용됨.
+따라서 완전히 같은 SQL을 실행해도 시점에 따라 다른 실행결과가 저장되는 실수가 발생. <br>
+-> SQL 실행 시 항상 rollback 적용으로 DB가 수정되지 않도록 수정.
+
+4. 데이터 생성시 도메인 지식 문제
+
+LLM으로 데이터를 생성할 때, Olist 상품 데이터와 그 도메인에 대한 지식이 있어야 할 수 있는 질문-SQL쌍이 필요함. <br>
+-> 칼럼 별 unique 값 중 랜덤 n개 추가, Kaggle Olist 데이터셋 페이지의 데이터셋 README 추가. 
+
+5. 질문 복잡성
+
+LLM이 실제 사람이 할 것 같은 질문을 만들도록 하고 싶었음. 하지만 SELECT, GROUP BY, COUNT, JOIN 등 특정 SQL문을 쓰라고 직접적으로 명시하면 거기에 LLM이 몰두해 대답이 한정적이게 됨.
+LLM을 나노미터 단위로 통제하는 것 보다 알아서 유연하게 만들도록 모범 예시를 추가함. 단, 항상 같은 예시가 아니도록 매 실행마다 랜덤한 예시 선정.<br>
+-> base Text-to-SQL 데이터 중 랜덤 n개에서 질문 추출.
+
+
 
 <br><br><br>
 
@@ -741,20 +777,18 @@ DDL 문에 -- 하고 각 칼럼별 설명 써있음. 복합 DB 데이터에만 �
 SQL문이 정확히 같은지 여부가 아니라 SQL을 실제 DB에 실행 시 돌아온 값이 같은지 여부로 판단하기. SQL문을 쓰는 방식은 아주 다양하기 때문.
 exact match 문자열 비교 X -> execution accracy 실행 기반 평가 O
 
+6/27) FineTuning
+v 1B짜리 colab에서 FT 해보고 평가까지 뽑는 코드 완성.
+v Runpod로 3B, 8B, allganize8B 전부 FT 진행.
+v 8B모델들 RunPod 비싼 GPU로 Pod만들고 HuggingFace에서 불러와서 테스트 데이터 만들기.
+v 테스트 데이터 만드는동안 테스트 데이터 평가 프롬프트 작성하기.
+v 테스트 데이터 GPT-5.4로 다시만들기
+gpt-4o-mini -> gpt-5.4
 
 ----------
-
-데이터 생성시 문제
-
-1. 도메인 지식
-데이터와 도메인에 대한 어느 정도의 지식이 있어야 가능한 질문이 필요함
--> 칼럼 별 unique 값 중 랜덤 n개 추가.
-2. 질문 복잡성
-실제 사람이 한 것 같은 질문을 만들도록 하고 싶었음. 하지만 특정 SELECT, GROUP BY, COUNT, JOIN 등 어떠한 SQL문을 쓰라고 직접적으로 명시하면 거기에 LLM이 몰두해 대답이 한정적이게 됨. 나노단위 통제보다 유연하게 만들도록 예시를 추가함 추가함.
--> base Text-to-SQL 데이터 중 랜덤 n개에서 질문만 추출해 추가.
 
 README 추가할 내용
 - 왜 일반 Llama Instruction이 아닌 allganize를 base model로 사용했는지도 적기. (한국어 성능 더 좋음)
 
 
----
+
