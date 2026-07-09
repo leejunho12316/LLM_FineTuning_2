@@ -1,59 +1,95 @@
 # LLM_FineTuning_2
-LLM
+
+<div align = 'center'>
+  <img src="./README/LLM_FineTuning2.png" width = '400'>
+</div>
 
 # 개요
 
 Llama 모델의 Text-to-SQL용 LoRA Fine-Tuning 프로젝트 입니다.<br>
 브라질 이커머스 사이트 Olist의 DataBase를 자연어로 쉽게 사용할 수 있도록 타게팅해 Fine-Tuning을 진행했습니다. 
-작동 정확도를 높이기 위해 Kaggle에 공개된 Olist 데이터셋을 사용해 text-to-sql 데이터셋을 생성해 학습했습니다. <br>
-베이스 데이터셋으로는 gretelai에서 제공하는 text-to-sql용 데이터셋을 사용했습니다.
+작동 정확도를 높이기 위해 Kaggle에 공개된 Olist 데이터셋을 사용해 text-to-sql 데이터셋을 생성해 학습했습니다. 베이스 데이터셋으로는 gretelai에서 text-to-sql용 데이터셋의 query를 한국어로 번역한 데이터셋을 사용했습니다.
 
+<br><br><br>
 
 # HuggingFace
 
 <img src="https://camo.githubusercontent.com/e70f2a6a8c8f5bf0f4211dd32a0b5311c7464b65098006e654986f6738bfe034/68747470733a2f2f68756767696e67666163652e636f2f64617461736574732f68756767696e67666163652f646f63756d656e746174696f6e2d696d616765732f7261772f6d61696e2f68756767696e67666163655f6875622e737667">
 
-## Dataset
+## Raw Data
+<img src="https://storage.googleapis.com/kaggle-datasets-images/55151/105464/d59245a7014a35a35cc7f7b721de4dae/dataset-cover.png?t=2018-09-21-16-21-21">
 
 Brazilian E-Commerce Public Dataset by Olist (Kaggle) : https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
-Text-to-SQL Olist Dataset : https://huggingface.co/datasets/leejunho12316/Olist_text_to_sql_FineTuning_dataset/tree/main
 
+
+브라진 E-commerce 사이트 Olist Store에서 공개한 데이터셋입니다. 2016년부터 2018년까지 브라질의 다양한 시장에서 생성된 100,000행의 주문 데이터를 가지고 있습니다.
+다양한 관점에서 주문을 분석할 수 있도록 주문 정보, 주문 상품, 결제 수단, 상품 속성, 고객 리뷰, 판매자 정보, 고객 정보, 지리적 위치의 총 8개의 DataBase를 제공합니다.
+
+<img src="https://i.imgur.com/HRhd2Y0.png" width="600">
+
+
+
+## Dataset
+
+생성한 Text-to-SQL Dataset : https://huggingface.co/datasets/leejunho12316/Olist_text_to_sql_FineTuning_dataset/tree/main <br>
 Base Fine-Tuning Dataset : https://raw.githubusercontent.com/leejunho12316/LLaMA-Factory/main/data/text_to_sql_data.json
 
-## FineTuned Models
+
+
+
+## Models
+
+Fine Tuning에는 Llama모델을 사용했습니다.
+
+- Base Models
+
+Llama-3.2-1B-Instruct : https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct <br>
+Llama-3.2-3B-Instruct : https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct <br>
+Llama-3.1-8B-Instruct : https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct <br>
+allganize-Llama-3-Alpha-Ko-8B-Instruct : https://huggingface.co/allganize/Llama-3-Alpha-Ko-8B-Instruct <br>
+
+
+- Fine-Tuned Models
 
 Llama-3.2-1B-Instruct : https://huggingface.co/leejunho12316/Llama-3.2-1B-Instruct-text-to-sql-FT-olist <br>
 Llama-3.2-3B-Instruct : https://huggingface.co/leejunho12316/Llama-3.2-3B-Instruct-text-to-sql-FT-olist <br>
 Llama-3.1-8B-Instruct : https://huggingface.co/leejunho12316/Llama-3.1-8B-Instruct-text-to-sql-FT-olist-config-edit <br>
 allganize-Llama-3-Alpha-Ko-8B-Instruct : https://huggingface.co/leejunho12316/allganize-Llama-3-Alpha-Ko-8B-Instruct-text-to-sql-FT-olist <br>
 
+
+
+<br><br><br>
+
+
+
 # 데이터 생성
 
 Kaggle에 공개된 Olist 데이터셋을 사용해 Fine-Tuning용 데이터를 제작했습니다. <br>
 하나의 DB를 사용하는 질문-SQL 쌍과 두 개 이상의 table을 사용해 JOIN이 필요한 질문-SQL 쌍을 각 800개씩 총 1,600개를 GPT-5.5 model을 사용해 생성했습니다. <br>
 
-
-## 1. 데이터 생성
+## 1. 단일 테이블 사용 데이터
 
 사용 Model : GPT-5.5 / 데이터 개수 : 800행
 
 하나의 table을 사용해 대답할 수 있는 질문과 그 SQL 쌍 데이터를 생성했습니다. 그 과정에서 다음을 고려했습니다.
 1. DB에 대한 정보
-- DDL 선언문 (DDL) : 사용할 DB의 DDL문을 제공해 데이터 생성 시 자료형에 실수가 없도록 했습니다.
-- 컬럼 설명 (column descriptions) : 데이터 도메인에 대한 지식을 갖추도록 Olist Kaggle 데이터의 README에 제공된 칼럼 설명을 집어넣어 각 칼럼의 역할과 쓰임에 대한 정보를 제공했습니다.
-- 질문 예시 (question examples) : gretel text-to-sql dataset의 질문을 랜덤으로 추출해 모범 질문 예시를 제공함으로써 사람이 직접 할 법한 질문을 생성하도록 유도했습니다.
-- 컬럼 값 예시 (column examples) : 컬럼 별 unique한 값 예시를 3개씩 추가해줌으로써 정확히 어떤 데이터가 DB에 추가되어 있는지 명확하게 알도록 정보를 제공했습니다.
-- 중복 방지 (history) : 이전 단계에서 생성한 질문을 전체 추가해 중복된 질문을 생성하지 않게 설계했습니다.
+- **DDL 선언문 (DDL)** : 사용할 DB의 DDL문을 제공해 데이터 생성 시 자료형에 실수가 없도록 했습니다.
+- **컬럼 설명 (column descriptions)** : 데이터 도메인에 대한 지식을 갖추도록 Olist Kaggle 데이터의 README에 제공된 칼럼 설명을 집어넣어 각 칼럼의 역할과 쓰임에 대한 정보를 제공했습니다.
+- **질문 예시 (question examples)** : gretel text-to-sql dataset의 질문을 랜덤으로 추출해 모범 질문 예시를 제공함으로써 사람이 직접 할 법한 질문을 생성하도록 유도했습니다.
+- **컬럼 값 예시 (column examples)** : 컬럼 별 unique한 값 예시를 3개씩 추가해줌으로써 정확히 어떤 데이터가 DB에 추가되어 있는지 명확하게 알도록 정보를 제공했습니다.
+- **중복 방지 (history)** : 이전 단계에서 생성한 질문을 전체 추가해 중복된 질문을 생성하지 않게 설계했습니다.
 
 2. 비현실적인 질문
+
 사람은 질문을 할 때 너무 디테일한 값을 포함한 질문은 하지 않습니다. 날짜 값을 포함한 질문을 할 때 ```2017-03-14 12:58:42'에 구매된 주문의 배송 예정일```처럼 초 단위까지의 질문을 생성하는 경우가 있었습니다.
 이 오류를 막기 위해 명시적으로 프롬프트에 규칙을 추가해 주었습니다.
 
 3. BETWEEN
+
 기간 조회 시 끝 날짜를 BETWEEN으로 지정하면 마지막 날짜가 누락됩니다. 2018년 6월 30일까지의 데이터를 조회해야 한다면 ```BETWEEN ㅇㅇ AND '2018-07-01'``` 처럼 그 다음 날짜를 입력해야 합니다.
 LLM은 이 규칙을 몰라 명시적으로 추가해 주었습니다.
 
-
+<br>
 
 <details>
 <summary>프롬프트 전문 (펼치기)</summary>
@@ -125,6 +161,9 @@ VALUES ('b7c13b2df92dc0d616315d518bbb97c7', 'd2308b8cb44552f9245efd95f4e73092', 
 ```
 
 </details>
+
+
+<br>
 
 
 ## 2. 다중 테이블 사용 데이터 (JOIN 데이터)
@@ -218,6 +257,8 @@ WHERE g.geolocation_state = 'RO';
 
 </details>
 
+<br>
+
 ## 3. 일반화 방지 
 
 ### 질문 형태 다양화
@@ -263,6 +304,8 @@ LLM에게 질문 시 영문 칼럼명을 직접적으로 작성할 수 있지만
     -> "아프리카에서 활동하는 모든 식량 정의 단체와 그들이 진행한 프로젝트 수를 나열하세요."
 ```
 
+<br>
+
 ### DDL 선언문 Values 개수 다영화
 DDL 선언문 뒤 INSERT INTO ~ VALUES ~ 문의 개수를 0개에서 5개 사이로 랜덤하게 추가. 입력되는 Value 개수가 적든 많든 올바르게 동작하도록 하기 위함.
 
@@ -284,7 +327,7 @@ VALUES ('60160', -3.734779452680465, -38.48632107799065, 'fortaleza', 'CE'),
 ...
 ```
 
-
+<br><br><br>
 
 
 # 데이터 검증 결과
@@ -324,10 +367,15 @@ SQL 확인
 2. 전체 데이터에서 output의 쿼리문이 중복되는 것이 있는지 확인
 ```
 
+<br>
+
 ## 검증 대상
 |단일 table 사용 SQL 데이터 총 800건 | 2개 table 사용 SQL 데이터 총 800건|
 |--|--|
 |Olist_geolocation_text_to_sql_data.json(100건) <br> Olist_order_reviews_text_to_sql_data.json(100건) <br>Olist_customers_text_to_sql_data.json(100건) <br>Olist_order_items_text_to_sql_data.json(100건) <br>Olist_order_payments_text_to_sql_data.json(100건) <br>Olist_orders_text_to_sql_data.json(100건) <br>Olist_products_text_to_sql_data.json(100건) <br>Olist_sellers_text_to_sql_data.json(100건) <br>|Olist_customers_and_geolocation_text_to_sql_data.json(100건)<br>Olist_order_items_and_products_text_to_sql_data.json(100건)<br>Olist_order_items_and_sellers_text_to_sql_data.json(100건)<br>Olist_orders_and_customers_text_to_sql_data.json(100건)<br>Olist_orders_and_order_items_text_to_sql_data.json(100건)<br>Olist_orders_and_order_payments_text_to_sql_data.json(100건)<br>Olist_orders_and_order_reviews_text_to_sql_data.json(100건)<br>Olist_sellers_and_geolocation_text_to_sql_data.json(100건)<br>|
+
+<br>
+
 ## 검증 결과
 
 - 단일 table 사용 SQL 데이터
@@ -353,9 +401,9 @@ Olist_customers_and_geolocation_text_to_sql_data.json [output(SQL) - SQL 실제 
 
 총 3건 삭제. 797건 데이터 확보.
 
+<br><br><br>
 
-
-# 파인 튜닝
+# Fine-Tuning
 
 ## 1B, 3B model Configs
 
@@ -399,6 +447,7 @@ Olist_customers_and_geolocation_text_to_sql_data.json [output(SQL) - SQL 실제 
 |---|---|
 | `max_seq_length` | 8192 |
 
+<br>
 
 ## 8B Model Configs
 
@@ -442,11 +491,15 @@ Olist_customers_and_geolocation_text_to_sql_data.json [output(SQL) - SQL 실제 
 |---|---|
 | `max_seq_length` | 8192 |
 
-
-
 ## Training Loss
 
 ![training_loss_by_model_plot.png](5.FineTuning_result/training_loss_by_model_plot.png)
+
+
+<br><br><br>
+
+
+# Fine-Tuning 평가
 
 ## 평가1 - response_status
 
@@ -460,6 +513,7 @@ response_status 종류
 
 ![test1_response_status_ratio.png](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test1_response_status_ratio.png)
 
+<br>
 
 ## 평가2 - tabels_match
 
@@ -476,6 +530,7 @@ response_status 종류
 
 ![test2_tables_match_ratio.png](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test2_tables_match_ratio.png)
 
+<br>
 
 ## 평가3 - LLM-as-a-Judge - response 품질
 
@@ -548,20 +603,17 @@ label : {label}
 
 
 
-a
 
 
 
 
 
-
-
-a
-
+<br><br><br>
 
 
 
-a
+
+
 
 # Trouble Shooting
 1. 8B FineTuning시 형식 미준수
@@ -608,6 +660,7 @@ v 테스트 데이터 만드는동안 테스트 데이터 평가 프롬프트 �
 v 테스트 데이터 GPT-5.4로 다시만들기
 gpt-4o-mini -> gpt-5.4
 
+<br><br><br>
 
 # text-to-sql 파인튜닝 계획
 
