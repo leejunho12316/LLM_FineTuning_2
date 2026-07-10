@@ -98,13 +98,14 @@ allganize-Llama-3-Alpha-Ko-8B-Instruct : https://huggingface.co/leejunho12316/al
 # 데이터 생성
 
 Kaggle에 공개된 Olist 데이터셋을 사용해 Fine-Tuning용 데이터를 제작했습니다. <br>
-하나의 DB를 사용하는 질문-SQL 쌍과 두 개 이상의 table을 사용해 JOIN이 필요한 질문-SQL 쌍을 각 800개씩 총 1,600개를 GPT-5.5 model을 사용해 생성했습니다. <br>
+하나의 table을 사용하는 질문-SQL 쌍과 두 개 이상의 table을 사용해 JOIN이 필요한 질문-SQL 쌍을 각 800개씩 총 1,600개를 GPT-5.5 model을 사용해 생성했습니다. <br>
 
 ## 1. 단일 테이블 사용 데이터
 
 사용 Model : GPT-5.5 / 데이터 개수 : 800행
 
 하나의 table을 사용해 대답할 수 있는 질문과 그 SQL 쌍 데이터를 생성했습니다. 그 과정에서 다음을 고려했습니다.
+
 1. DB에 대한 정보
 - **DDL 선언문 (DDL)** : 사용할 DB의 DDL문을 제공해 데이터 생성 시 자료형에 실수가 없도록 했습니다.
 - **컬럼 설명 (column descriptions)** : 데이터 도메인에 대한 지식을 갖추도록 Olist Kaggle 데이터의 README에 제공된 칼럼 설명을 집어넣어 각 칼럼의 역할과 쓰임에 대한 정보를 제공했습니다.
@@ -201,7 +202,7 @@ VALUES ('b7c13b2df92dc0d616315d518bbb97c7', 'd2308b8cb44552f9245efd95f4e73092', 
 
 ## 2. 다중 테이블 사용 데이터 (JOIN 데이터)
 
-사용자 query - SQL 쌍을 생성하는 과정에서 다음을 추가적으로 고려했습니다.
+두 개의 테이블을 사용해야만 대답할 수 있는 질문-SQL 쌍을 생성했습니다. 이 과정에서 다음을 추가적으로 고려했습니다.
 
 두 테이블 사용 관련
 - 두 테이블 사용 여부 : 두 table을 JOIN했지만 결국 하나의 table만 사용하는 경우, 애초에 JOIN을 하지 않는 경우를 체크하였습니다.
