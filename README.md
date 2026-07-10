@@ -559,6 +559,8 @@ response_status 종류
 
 ![test1_response_status_ratio.png](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test1_response_status_ratio.png)
 
+![test1_response_status_ratio_base.png](8.Base%20%EB%AA%A8%EB%8D%B8%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test1_response_status_ratio_base.png)
+
 <br>
 
 ## 2. 평가2 - tabels_match (Rule-Based)
@@ -575,6 +577,8 @@ response_status 종류
 6. empty:        response 또는 label이 비어있음
 
 ![test2_tables_match_ratio.png](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test2_tables_match_ratio.png)
+
+![test2_tables_match_ratio_base.png](8.Base%20%EB%AA%A8%EB%8D%B8%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test2_tables_match_ratio_base.png)
 
 <br>
 
@@ -647,7 +651,7 @@ label : {label}
 
 ![test3_score_visualization.png](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test3_score_visualization.png)
 
-
+![test3_score_visualization_base.png](8.Base%20%EB%AA%A8%EB%8D%B8%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/test3_score_visualization_base.png)
 
 <br><br><br>
 

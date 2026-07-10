@@ -1,0 +1,26 @@
+{
+  "1B": {
+    "success(converted)": 41.6,
+    "success": 31.7,
+    "SQL execution error": 19.0,
+    "SQL too long": 6.3,
+    "wrong format": 1.3
+  },
+  "3B": {
+    "success": 65.3,
+    "success(converted)": 21.8,
+    "SQL execution error": 12.5,
+    "SQL too long": 0.4
+  },
+  "8B": {
+    "success": 61.1,
+    "success(converted)": 30.0,
+    "SQL execution error": 8.9
+  },
+  "8B_Alpha": {
+    "success": 56.7,
+    "success(converted)": 24.9,
+    "SQL execution error": 14.2,
+    "SQL too long": 4.2
+  }
+}

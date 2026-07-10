@@ -1,0 +1,56 @@
+완료: Llama-3.2-1B-Instruct_llm_eval(base).csv (473개 평가 완료)
+
+=== 점수 통계 ===
+평균:   0.48
+중앙값: 0.0
+분포:
+score
+0    270
+1    185
+2     14
+3      4
+Name: count, dtype: int64
+
+완료: Llama-3.2-3B-Instruct_llm_eval(base).csv (472개 평가 완료)
+
+=== 점수 통계 ===
+평균:   1.18
+중앙값: 1.0
+분포:
+score
+0    106
+1    254
+2     72
+3     13
+4     17
+5     10
+
+완료: Llama-3.1-8B-Instruct_llm_eval(base).csv (473개 평가 완료)
+
+=== 점수 통계 ===
+평균:   1.72
+중앙값: 1.0
+분포:
+score
+0     36
+1    231
+2    118
+3     29
+4     37
+5     22
+Name: count, dtype: int64
+
+
+완료: Llama-3-Alpha-Ko-8B-Instruct_llm_eval(base).csv (473개 평가 완료)
+
+=== 점수 통계 ===
+평균:   1.61
+중앙값: 1.0
+분포:
+score
+0     45
+1    243
+2     108
+3     30
+4     23
+5     24

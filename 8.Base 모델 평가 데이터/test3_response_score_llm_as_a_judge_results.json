@@ -1,0 +1,58 @@
+[
+  {
+    "model": "Llama-3.2-1B-Instruct",
+    "total_evaluated": 473,
+    "mean_score": 0.48,
+    "median_score": 0.0,
+    "score_distribution": {
+      "0": 270,
+      "1": 185,
+      "2": 14,
+      "3": 4,
+      "4": 0,
+      "5": 0
+    }
+  },
+  {
+    "model": "Llama-3.2-3B-Instruct",
+    "total_evaluated": 472,
+    "mean_score": 1.18,
+    "median_score": 1.0,
+    "score_distribution": {
+      "0": 106,
+      "1": 254,
+      "2": 72,
+      "3": 13,
+      "4": 17,
+      "5": 10
+    }
+  },
+  {
+    "model": "Llama-3.1-8B-Instruct",
+    "total_evaluated": 473,
+    "mean_score": 1.72,
+    "median_score": 1.0,
+    "score_distribution": {
+      "0": 36,
+      "1": 231,
+      "2": 118,
+      "3": 29,
+      "4": 37,
+      "5": 22
+    }
+  },
+  {
+    "model": "Llama-3-Alpha-Ko-8B-Instruct",
+    "total_evaluated": 473,
+    "mean_score": 1.61,
+    "median_score": 1.0,
+    "score_distribution": {
+      "0": 45,
+      "1": 243,
+      "2": 108,
+      "3": 30,
+      "4": 23,
+      "5": 24
+    }
+  }
+]
