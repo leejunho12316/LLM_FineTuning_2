@@ -1,8 +1,40 @@
-# LLM_FineTuning_2
+# LLM Fine-Tuning 2
 
 <div align = 'center'>
   <img src="./README/LLM_FineTuning2.png" width = '400'>
 </div>
+
+## 목차
+
+- [개요](#개요)
+- [HuggingFace](#huggingface)
+  - [1. Raw Data](#1-raw-data)
+  - [2. Dataset](#2-dataset)
+  - [3. Models](#3-models)
+- [데이터 생성](#데이터-생성)
+  - [1. 단일 테이블 사용 데이터](#1-단일-테이블-사용-데이터)
+  - [2. 다중 테이블 사용 데이터 (JOIN 데이터)](#2-다중-테이블-사용-데이터-join-데이터)
+  - [3. 일반화 방지](#3-일반화-방지)
+- [데이터 검증 결과](#데이터-검증-결과)
+  - [1. Rule-Based 검증 내용](#1-rule-based-검증-내용)
+  - [2. 검증 대상](#2-검증-대상)
+  - [3. 검증 결과](#3-검증-결과)
+- [Fine-Tuning](#fine-tuning)
+  - [1. 1B, 3B model Configs](#1-1b-3b-model-configs)
+  - [2. 8B Model Configs](#2-8b-model-configs)
+  - [3. Training Loss](#3-training-loss)
+- [Base-Model 평가](#base-model-평가)
+- [Fine-Tuning 평가](#fine-tuning-평가)
+  - [1. 평가1 - response_status (Rule-Based)](#1-평가1---response_status-rule-based)
+  - [2. 평가2 - tabels_match (Rule-Based)](#2-평가2---tabels_match-rule-based)
+  - [3. 평가3 - response 품질 (LLM-as-a-Judge)](#3-평가3---response-품질-llm-as-a-judge)
+- [결론](#결론)
+- [Notes](#Notes)
+  - [폴더 설명](#폴더-설명)
+  - [Trouble Shooting](#trouble-shooting)
+  - [text-to-sql 파인튜닝 계획](#text-to-sql-파인튜닝-계획)
+
+<br><br><br>
 
 # 개요
 
@@ -11,6 +43,7 @@ Llama 모델의 Text-to-SQL용 LoRA Fine-Tuning 프로젝트 입니다.<br>
 작동 정확도를 높이기 위해 Kaggle에 공개된 Olist 데이터셋을 사용해 text-to-sql 데이터셋을 생성해 학습했습니다. 베이스 데이터셋으로는 gretelai에서 text-to-sql용 데이터셋의 query를 한국어로 번역한 데이터셋을 사용했습니다.
 
 <br><br><br>
+
 
 # HuggingFace
 
@@ -677,8 +710,9 @@ FineTuning 결과 Llama-3-Alpha-Ko-8B-Instruct 모델이 평가1에서 96.7%의 
 
 
 <br><br><br>
+# Notes
 
-# 폴더 설명
+## 폴더 설명
 2.geretel_data <br>
 gretelai에서 제공하는 영문 text-to-sql 데이터의 질문을 한국어로 바꾼 data
 
@@ -707,7 +741,7 @@ gretelai에서 제공하는 영문 text-to-sql 데이터의 질문을 한국어�
    6번과 동일 <br>
 
 
-# Trouble Shooting
+## Trouble Shooting
 1. 8B FineTuning시 형식 미준수
 
 8B Model을 1B, 3B FT할때와 같은 Config로 FT 진행. 8B모델이 1B와 3B보다 '쿼리 작성:'으로 시작해 대답하는 것을 충분히 학습하지 못함.
@@ -765,7 +799,7 @@ LLM을 나노미터 단위로 통제하는 것 보다 알아서 유연하게 만
 
 <br><br><br>
 
-# text-to-sql 파인튜닝 계획
+## text-to-sql 파인튜닝 계획
 
 진행
 
