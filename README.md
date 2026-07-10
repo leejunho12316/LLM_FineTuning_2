@@ -664,25 +664,32 @@ label : {label}
 <br><br><br>
 
 # 폴더 설명
-2.geretel_data
+2.geretel_data <br>
 gretelai에서 제공하는 영문 text-to-sql 데이터의 질문을 한국어로 바꾼 data
 
-3.Olist_data
+3.Olist_data <br>
 생성한 data 전체 저장
 
-5.FineTuning_result
-ㄴ 모델명
-   모델명.csv :  테스트 데이터 FineTuning 모델로 실행한 결과
-   모델명_with_exec.zip : FineTuning모델로 실행해 나온 SQL DB에 실행한 결과 (2 있는 경우 1은 sqlite 문법으로 SQL 변환시 gpt-4o-mini model 쓴것, 2는 gpt-5.4-nano model 쓴 것)
-   모델명-training_log.csv : FineTuning 모델 실행 loss & grad_norm
-   모델명-training_log.json : FineTuning 모델 실행 loss & grad_norm
+5.FineTuning_result <br>
+ㄴ 모델명 <br>
+   모델명.csv :  테스트 데이터 FineTuning 모델로 실행한 결과 <br>
+   모델명_with_exec.zip : FineTuning모델로 실행해 나온 SQL DB에 실행한 결과 (2 있는 경우 1은 sqlite 문법으로 SQL 변환시 gpt-4o-mini model 쓴것, 2는 gpt-5.4-nano model 쓴 것) <br>
+   모델명-training_log.csv : FineTuning 모델 실행 loss & grad_norm <br>
+   모델명-training_log.json : FineTuning 모델 실행 loss & grad_norm <br>
 
-6.평가 데이터
-   test1_response_status_ratio.json : Fine-Tuning 모델 별 response SQL DB 실행 결과
-   test2_tables_match_ratio.json : Fine-Tuning 모델 별 response SQL 정답 일치 결과
-   test3_response_score_llm_as_a_judge_results.json : 평가3 LLM-as-a-Judge 평가 결과
-   모델명.csv : response quality LLM-as-a-Judge 평가 데이터
+6.평가 데이터 <br>
+   test1_response_status_ratio.json : Fine-Tuning 모델 별 response SQL DB 실행 결과 <br>
+   test2_tables_match_ratio.json : Fine-Tuning 모델 별 response SQL 정답 일치 결과 <br>
+   test3_response_score_llm_as_a_judge_results.json : 평가3 LLM-as-a-Judge 평가 결과 <br>
+   모델명.csv : response quality LLM-as-a-Judge 평가 데이터 <br>
 
+7.BaseModel_result <br>
+ㄴ 모델명 <br>
+   모델명.csv : 테스트 데이터 Base 모델로 실행한 결과 <br>
+   모델명_with_exec.zip : Base모델로 실행해 나온 SQL DB에 실행한 결과 <br>
+
+8.Base 모델 평가 데이터 <br>
+   6번과 동일 <br>
 
 
 # Trouble Shooting
