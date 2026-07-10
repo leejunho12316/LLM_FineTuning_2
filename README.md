@@ -551,6 +551,9 @@ ORDER BY avg_hours_to_approval DESC;
 
 테스트 데이터셋의 query를 입력하고 리턴받은 SQL문을 DB에 실행했을 때 response_status 비율.
 
+FineTuning 모델의 경우 SQL 실행 성공률이 1B, 3B, 8B, 8B_Alpha 순서대로 91.9%, 93.6%, 95.5%, 96.7%였습니다.
+이는 Fine-Tuning 전 기본 모델의 성능인 73.3%, 87.1%, 91.1%, 81.6%보다 18.6%, 6.5%, 4.4%, 15.1%, **평균 11.15% 증가된 성능**이었습니다.
+
 response_status 종류
 1. success/success(converted) : 성공 / DB마다 다른 SQL문의 형식을 sqlite 형식으로 변환해서 성공
 2. error : SQL too long (** chars) : 비정상적으로 긴 SQL
@@ -567,6 +570,8 @@ response_status 종류
 
 테스트 데이터셋의 query를 입력하고 리턴받은 SQL문이 사용한 table명의 정확도.
 
+FineTuning모델의 경우 사용한 table 정확도가 96.8%, 99.8%, 99.6%, 99.6%로 높은 수치를 보였습니다.
+이는 FineTuning 전 기본 모델의 table 정확도인 66.4%, 76.9%, 86.0%, 76.3%보다 30.4%, 22.9%, 13.6%, 23.3%, 평균 22.55% 증가된 성능이었습니다.
 
 카테고리
 1. exact_match:  완전히 같음
@@ -584,7 +589,10 @@ response_status 종류
 
 ## 3. 평가3 - response 품질 (LLM-as-a-Judge)
 
-테스트 데이터셋을 실행한 response와 prompt, DDL문, label을 비교해 생성된 SQL문의 퀄리티를 평가.
+테스트 데이터셋을 실행한 SQL response와 prompt, DDL문, label을 비교해 생성된 SQL문의 퀄리티를 평가.
+
+FineTuning 모델의 경우 응답 품질 평균 점수(5점 만점)가 1B, 3B, 8B, 8B_Alpha 순서대로 1.98점, 2.56점, 2.86점, 2.93점이었습니다.
+이는 Fine-Tuning 전 기본 모델의 평균 점수인 0.48점, 1.18점, 1.72점, 1.61점보다 1.50점, 1.38점, 1.14점, 1.32점, 평균 1.34점 증가된 성능이었습니다.
 
 [Llama-3.2-1B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.2-1B-Instruct_llm_eval.csv) <br>
 [Llama-3.2-3B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.2-3B-Instruct_llm_eval.csv) <br>
@@ -656,6 +664,13 @@ label : {label}
 <br><br><br>
 
 # 결론
+
+FineTuning 결과 Llama-3-Alpha-Ko-8B-Instruct 모델이 평가1에서 96.7%의 정확도를, 평가2에서 99.6%의 정확도를, 평가3에서 평균 2.93 & 중앙값 3.0으로 가장 높은 평가를 받았습니다.
+이 모델은 Fine-Tuning하기 전의 경우 Llama-3.1-8B-Instruct 모델에 약간 못 미치는 성능을 보입니다. 하지만 한국어로 pretraining을 진행한 모델이라 한국어 질문 이해 능력이 뛰어나 학습률이 뛰어났습니다.
+따라서 브라질 Olist Online Store를 위한 Text-to-SQL 모델은 Llama-3-Alpha-Ko-8B-Instruct를 선정하였습니다.
+
+
+
 
 
 
