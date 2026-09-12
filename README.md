@@ -27,7 +27,8 @@
 - [Fine-Tuning 평가](#fine-tuning-평가)
   - [1. 평가1 - response_status (Rule-Based)](#1-평가1---response_status-rule-based)
   - [2. 평가2 - tabels_match (Rule-Based)](#2-평가2---tabels_match-rule-based)
-  - [3. 평가3 - response 품질 (LLM-as-a-Judge)](#3-평가3---response-품질-llm-as-a-judge)
+  - [3. 평가3 - SQL문 품질 (LLM-as-a-Judge)](#3-평가3---sql문-품질-llm-as-a-judge)
+  - [4. 평가4 - SQL문 정답률 (LLM-as-a-Judge)](#4-평가4---sql문-정답률-llm-as-a-judge)
 - [결론](#결론)
 - [Notes](#Notes)
   - [폴더 설명](#폴더-설명)
@@ -621,7 +622,7 @@ FineTuning모델의 경우 사용한 table 정확도가 96.8%, 99.8%, 99.6%, 99.
 
 <br>
 
-## 3. 평가3 - response 품질 (LLM-as-a-Judge)
+## 3. 평가3 - SQL문 품질 (LLM-as-a-Judge)
 
 테스트 데이터셋을 실행한 SQL response와 prompt, DDL문, label을 비교해 생성된 SQL문의 퀄리티를 평가.
 
@@ -697,9 +698,59 @@ label : {label}
 
 <br><br><br>
 
+
+## 4. 평가4 - SQL문 정답률 (LLM-as-a-Judge)
+
+테스트 데이터셋을 실행한 SQL Response와 정답 label을 비교해 생성된 SQL문의 정답을 평가했습니다.
+
+평가 3의 경우 '의미적 동치'가 아니라 response의 label과의 '표면적 유사도'를 채점했습니다. 그 아쉬움을 해겨랗기 위해 다음의 해결 방식을 적용해 재채점 하였습니다.
+
+예시)
+
+별칭을 감점 사유로 언급, 24건이 컬럼명 차이를 언급 <br>
+- index 1: judge가 직접 "수학적으로는 동일합니다"라고 써놓고도 length*width*height vs length*height*width 항 순서가 다르다며 1, 2번 항목 모두 불만족 처리
+- index 57; SQL이 완전히 같고 별칭만 single_installment_count vs payment_count. 이걸로 2개 항목 감점
+- index 208: 별칭에 _g, _cm 접미사가 없다는 이유로 3개 항목 감점
+- index 180: 쿼리 작성: 프리픽스가 붙어서 "단독 SQL로 실행 불가"라며 감점. 그런데 그 프리픽스는 label에도 똑같이 붙어 있습니다. 전처리 아티팩트를 모델 잘못으로 채점한 거죠.
+
+해결방법)
+
+1. 5점척도 -> EQUIVALENT / NOT_EQUIVALENT / UNCERTAIN 3분류
+척도가 있으면 judge가 항목마다 만족/불만족을 채워야 한다는 압박을 받고, 결국 없는 감점거리를 만들어냄.
+
+2. 무시할 차이 7가지를 열거.
+별칭 이름(38건 감점), 컬럼명 차이(24건), 교환법칙 항 순서, 서브쿼리/JOIN 변환, IN/EXISTS, 공백·대소문자, SELECT 컬럼 나열 순서.
+직접 나열해서 바보같은 감점사유로 등장한 것들 삭제 
+
+3. 반례 의무화
+NOT_EQUIVALENT를 주려면 두 쿼리가 다른 결과를 내는 구체적 데이터 상황을 쓰도록 명시. 그러지 못하면 EQUVALENT.
+
+4. 전처리 분리.
+쿼리 작성: 프리픽스는 label에도 붙어 있는데 judge가 이걸로 index 180을 깎았습니다. 프롬프트로 해결할 문제가 아니라 호출 전에 clean_sql()로 잘라냄.
+
+5. 평가 3 오류 예시 추가
+평가 3에서 진행한 내용으로부터 잘못된 평가 방식을 few shot으로 넣어주어 같은 평가 오류가 발생하지 않도록 함.
+
+평가 데이터
+   
+[Llama-3.2-1B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.2-1B-Instruct_llm_eval.csv) <br>
+[Llama-3.2-3B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.2-3B-Instruct_llm_eval.csv) <br>
+[Llama-3.1-8B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3.1-8B-Instruct_llm_eval.csv) <br>
+[Llama-3-Alpha-Ko-8B-Instruct_llm_eval.csv](6.%20%ED%8F%89%EA%B0%80%20%EB%8D%B0%EC%9D%B4%ED%84%B0/Llama-3-Alpha-Ko-8B-Instruct_llm_eval.csv)<br>
+
+결과
+
+Llama-3-Alpha-Ko-8B-Instruct 정확도 21.8% -> 79.2% <br>
+Llama-3.1-8B-Instruct 정확도 27.3% -> 78.4% <br>
+Llama-3.2-3B-Instruct 정확도 19.1% -> 69.1% <br>
+Llama-3.2-1B-Instruct 정확도 10.2% -> 53.2% <br>
+
+![model_accuracy.png](9.LLM_as_a_Judge_new/results/model_accuracy.png)
+
+
 # 결론
 
-FineTuning 결과 Llama-3-Alpha-Ko-8B-Instruct 모델이 평가1에서 96.7%의 정확도를, 평가2에서 99.6%의 정확도를, 평가3에서 평균 2.93 & 중앙값 3.0으로 가장 높은 평가를 받았습니다.
+FineTuning 결과 Llama-3-Alpha-Ko-8B-Instruct 모델이 평가1에서 96.7%의 정확도를, 평가2에서 99.6%의 정확도를, 평가3에서 평균 2.93 & 중앙값 3.0으로 가장 높은 평가를, 평가 4에서 79.2%의 정확도를 받았습니다.
 이 모델은 Fine-Tuning하기 전의 경우 Llama-3.1-8B-Instruct 모델에 약간 못 미치는 성능을 보입니다. 하지만 한국어로 pretraining을 진행한 모델이라 한국어 질문 이해 능력이 뛰어나 학습률이 뛰어났습니다.
 따라서 브라질 Olist Online Store를 위한 Text-to-SQL 모델은 Llama-3-Alpha-Ko-8B-Instruct를 선정하였습니다.
 
